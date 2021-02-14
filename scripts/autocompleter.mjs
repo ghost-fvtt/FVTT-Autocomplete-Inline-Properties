@@ -11,10 +11,21 @@ class AIP {
     /** @type {(String[])} */
     _activePath = [];
 
+    /** @type {(number|null)} */
+    _activeTerm = null;
+
     _activeListeners = null;
     _windowClickListener = null;
 
-    constructor() {
+    get _activeDataAtPath() {
+        return this._activePath.length ? getProperty(this._activeData, this._activePath.join(".")) : this._activeData ?? {};
+    }
+
+    get _activeDataOrderedEntriesAtPath() {
+        const entries = Object.entries(this._activeDataAtPath);
+        const valEntries = entries.filter(([key, value]) => typeof value !== "object");
+        const objEntries = entries.filter(([key, value]) => typeof value === "object");
+        return [...valEntries, ...objEntries];
     }
 
     /**
@@ -50,60 +61,53 @@ class AIP {
             return;
         }
 
-        this._create(element, data);
+        this._activeTargetElement = element;
+        this._activeData = data;
+        this._activeTerm = this._getCursorTerm()?.termIndex ?? null;
+        this._activateListeners(this._activeTargetElement);
+        this._createUI();
     }
 
     /**
      * Creates a autocomplete list from the keys in the provided data
-     * @param {HTMLInputElement} element
-     * @param {Object} data
      * @private
      */
-    _create(element, data) {
-        console.log(element, data); // TODO - remove debug logging
+    _createUI() {
+        this._cleanupUI();
+        this._activeListElement = this._render();
+    }
 
-        this.close();
-        this._activeTargetElement = element;
-        this._activeData = data;
-        this._activeListElement = this._render(element.parentElement, element);
-        this._activateListeners(element);
+    _cleanupUI() {
+        this._activeListElement?.remove();
+        this._activeListElement = null;
     }
 
     /**
      * Closes the currently open autocomplete list and reset autocompleter state
      */
     close() {
-        this._activeListElement?.remove();
-        this._activeListElement = null;
-        this._activeData = null;
+        this._cleanupUI();
         this._activePath = [];
+        this._activeData = null;
+        this._activeTerm = null;
         this._deactivateListeners();
         this._activeTargetElement = null;
     }
 
     /**
-     * Renders the autocomplete list given the current autocompleter state
-     * @param {HTMLElement} parentElement
-     * @param {HTMLInputElement} targetElement
+     * Renders the autocomplete list according to the current state
      * @returns {(HTMLElement|null)}
      * @private
      */
-    _render(parentElement, targetElement) {
+    _render() {
+        const targetElement = this._activeTargetElement;
+
         // Create list element
         const container = AIP._createElement(document.body, "div", "autocompleter");
         const list = AIP._createElement(container, "ol");
 
-        // Get the data at our active path
-        const currentData = this._activePath.length ? getProperty(this._activeData, this._activePath.join(".")) : this._activeData;
-        if (!currentData) {
-            return container;
-        }
-
         // Populate the list with the entries at the active path
-        const entries = Object.entries(currentData);
-        const valEntries = entries.filter(([key, value]) => typeof value !== "object");
-        const objEntries = entries.filter(([key, value]) => typeof value === "object");
-        for (let [key, val] of [...valEntries, ...objEntries]) {
+        for (let [key, val] of this._activeDataOrderedEntriesAtPath) {
             key = (!this._activePath.length ? "@" : ".") + key;
             const el = AIP._createElement(list, "li");
             const label = AIP._createElement(el, "span", "", ["label"]);
@@ -150,6 +154,7 @@ class AIP {
         this._activeListeners = {
             blur: this._onFocusLost.bind(this),
             input: this._onInput.bind(this),
+            keydown: this._onKeyDown.bind(this),
         };
 
         for (let [eventType, fn] of Object.entries(this._activeListeners)) {
@@ -158,9 +163,8 @@ class AIP {
 
         this._windowClickListener = (event) => {
             event.stopPropagation();
-            if (event.target && [this._activeTargetElement, this._activeListElement].every(el => !event.path.includes(el))) {
-                this.close();
-            }
+            if (event.path.includes(this._activeListElement)) return;
+            this.close();
         }
         window.addEventListener("mousedown", this._windowClickListener);
     }
@@ -182,22 +186,99 @@ class AIP {
     }
 
     /**
+     * Gets the index of the symbol the cursor is in, and the index of the cursor within that term
+     * @returns {({ terms: string[], cursorTerm: string, termIndex: number, remainder: number }|null)}
+     * @private
+     */
+    _getCursorTerm() {
+        const element = this._activeTargetElement;
+        if (!element) return null;
+
+        const cursorLocation = Math.min(element.selectionStart, element.selectionEnd);
+        const delimiter = "[^a-zA-Z0-9@\\.]";
+        const terms = this._activeTargetElement.value.split(new RegExp(`(?=${delimiter})|(?<=${delimiter})`));
+
+        const result = terms.reduce(({ cursorTerm, termIndex, remainder }, nextTerm, idx) => {
+            if (termIndex !== null) return { cursorTerm, termIndex, remainder };
+            else {
+                const nextRemaining = remainder - nextTerm.length;
+                if (nextRemaining <= 0) return { cursorTerm: nextTerm, termIndex: idx, remainder };
+                else return { cursorTerm, termIndex, remainder: nextRemaining };
+            }
+        }, { cursorTerm: null,termIndex: null, remainder: cursorLocation });
+
+        return { terms, ...result };
+    }
+
+    /**
+     * Inserts the first matching entry in place of the active term
+     * @private
+     */
+    _insertBestMatch() {
+        const { terms, cursorTerm, termIndex } = this._getCursorTerm() ?? {};
+
+        const splitCursorTerm = cursorTerm.slice(1).split(".");
+        const nextStepPartialKey = splitCursorTerm[splitCursorTerm.length - 1];
+        const filteredDataEntries = this._activeDataOrderedEntriesAtPath.filter(([key, value]) => key.startsWith(nextStepPartialKey));
+        if (!filteredDataEntries.length) return;
+
+        const bestMatch = filteredDataEntries[0];
+        const concatenatedPath = this._activePath.join(".");
+        terms[termIndex] = "@" + concatenatedPath + (concatenatedPath.length ? "." : "") + bestMatch[0];
+        this._activeTargetElement.value = terms.join("");
+        if (typeof bestMatch[1] === "object") {
+            this._activeTargetElement.value += ".";
+            this._activePath.push(bestMatch[0]);
+            this._createUI();
+        } else {
+            this.close();
+        }
+    }
+
+    /**
      * Handle new text being entered (or deleted) on the active target element
-     * @param event
+     * @param {InputEvent} event
      * @private
      */
     _onInput(event) {
-        console.log(event); // TODO - remove debug logging
+        // console.log(event); // TODO - remove debug logging
+
+        const { cursorTerm, remainder } = this._getCursorTerm() ?? {};
+        const preTrimmedLen = cursorTerm.length;
+        const trimmedTerm = cursorTerm.trimStart();
+        const trimmedChars = preTrimmedLen - trimmedTerm.length;
+
+        if (!trimmedTerm?.length || !trimmedTerm.includes("@")) {
+            this.close();
+        }
     }
 
     /**
      * Handle the active target element losing focus
-     * @param event
+     * @param {FocusEvent} event
      * @private
      */
     _onFocusLost(event) {
         if (!event.relatedTarget) return;
         this.close();
+    }
+
+    _onKeyDown(event) {
+        console.log(event);
+
+        switch (event.key) {
+            case "Tab":
+            case "Enter":
+                this._insertBestMatch();
+                break;
+            case "Escape":
+                this.close();
+                break;
+            default: return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     /**

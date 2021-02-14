@@ -2,6 +2,7 @@
     position: fixed;
     float: bottom;
     background: #DDDDDD;
+    border: 1px #888888 solid;
     padding: 5px;
     margin: 2px;
     min-width: 150px;
