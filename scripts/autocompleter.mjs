@@ -241,14 +241,9 @@ class AIP {
      * @private
      */
     _onInput(event) {
-        // console.log(event); // TODO - remove debug logging
-
-        const { cursorTerm, remainder } = this._getCursorTerm() ?? {};
-        const preTrimmedLen = cursorTerm.length;
-        const trimmedTerm = cursorTerm.trimStart();
-        const trimmedChars = preTrimmedLen - trimmedTerm.length;
-
-        if (!trimmedTerm?.length || !trimmedTerm.includes("@")) {
+        // If the term that the cursor is currently in isn't the term we started with, or if it no longer contains an "@", quit
+        const { cursorTerm, termIndex } = this._getCursorTerm() ?? {};
+        if (termIndex !== this._activeTerm || !cursorTerm.includes("@")) {
             this.close();
         }
     }
