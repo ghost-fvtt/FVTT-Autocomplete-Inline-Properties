@@ -4,7 +4,9 @@ export const SYSTEM_CONFIG = {
             {
                 name: "ItemSheet5e",
                 rollDataFieldSelectors: [
-                    `.dnd5e.sheet.item .tab.details .damage-part input[type="text"]`
+                    `.sheet.item .tab.details input[type="text"][name^="data.damage"]`,
+                    `.sheet.item .tab.details input[type="text"][name="data.formula"]`,
+                    `.sheet.item .tab.details input[type="text"][name="data.save.dc"]`,
                 ],
                 entityDataFieldSelectors: [ ],
             },

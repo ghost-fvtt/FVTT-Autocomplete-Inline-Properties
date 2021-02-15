@@ -1,40 +1,35 @@
-#autocompleter {
-    position: fixed;
-    float: bottom;
-    background: #DDDDDD;
-    border: 1px #888888 solid;
-    padding: 5px;
-    margin: 2px;
-    min-width: 150px;
-    border-radius: 4px;
-    z-index: 9999;
+/* Autocompleter summon button */
+button.autocompleter-summon {
+    flex: 0 0 25px !important;
+    width: 25px !important;
+    height: 25px !important;
+    padding: 0 !important;
+    line-height: 23px !important;
 }
 
-#autocompleter ol {
+button.autocompleter-summon > i {
     margin: 0;
-    padding: 0;
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
 }
 
-#autocompleter ol li {
-    display: flex;
-    flex: 0 0 auto;
+/* Autocompleter application */
+.autocompleter {
+    min-height: 25px;
 }
 
-#autocompleter ol li > span {
+.autocompleter .window-content {
+    padding: 3px;
+}
+
+.autocompleter input.aip-input {
+    flex: 1;
+}
+
+.autocompleter button.aip-insert {
+    flex: 0 0 25px;
+    text-align: center;
     line-height: unset;
 }
 
-#autocompleter ol li > .label {
-    flex: 1 1 0;
-    text-align: left;
-}
-
-#autocompleter ol li > .value {
-    flex: 0 0 20px;
-    text-align: center;
-    color: #888888;
-    font-family: Monospaced, monospace;
+.autocompleter button.aip-insert > i {
+    margin: unset;
 }

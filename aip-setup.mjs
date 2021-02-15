@@ -1,5 +1,5 @@
 import { SYSTEM_CONFIG } from "./system-config.mjs";
-import { Autocompleter, DATA_MODE } from "./scripts/autocompleter.mjs";
+import Autocompleter from "./scripts/autocompleter.mjs";
 
 
 Hooks.on("setup", () => {
@@ -19,29 +19,37 @@ Hooks.on("setup", () => {
         Hooks.on(`render${sheetClass.name}`, (sheet, $element, templateData) => {
             const element = $element[0];
             for (let selector of sheetClass.entityDataFieldSelectors) {
-                registerSelector(element, selector, DATA_MODE.ENTITY_DATA);
+                registerSelector(element, selector, Autocompleter.DATA_MODE.ENTITY_DATA);
             }
             for (let selector of sheetClass.rollDataFieldSelectors) {
-                registerSelector(element, selector, DATA_MODE.ROLL_DATA);
+                registerSelector(element, selector, Autocompleter.DATA_MODE.ROLL_DATA);
             }
         });
     }
 });
 
 /**
- * @param {Element} sheetElement - the sheet to register the selector for.
+ * @param {HTMLElement} sheetElement - the sheet to register the selector for.
  * @param {string} selector
- * @param {DATA_MODE} mode
+ * @param {Autocompleter.DATA_MODE} mode
  */
 function registerSelector(sheetElement, selector, mode) {
     if (CONFIG.debug.aip) console.log(`AIP | Registering oninput handler for "${selector}"`);
     const elements = Array.from(sheetElement.querySelectorAll(selector)).filter(e => e.type === "text");
     for (let element of elements) {
-        element.oninput = (event) => {
-            if (event.inputType === "insertText" && event.data === "@") {
-                console.log(event); // TODO - remove debug logging
-                Autocompleter.create(element, mode);
-            }
-        };
+        let elementAutocompleter = null;
+        const button = document.createElement("button");
+        button.innerHTML = `<i class="fas fa-at"></i>`;
+        button.classList.add("autocompleter-summon");
+        button.addEventListener("click", (event) => {
+            console.log("Launching autocompleter", event); // TODO - remove logging
+
+            if (!elementAutocompleter) elementAutocompleter = new Autocompleter(element);
+            elementAutocompleter.render(true);
+        });
+
+        button.disabled = element.disabled;
+
+        element.parentNode.insertBefore(button, element.nextSibling);
     }
 }
