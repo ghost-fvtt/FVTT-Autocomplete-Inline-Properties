@@ -6,9 +6,10 @@ export default class Autocompleter extends Application {
      * @param {(number|null)} targetSelectionStart
      * @param {(number|null)} targetSelectionEnd
      * @param {Autocompleter.DATA_MODE} mode
+     * @param {function} onClose
      * @param options
      */
-    constructor(data, target, targetSelectionStart, targetSelectionEnd, mode, options) {
+    constructor(data, target, targetSelectionStart, targetSelectionEnd, mode, onClose, options) {
         super(options);
 
         this.targetData = data;
@@ -22,6 +23,7 @@ export default class Autocompleter extends Application {
             default:
                 this.keyPrefix = ""; break;
         }
+        this.onClose = onClose;
 
         this.rawPath = "";
     }
@@ -85,6 +87,10 @@ export default class Autocompleter extends Application {
 
     get currentBestMatch() {
         return this.sortedDataAtPath.filter(({ key }) => key.startsWith(this.combinedFullPath))?.[0];
+    }
+
+    retarget(newTarget) {
+        this.target = newTarget;
     }
 
     /** @override */
@@ -155,13 +161,17 @@ export default class Autocompleter extends Application {
         });
     }
 
+    /** @override */
+    async close(options = {}) {
+        this.onClose();
+        return super.close(options);
+    }
+
     /**
      * @param {InputEvent} event
      * @private
      */
     _onInputChanged(event) {
-        console.log(`Autocompleter input changed`, event); // TODO - remove logging
-
         const input = this.inputElement;
         this.rawPath = input.value;
         this.render(false);
@@ -172,8 +182,6 @@ export default class Autocompleter extends Application {
      * @private
      */
     _onInputKeydown(event) {
-        console.log(`Autocompleter key down`, event); // TODO - remove logging
-
         switch (event.key) {
             case "Escape": this.close(); return;
             case "Tab":
@@ -196,8 +204,6 @@ export default class Autocompleter extends Application {
      * @private
      */
     _onInsertClicked(event) {
-        console.log(`Autocompleter insert button clicked`, event); // TODO - remove logging
-
         const oldValue = this.target.value;
 
         let spliceStart = oldValue.length;

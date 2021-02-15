@@ -1,6 +1,8 @@
 import { SYSTEM_CONFIG } from "./system-config.mjs";
 import Autocompleter from "./scripts/autocompleter.mjs";
 
+// Store active autocompleters in a map, where the key is a stable identifier for the element that the autocompleter is targeting.
+const _registrations = new Map();
 
 Hooks.on("setup", () => {
     CONFIG.debug.aip = true; // TODO - disable debug logging by default;
@@ -34,13 +36,18 @@ Hooks.on("setup", () => {
  * @param {Autocompleter.DATA_MODE} mode
  */
 function registerSelector(sheetElement, selector, mode) {
-    if (CONFIG.debug.aip) console.log(`AIP | Registering oninput handler for "${selector}"`);
+    const sheet = ui.windows[sheetElement.closest(`[data-appid]`).dataset.appid];
+    if (!sheet) return;
+    const entity = sheet.object;
+
     const elements = Array.from(sheetElement.querySelectorAll(selector)).filter(e => e.type === "text");
     for (let element of elements) {
+        // Create autocompleter summon button
         const button = document.createElement("button");
         button.innerHTML = `<i class="fas fa-at"></i>`;
         button.classList.add("autocompleter-summon");
 
+        // When the user clicks on the button, if they had
         let selectionStart = null, selectionEnd = null;
         element.addEventListener("blur", function(event) {
             if (event.relatedTarget === button) {
@@ -51,17 +58,34 @@ function registerSelector(sheetElement, selector, mode) {
                 selectionEnd = null;
             }
         });
-        button.addEventListener("click", function(event) {
+
+        button.addEventListener("click", function (event) {
             event.preventDefault();
-            console.log("Launching autocompleter", event); // TODO - remove logging
-            const entity = ui.windows[this.closest("div.app.sheet").dataset.appid]?.object;
-            if (!entity) throw new Error("The entity for this sheet does not exist");
-            let data = {};
-            switch (mode) {
-                case Autocompleter.DATA_MODE.ENTITY_DATA: data = entity.data; break;
-                case Autocompleter.DATA_MODE.ROLL_DATA: data = entity.getRollData(); break;
+
+            const key = sheet.appId + element.name;
+
+            if (_registrations.has(key)) {
+                // If this sheet is being re-rendered, we will have already registered an Autocompleter for this element.
+                // If so, retarget the autocompleter to the correct new element.
+                _registrations.get(key).retarget(element);
+            } else {
+                // Otherwise, create a new autocompleter
+                let data = {};
+                switch (mode) {
+                    case Autocompleter.DATA_MODE.ENTITY_DATA:
+                        data = entity.data;
+                        break;
+                    case Autocompleter.DATA_MODE.ROLL_DATA:
+                        data = entity.getRollData();
+                        break;
+                }
+
+                const autocompleter = new Autocompleter(data, element, selectionStart, selectionEnd, mode, () => {
+                    // When this Autocompleter gets closed, clean up the registration for this element.
+                    _registrations.delete(key);
+                }).render(true);
+                _registrations.set(sheet.appId + element.name, autocompleter);
             }
-            new Autocompleter(data, element, selectionStart, selectionEnd, mode).render(true);
         });
 
         button.disabled = element.disabled;
