@@ -22,8 +22,8 @@ button.autocompleter-summon[disabled] > i {
 /* Autocompleter application */
 .window-app.app.autocompleter {
     min-height: 25px;
-    box-shadow: 0 0 5px #000;
-    border: 2px #333333 solid;
+    box-shadow: 0 0 5px #555555;
+    /*border: 2px #333333 solid;*/
     border-radius: 5px;
 }
 
@@ -36,6 +36,18 @@ button.autocompleter-summon[disabled] > i {
     margin: 2px;
     padding: 0;
     list-style-type: none;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.autocompleter ol.aip-list li.aip-data-entry {
+    background: #99999922;
+    padding: 1px 3px;
+    margin: 1px 0;
+}
+
+.autocompleter ol.aip-list li.aip-data-entry.highlighted {
+    background: #55559922;
 }
 
 .autocompleter ol.aip-list li.aip-data-entry .aip-key-prefix {
@@ -47,11 +59,15 @@ button.autocompleter-summon[disabled] > i {
     flex: 1 1 auto;
 }
 
+.autocompleter ol.aip-list li.aip-data-entry .aip-key .match {
+    text-decoration: underline;
+}
+
 .autocompleter ol.aip-list li.aip-data-entry .aip-value {
     flex: 0 0 30px;
     text-align: center;
     font-family: monospace;
-    color: #333333;
+    opacity: 50%;
 }
 
 .autocompleter .aip-form > :not(:last-child) {

@@ -1,15 +1,15 @@
 <div class="flexcol">
     <ol class="aip-list">
         {{#each dataEntries}}
-            <li class="aip-data-entry flexrow">
+            <li class="aip-data-entry flexrow{{#if (eq @index ../highlightedEntry)}} highlighted{{/if}}">
                 <span class="aip-key-prefix">{{../keyPrefix}}</span>
-                <span class="aip-key">{{key}}</span>
+                <span class="aip-key">{{{key}}}</span>
                 <span class="aip-value">{{value}}</span>
             </li>
         {{/each}}
     </ol>
     <div class="aip-form flexrow">
-        <input class="aip-input" type="text">
+        <input class="aip-input" type="text" value="{{path}}">
         <button class="aip-insert"><i class="fas fa-i-cursor"></i></button>
     </div>
 </div>

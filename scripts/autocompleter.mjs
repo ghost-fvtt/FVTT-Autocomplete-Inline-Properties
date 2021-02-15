@@ -16,8 +16,14 @@ export default class Autocompleter extends Application {
         this.targetSelectionStart = targetSelectionStart;
         this.targetSelectionEnd = targetSelectionEnd;
         this.mode = mode;
+        switch (this.mode) {
+            case Autocompleter.DATA_MODE.ROLL_DATA: this.keyPrefix = "@"; break;
+            case Autocompleter.DATA_MODE.ENTITY_DATA:
+            default:
+                this.keyPrefix = ""; break;
+        }
 
-        this.dataPath = [];
+        this.rawPath = "";
     }
 
     /** @enum {string} */
@@ -36,42 +42,76 @@ export default class Autocompleter extends Application {
         });
     }
 
-    get combinedFullPath() { return this.dataPath.join("."); }
-    get combinedPath() { return this.dataPath.slice(0, -1).join("."); }
+    get inputElement() { return this.element?.[0]?.querySelector("input.aip-input"); }
 
-    get dataAtPath() {
-        return this.dataPath?.length ? getProperty(this.targetData, this.combinedPath) : this.targetData;
+    get splitPath() { return this.rawPath.split("."); }
+    get combinedFullPath() { return this.rawPath; }
+    get combinedPath() { return this.splitPath.slice(0, -1).join("."); }
+
+    get _dataAtPath() {
+        const path = this.combinedPath;
+        return Object.entries(path?.length ? getProperty(this.targetData, path) : this.targetData)
+            .map(([key, value]) => ({
+                "key": path + (path.length ? "." : "") + key,
+                value,
+            }));
+    }
+
+    static _formatData(entry) {
+        return {
+            key: entry.key,
+            value: typeof entry.value === "object" ? "{}" : entry.value.toString(),
+        }
+    }
+
+    get dataAtPathFormatted() {
+        return this._dataAtPath.map(Autocompleter._formatData);
     }
 
     get sortedDataAtPath() {
-        const path = this.combinedPath;
-        const dataAtPath = this.dataAtPath;
-        return !dataAtPath ? [] : Object.entries(dataAtPath)
+        return this._dataAtPath
             .sort((a, b) => {
-                if (typeof a[1] !== "object") return -1;
-                else if (typeof b[1] !== "object") return 1;
-                else return a[0].localeCompare(b[0]);
-            })
-            .map(([key, value]) => ({
-                "key": path + key,
-                "value": typeof value === "object" ? "{}" : value,
-            }));
+                if (typeof a.value !== "object" && typeof b.value !== "object") return a.key.localeCompare(b.key);
+                if (typeof a.value !== "object") return -1;
+                if (typeof b.value !== "object") return 1;
+
+                return a.key.localeCompare(b.key);
+            });
+    }
+
+    get sortedDataAtPathFormatted() {
+        return this.sortedDataAtPath.map(Autocompleter._formatData);
+    }
+
+    get currentBestMatch() {
+        return this.sortedDataAtPath.filter(({ key }) => key.startsWith(this.combinedFullPath))?.[0];
     }
 
     /** @override */
     getData(options = {}) {
-        let keyPrefix;
-        switch (this.mode) {
-            case Autocompleter.DATA_MODE.ROLL_DATA: keyPrefix = "@"; break;
-            case Autocompleter.DATA_MODE.ENTITY_DATA:
-            default:
-                keyPrefix = ""; break;
-        }
+        const escapedCombinedPath = "^" + this.combinedFullPath.replace(/\./, "\\.");
+        let highlightedEntry = null;
+        const dataEntries = this.sortedDataAtPathFormatted
+            .map(({ key, value }, index) => {
+                const match = key.match(escapedCombinedPath)?.[0];
+                if (!match) return { key, value };
+                const matchedKey = key.slice(0, match.length);
+                const unmatchedKey = key.slice(match.length);
 
-        const dataEntries = this.sortedDataAtPath.reverse();
+                if (highlightedEntry === null) highlightedEntry = index;
+
+                return {
+                    "key": `<span class="match">${matchedKey}</span>${unmatchedKey}`,
+                    value,
+                }
+            });
+
+        highlightedEntry = highlightedEntry ?? 0;
         return {
+            keyPrefix: this.keyPrefix,
+            path: this.rawPath,
             dataEntries,
-            keyPrefix,
+            highlightedEntry,
         };
     }
 
@@ -82,6 +122,7 @@ export default class Autocompleter extends Application {
 
         const input = html.querySelector(`input[type="text"]`);
         input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
 
         // input.addEventListener("blur", () => this.close());
         input.addEventListener("input", this._onInputChanged.bind(this));
@@ -120,6 +161,10 @@ export default class Autocompleter extends Application {
      */
     _onInputChanged(event) {
         console.log(`Autocompleter input changed`, event); // TODO - remove logging
+
+        const input = this.inputElement;
+        this.rawPath = input.value;
+        this.render(false);
     }
 
     /**
@@ -130,8 +175,18 @@ export default class Autocompleter extends Application {
         console.log(`Autocompleter key down`, event); // TODO - remove logging
 
         switch (event.key) {
-            case "Escape":
-                this.close();
+            case "Escape": this.close(); return;
+            case "Tab":
+                event.preventDefault();
+                const bestMatch = this.currentBestMatch;
+                if (!bestMatch) {
+                    ui.notifications.warn(`The key "${this.combinedFullPath}" does not match any known keys.`);
+                    this.rawPath = "";
+                } else {
+                    const newEntry = bestMatch;
+                    this.rawPath = newEntry.key + (typeof newEntry.value === "object" ? "." : "");
+                }
+                this.render(false);
                 return;
         }
     }
@@ -156,8 +211,8 @@ export default class Autocompleter extends Application {
         const preSpacer = (!preString.length || preString[preString.length - 1] === " ") ? "" : " ";
         const postString = oldValue.slice(spliceEnd);
         const postSpacer = (!postString.length || postString[postString.length - 1] === " ") ? "" : " ";
-        const insert = this.element[0].querySelector("input.aip-input").value;
-        this.target.value = preString + preSpacer + insert + postSpacer + postString;
+        const insert = this.inputElement.value;
+        this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
         this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
 
         this.close();
