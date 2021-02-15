@@ -37,19 +37,28 @@ function registerSelector(sheetElement, selector, mode) {
     if (CONFIG.debug.aip) console.log(`AIP | Registering oninput handler for "${selector}"`);
     const elements = Array.from(sheetElement.querySelectorAll(selector)).filter(e => e.type === "text");
     for (let element of elements) {
-        let elementAutocompleter = null;
         const button = document.createElement("button");
         button.innerHTML = `<i class="fas fa-at"></i>`;
         button.classList.add("autocompleter-summon");
-        button.addEventListener("click", (event) => {
-            console.log("Launching autocompleter", event); // TODO - remove logging
 
-            if (!elementAutocompleter) elementAutocompleter = new Autocompleter(element);
-            elementAutocompleter.render(true);
+        let selectionStart = null, selectionEnd = null;
+        element.addEventListener("blur", function(event) {
+            if (event.relatedTarget === button) {
+                selectionStart = this.selectionStart;
+                selectionEnd = this.selectionEnd;
+            } else {
+                selectionStart = null;
+                selectionEnd = null;
+            }
+        });
+        button.addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log("Launching autocompleter", event); // TODO - remove logging
+            new Autocompleter(element, selectionStart, selectionEnd, mode).render(true);
         });
 
         button.disabled = element.disabled;
 
-        element.parentNode.insertBefore(button, element.nextSibling);
+        element.parentNode.insertBefore(button, element);
     }
 }

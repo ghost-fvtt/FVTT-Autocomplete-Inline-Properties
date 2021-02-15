@@ -1,14 +1,22 @@
 /* Autocompleter summon button */
 button.autocompleter-summon {
-    flex: 0 0 25px !important;
-    width: 25px !important;
-    height: 25px !important;
+    flex: 0 0 20px !important;
+    width: 20px !important;
+    height: 20px !important;
     padding: 0 !important;
-    line-height: 23px !important;
+    margin: auto 2px !important;
+    line-height: 0 !important;
+    border-radius: 10px;
 }
 
 button.autocompleter-summon > i {
     margin: 0;
+    color: #333333;
+}
+
+button.autocompleter-summon[disabled] > i {
+    margin: 0;
+    opacity: 50%;
 }
 
 /* Autocompleter application */
@@ -20,6 +28,10 @@ button.autocompleter-summon > i {
     padding: 3px;
 }
 
+.autocompleter .aip-form > :not(:last-child) {
+    margin-right: 2px;
+}
+
 .autocompleter input.aip-input {
     flex: 1;
 }
@@ -28,6 +40,7 @@ button.autocompleter-summon > i {
     flex: 0 0 25px;
     text-align: center;
     line-height: unset;
+    margin: 0;
 }
 
 .autocompleter button.aip-insert > i {

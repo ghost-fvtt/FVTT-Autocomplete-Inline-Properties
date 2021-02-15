@@ -1,8 +1,18 @@
 export default class Autocompleter extends Application {
-    constructor(target, mode, options) {
+    /**
+     *
+     * @param {HTMLInputElement} target
+     * @param {(number|null)} targetSelectionStart
+     * @param {(number|null)} targetSelectionEnd
+     * @param {Autocompleter.DATA_MODE} mode
+     * @param options
+     */
+    constructor(target, targetSelectionStart, targetSelectionEnd, mode, options) {
         super(options);
 
         this.target = target;
+        this.targetSelectionStart = targetSelectionStart;
+        this.targetSelectionEnd = targetSelectionEnd;
         this.mode = mode;
     }
 
@@ -56,11 +66,15 @@ export default class Autocompleter extends Application {
     }
 
     /**
-     * @param {InputEvent} event
+     * @param {KeyboardEvent} event
      * @private
      */
     _onInputKeydown(event) {
         console.log(`Autocompleter key down`, event); // TODO - remove logging
+
+        switch (event.key) {
+            case "Escape": this.close(); return;
+        }
     }
 
     /**
@@ -69,5 +83,24 @@ export default class Autocompleter extends Application {
      */
     _onInsertClicked(event) {
         console.log(`Autocompleter insert button clicked`, event); // TODO - remove logging
+
+        const oldValue = this.target.value;
+
+        let spliceStart = oldValue.length;
+        let spliceEnd = oldValue.length;
+        if (Number.isNumeric(this.targetSelectionStart) && Number.isNumeric(this.targetSelectionEnd)) {
+            spliceStart = Math.min(this.targetSelectionStart, this.targetSelectionEnd);
+            spliceEnd = Math.max(this.targetSelectionStart, this.targetSelectionEnd);
+        }
+
+        const preString = oldValue.slice(0, spliceStart);
+        const preSpacer = (!preString.length || preString[preString.length - 1] === " ") ? "" : " ";
+        const postString = oldValue.slice(spliceEnd);
+        const postSpacer = (!postString.length || postString[postString.length - 1] === " ") ? "" : " ";
+        const insert = this.element[0].querySelector("input.aip-input").value;
+        this.target.value = preString + preSpacer + insert + postSpacer + postString;
+        this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
+
+        this.close();
     }
 }
