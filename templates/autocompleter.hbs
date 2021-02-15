@@ -2,6 +2,7 @@
     <ol class="aip-list">
         {{#each dataEntries}}
             <li class="aip-data-entry flexrow">
+                <span class="aip-key-prefix">{{../keyPrefix}}</span>
                 <span class="aip-key">{{key}}</span>
                 <span class="aip-value">{{value}}</span>
             </li>

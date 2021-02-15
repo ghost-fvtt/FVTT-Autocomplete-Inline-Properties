@@ -38,6 +38,11 @@ button.autocompleter-summon[disabled] > i {
     list-style-type: none;
 }
 
+.autocompleter ol.aip-list li.aip-data-entry .aip-key-prefix {
+    flex: 0;
+    opacity: 50%;
+}
+
 .autocompleter ol.aip-list li.aip-data-entry .aip-key {
     flex: 1 1 auto;
 }

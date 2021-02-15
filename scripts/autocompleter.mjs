@@ -67,9 +67,11 @@ export default class Autocompleter extends Application {
             default:
                 keyPrefix = ""; break;
         }
+
         const dataEntries = this.sortedDataAtPath.reverse();
         return {
-            dataEntries: dataEntries.map(({ key, value }) => ({ "key": keyPrefix + key, value }) ),
+            dataEntries,
+            keyPrefix,
         };
     }
 
@@ -91,6 +93,7 @@ export default class Autocompleter extends Application {
 
     /** @override */
     async _render(force = false, options = {}) {
+        // Set location to be just above the target
         const targetRect = this.target.getBoundingClientRect();
         mergeObject(this.position, {
             width: targetRect.width,
