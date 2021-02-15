@@ -51,10 +51,17 @@ function registerSelector(sheetElement, selector, mode) {
                 selectionEnd = null;
             }
         });
-        button.addEventListener("click", (event) => {
+        button.addEventListener("click", function(event) {
             event.preventDefault();
             console.log("Launching autocompleter", event); // TODO - remove logging
-            new Autocompleter(element, selectionStart, selectionEnd, mode).render(true);
+            const entity = ui.windows[this.closest("div.app.sheet").dataset.appid]?.object;
+            if (!entity) throw new Error("The entity for this sheet does not exist");
+            let data = {};
+            switch (mode) {
+                case Autocompleter.DATA_MODE.ENTITY_DATA: data = entity.data; break;
+                case Autocompleter.DATA_MODE.ROLL_DATA: data = entity.getRollData(); break;
+            }
+            new Autocompleter(data, element, selectionStart, selectionEnd, mode).render(true);
         });
 
         button.disabled = element.disabled;

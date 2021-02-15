@@ -1,35 +1,76 @@
 export default class Autocompleter extends Application {
     /**
      *
+     * @param {object} data
      * @param {HTMLInputElement} target
      * @param {(number|null)} targetSelectionStart
      * @param {(number|null)} targetSelectionEnd
      * @param {Autocompleter.DATA_MODE} mode
      * @param options
      */
-    constructor(target, targetSelectionStart, targetSelectionEnd, mode, options) {
+    constructor(data, target, targetSelectionStart, targetSelectionEnd, mode, options) {
         super(options);
 
+        this.targetData = data;
         this.target = target;
         this.targetSelectionStart = targetSelectionStart;
         this.targetSelectionEnd = targetSelectionEnd;
         this.mode = mode;
+
+        this.dataPath = [];
     }
 
     /** @enum {string} */
     static DATA_MODE = {
         ENTITY_DATA: "entity",
         ROLL_DATA: "roll",
-    }
+    };
 
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            classes: [ "autocompleter" ],
+            classes: ["autocompleter"],
             template: "./modules/autocomplete-inline-properties/templates/autocompleter.hbs",
-            width: 250,
+            minWidth: 250,
             height: "auto",
         });
+    }
+
+    get combinedFullPath() { return this.dataPath.join("."); }
+    get combinedPath() { return this.dataPath.slice(0, -1).join("."); }
+
+    get dataAtPath() {
+        return this.dataPath?.length ? getProperty(this.targetData, this.combinedPath) : this.targetData;
+    }
+
+    get sortedDataAtPath() {
+        const path = this.combinedPath;
+        const dataAtPath = this.dataAtPath;
+        return !dataAtPath ? [] : Object.entries(dataAtPath)
+            .sort((a, b) => {
+                if (typeof a[1] !== "object") return -1;
+                else if (typeof b[1] !== "object") return 1;
+                else return a[0].localeCompare(b[0]);
+            })
+            .map(([key, value]) => ({
+                "key": path + key,
+                "value": typeof value === "object" ? "{}" : value,
+            }));
+    }
+
+    /** @override */
+    getData(options = {}) {
+        let keyPrefix;
+        switch (this.mode) {
+            case Autocompleter.DATA_MODE.ROLL_DATA: keyPrefix = "@"; break;
+            case Autocompleter.DATA_MODE.ENTITY_DATA:
+            default:
+                keyPrefix = ""; break;
+        }
+        const dataEntries = this.sortedDataAtPath.reverse();
+        return {
+            dataEntries: dataEntries.map(({ key, value }) => ({ "key": keyPrefix + key, value }) ),
+        };
     }
 
     /** @override */
@@ -37,7 +78,7 @@ export default class Autocompleter extends Application {
         super.activateListeners($html);
         const html = $html[0];
 
-        const input = html.querySelector(`input[type="text"]`)
+        const input = html.querySelector(`input[type="text"]`);
         input.focus();
 
         // input.addEventListener("blur", () => this.close());
@@ -46,6 +87,19 @@ export default class Autocompleter extends Application {
 
         const insert = html.querySelector(`button`);
         insert.addEventListener("click", this._onInsertClicked.bind(this));
+    }
+
+    /** @override */
+    async _render(force = false, options = {}) {
+        const targetRect = this.target.getBoundingClientRect();
+        mergeObject(this.position, {
+            width: targetRect.width,
+            left: targetRect.left,
+        })
+        return super._render(force, options).then(result => {
+            this.setPosition({ top: targetRect.top - this.element[0].getBoundingClientRect().height });
+            return result;
+        })
     }
 
     /** @override */
@@ -73,7 +127,9 @@ export default class Autocompleter extends Application {
         console.log(`Autocompleter key down`, event); // TODO - remove logging
 
         switch (event.key) {
-            case "Escape": this.close(); return;
+            case "Escape":
+                this.close();
+                return;
         }
     }
 

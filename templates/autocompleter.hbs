@@ -1,5 +1,12 @@
 <div class="flexcol">
-    <ol class="aip-list"></ol>
+    <ol class="aip-list">
+        {{#each dataEntries}}
+            <li class="aip-data-entry flexrow">
+                <span class="aip-key">{{key}}</span>
+                <span class="aip-value">{{value}}</span>
+            </li>
+        {{/each}}
+    </ol>
     <div class="aip-form flexrow">
         <input class="aip-input" type="text">
         <button class="aip-insert"><i class="fas fa-i-cursor"></i></button>
