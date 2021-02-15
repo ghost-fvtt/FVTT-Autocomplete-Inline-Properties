@@ -97,7 +97,7 @@ export default class Autocompleter extends Application {
             left: targetRect.left,
         })
         return super._render(force, options).then(result => {
-            this.setPosition({ top: targetRect.top - this.element[0].getBoundingClientRect().height });
+            this.setPosition({ top: targetRect.top - this.element[0].getBoundingClientRect().height - 5 });
             return result;
         })
     }

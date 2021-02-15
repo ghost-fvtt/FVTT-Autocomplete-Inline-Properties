@@ -20,12 +20,16 @@ button.autocompleter-summon[disabled] > i {
 }
 
 /* Autocompleter application */
-.autocompleter {
+.window-app.app.autocompleter {
     min-height: 25px;
+    box-shadow: 0 0 5px #000;
+    border: 2px #333333 solid;
+    border-radius: 5px;
 }
 
 .autocompleter .window-content {
     padding: 3px;
+    border-radius: 5px;
 }
 
 .autocompleter ol.aip-list {
