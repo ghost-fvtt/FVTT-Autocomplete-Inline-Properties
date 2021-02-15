@@ -42,54 +42,58 @@ function registerSelector(sheetElement, selector, mode) {
 
     const elements = Array.from(sheetElement.querySelectorAll(selector)).filter(e => e.type === "text");
     for (let element of elements) {
+        const key = sheet.appId + element.name;
+
         // Create autocompleter summon button
         const button = document.createElement("button");
         button.innerHTML = `<i class="fas fa-at"></i>`;
         button.classList.add("autocompleter-summon");
+        button.disabled = element.disabled;
+        element.parentNode.insertBefore(button, element);
 
-        // When the user clicks on the button, if they had
+        // If the user had the target element focused, remember their selection for use later when the Autocompleter inserts new content.
         let selectionStart = null, selectionEnd = null;
         element.addEventListener("blur", function(event) {
+            console.log("blur", event);
             if (event.relatedTarget === button) {
                 selectionStart = this.selectionStart;
                 selectionEnd = this.selectionEnd;
+                _activateAutocompleter(event);
             } else {
                 selectionStart = null;
                 selectionEnd = null;
             }
         });
 
-        button.addEventListener("click", function (event) {
-            event.preventDefault();
+        // If the user clicks on the autocompleter summoner button, create a new autocompleter,
+        // or if an autocompleter already exists, retargets it to the current element.
+        button.addEventListener("click", _activateAutocompleter);
 
-            const key = sheet.appId + element.name;
+        // If an autocompleter already exists with this key (because the target sheet is being re-rendered), re-activate the autocompleter.
+        if (_registrations.has(key)) {
+            _registrations.get(key).retarget(element);
+        }
 
-            if (_registrations.has(key)) {
-                // If this sheet is being re-rendered, we will have already registered an Autocompleter for this element.
-                // If so, retarget the autocompleter to the correct new element.
-                _registrations.get(key).retarget(element);
-            } else {
-                // Otherwise, create a new autocompleter
-                let data = {};
-                switch (mode) {
-                    case Autocompleter.DATA_MODE.ENTITY_DATA:
-                        data = entity.data;
-                        break;
-                    case Autocompleter.DATA_MODE.ROLL_DATA:
-                        data = entity.getRollData();
-                        break;
-                }
+        // A function which creates a new autocompleter for this element, or if one already exists, retargets it to this element.
+        function _activateAutocompleter(event) {
+            event?.preventDefault();
 
-                const autocompleter = new Autocompleter(data, element, selectionStart, selectionEnd, mode, () => {
-                    // When this Autocompleter gets closed, clean up the registration for this element.
-                    _registrations.delete(key);
-                }).render(true);
-                _registrations.set(sheet.appId + element.name, autocompleter);
+            // Otherwise, create a new autocompleter
+            let data = {};
+            switch (mode) {
+                case Autocompleter.DATA_MODE.ENTITY_DATA:
+                    data = entity.data;
+                    break;
+                case Autocompleter.DATA_MODE.ROLL_DATA:
+                    data = entity.getRollData();
+                    break;
             }
-        });
 
-        button.disabled = element.disabled;
-
-        element.parentNode.insertBefore(button, element);
+            const autocompleter = new Autocompleter(data, element, selectionStart, selectionEnd, mode, () => {
+                // When this Autocompleter gets closed, clean up the registration for this element.
+                _registrations.delete(key);
+            }).render(true);
+            _registrations.set(key, autocompleter);
+        }
     }
 }

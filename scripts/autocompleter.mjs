@@ -91,6 +91,7 @@ export default class Autocompleter extends Application {
 
     retarget(newTarget) {
         this.target = newTarget;
+        this.bringToTop();
     }
 
     /** @override */
@@ -126,16 +127,20 @@ export default class Autocompleter extends Application {
         super.activateListeners($html);
         const html = $html[0];
 
-        const input = html.querySelector(`input[type="text"]`);
+        const input = html.querySelector(`input.aip-input`);
         input.focus();
         input.setSelectionRange(input.value.length, input.value.length);
 
-        // input.addEventListener("blur", () => this.close());
+        input.addEventListener("blur", (event) => {
+            if (!event.path.includes(this.element[0])) {
+                this.close();
+            }
+        });
         input.addEventListener("input", this._onInputChanged.bind(this));
         input.addEventListener("keydown", this._onInputKeydown.bind(this));
 
-        const insert = html.querySelector(`button`);
-        insert.addEventListener("click", this._onInsertClicked.bind(this));
+        const insert = html.querySelector(`form.aip-form`);
+        insert.addEventListener("submit", this._onSubmit.bind(this));
     }
 
     /** @override */
@@ -203,7 +208,8 @@ export default class Autocompleter extends Application {
      * @param {MouseEvent} event
      * @private
      */
-    _onInsertClicked(event) {
+    _onSubmit(event) {
+        event.preventDefault();
         const oldValue = this.target.value;
 
         let spliceStart = oldValue.length;
@@ -219,8 +225,8 @@ export default class Autocompleter extends Application {
         const postSpacer = (!postString.length || postString[postString.length - 1] === " ") ? "" : " ";
         const insert = this.inputElement.value;
         this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
-        this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
 
         this.close();
+        this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
     }
 }
