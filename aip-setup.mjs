@@ -1,4 +1,3 @@
-import { SYSTEM_CONFIG } from "./system-config.mjs";
 import Autocompleter from "./scripts/autocompleter.mjs";
 
 // Store active autocompleters in a map, where the key is a stable identifier for the element that the autocompleter is targeting.
@@ -8,25 +7,27 @@ Hooks.on("setup", () => {
     CONFIG.debug.aip = true; // TODO - disable debug logging by default;
     console.log("AIP | Setting up Autocomplete Inline Properties");
 
-    const systemId = game.system.id;
-    const systemConfig = SYSTEM_CONFIG[systemId];
+    const packageConfig = CONFIG.AIP.PACKAGE_CONFIG;
 
-    if (!systemConfig) {
+    if (!packageConfig.find(pkg => pkg.packageName === game.system.id)) {
         ui.notifications.warn(game.i18n.localize("AIP.SystemNotSupported"));
-        return;
     }
 
-    for (let sheetClass of systemConfig.sheetClasses) {
-        if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
-        Hooks.on(`render${sheetClass.name}`, (sheet, $element, templateData) => {
-            const element = $element[0];
-            for (let selector of sheetClass.entityDataFieldSelectors) {
-                registerSelector(element, selector, Autocompleter.DATA_MODE.ENTITY_DATA);
-            }
-            for (let selector of sheetClass.rollDataFieldSelectors) {
-                registerSelector(element, selector, Autocompleter.DATA_MODE.ROLL_DATA);
-            }
-        });
+    for (let pkg of packageConfig) {
+        if (pkg.packageName !== game.system.id && !game.modules.get(pkg.packageName)?.active) continue;
+
+        for (let sheetClass of pkg.sheetClasses) {
+            if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
+            Hooks.on(`render${sheetClass.name}`, (sheet, $element, templateData) => {
+                const element = $element[0];
+                for (let selector of sheetClass.entityDataFieldSelectors ?? []) {
+                    registerSelector(element, selector, Autocompleter.DATA_MODE.ENTITY_DATA);
+                }
+                for (let selector of sheetClass.rollDataFieldSelectors ?? []) {
+                    registerSelector(element, selector, Autocompleter.DATA_MODE.ROLL_DATA);
+                }
+            });
+        }
     }
 });
 

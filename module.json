@@ -12,6 +12,7 @@
     }
   ],
   "esmodules": [
+    "./package-config.mjs",
     "./aip-setup.mjs"
   ],
   "styles": [
