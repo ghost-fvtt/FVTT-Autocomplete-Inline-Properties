@@ -91,6 +91,7 @@ export default class Autocompleter extends Application {
 
     retarget(newTarget) {
         this.target = newTarget;
+        this.render(false);
         this.bringToTop();
     }
 

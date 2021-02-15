@@ -65,6 +65,12 @@ function registerSelector(sheetElement, selector, mode) {
             }
         });
 
+        element.addEventListener("keydown", function(event) {
+            if (event.key === "@") {
+                _activateAutocompleter(event);
+            }
+        });
+
         // If the user clicks on the autocompleter summoner button, create a new autocompleter,
         // or if an autocompleter already exists, retargets it to the current element.
         button.addEventListener("click", _activateAutocompleter);
@@ -77,6 +83,11 @@ function registerSelector(sheetElement, selector, mode) {
         // A function which creates a new autocompleter for this element, or if one already exists, retargets it to this element.
         function _activateAutocompleter(event) {
             event?.preventDefault();
+
+            if (_registrations.has(key)) {
+                _registrations.get(key).retarget(element);
+                return;
+            }
 
             // Otherwise, create a new autocompleter
             let data = {};
