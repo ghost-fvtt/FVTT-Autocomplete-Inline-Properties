@@ -5,7 +5,7 @@ export default class Autocompleter extends Application {
      * @param {HTMLInputElement} target
      * @param {(number|null)} targetSelectionStart
      * @param {(number|null)} targetSelectionEnd
-     * @param {Autocompleter.DATA_MODE} mode
+     * @param {CONST.AIP.DATA_MODE} mode
      * @param {function} onClose
      * @param options
      */
@@ -18,8 +18,8 @@ export default class Autocompleter extends Application {
         this.targetSelectionEnd = targetSelectionEnd;
         this.mode = mode;
         switch (this.mode) {
-            case Autocompleter.DATA_MODE.ROLL_DATA: this.keyPrefix = "@"; break;
-            case Autocompleter.DATA_MODE.ENTITY_DATA:
+            case CONST.AIP.DATA_MODE.ROLL_DATA: this.keyPrefix = "@"; break;
+            case CONST.AIP.DATA_MODE.ENTITY_DATA:
             default:
                 this.keyPrefix = ""; break;
         }
@@ -27,12 +27,6 @@ export default class Autocompleter extends Application {
 
         this.rawPath = "";
     }
-
-    /** @enum {string} */
-    static DATA_MODE = {
-        ENTITY_DATA: "entity",
-        ROLL_DATA: "roll",
-    };
 
     /** @override */
     static get defaultOptions() {

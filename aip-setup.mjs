@@ -19,12 +19,9 @@ Hooks.on("setup", () => {
         for (let sheetClass of pkg.sheetClasses) {
             if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
             Hooks.on(`render${sheetClass.name}`, (sheet, $element, templateData) => {
-                const element = $element[0];
-                for (let selector of sheetClass.entityDataFieldSelectors ?? []) {
-                    registerSelector(element, selector, Autocompleter.DATA_MODE.ENTITY_DATA);
-                }
-                for (let selector of sheetClass.rollDataFieldSelectors ?? []) {
-                    registerSelector(element, selector, Autocompleter.DATA_MODE.ROLL_DATA);
+                const sheetElement = $element[0];
+                for (let fieldDef of sheetClass.fieldConfigs) {
+                    registerField(sheetElement, fieldDef);
                 }
             });
         }
@@ -32,31 +29,37 @@ Hooks.on("setup", () => {
 });
 
 /**
- * @param {HTMLElement} sheetElement - the sheet to register the selector for.
- * @param {string} selector
- * @param {Autocompleter.DATA_MODE} mode
+ * @param {HTMLElement} applicationElement - the sheet to register the selector for.
+ * @param {AIPFieldConfig} fieldConfig
  */
-function registerSelector(sheetElement, selector, mode) {
-    const sheet = ui.windows[sheetElement.closest(`[data-appid]`).dataset.appid];
-    if (!sheet) return;
-    const entity = sheet.object;
+function registerField(applicationElement, fieldConfig) {
+    const app = ui.windows[applicationElement.closest(`[data-appid]`).dataset.appid];
+    if (!app) return;
+    const entity = app.object;
 
-    const elements = Array.from(sheetElement.querySelectorAll(selector)).filter(e => e.type === "text");
+    const elements = Array.from(applicationElement.querySelectorAll(fieldConfig.selector)).filter(e => e.type === "text");
     for (let element of elements) {
-        const key = sheet.appId + element.name;
+        const key = app.appId + element.name;
 
-        // Create autocompleter summon button
-        const button = document.createElement("button");
-        button.innerHTML = `<i class="fas fa-at"></i>`;
-        button.classList.add("autocompleter-summon");
-        button.disabled = element.disabled;
-        element.parentNode.insertBefore(button, element);
+        let button;
+        if (fieldConfig.showButton) {
+            // Create autocompleter summon button
+            button = document.createElement("button");
+            button.innerHTML = `<i class="fas fa-at"></i>`;
+            button.classList.add("autocompleter-summon");
+            button.disabled = element.disabled;
+            element.parentNode.insertBefore(button, element);
+
+            // If the user clicks on the autocompleter summoner button, create a new autocompleter,
+            // or if an autocompleter already exists, retargets it to the current element.
+            button.addEventListener("click", _activateAutocompleter);
+        }
 
         // If the user had the target element focused, remember their selection for use later when the Autocompleter inserts new content.
         let selectionStart = null, selectionEnd = null;
         element.addEventListener("blur", function(event) {
             console.log("blur", event);
-            if (event.relatedTarget === button) {
+            if (button && event.relatedTarget === button) {
                 selectionStart = this.selectionStart;
                 selectionEnd = this.selectionEnd;
                 _activateAutocompleter(event);
@@ -71,10 +74,6 @@ function registerSelector(sheetElement, selector, mode) {
                 _activateAutocompleter(event);
             }
         });
-
-        // If the user clicks on the autocompleter summoner button, create a new autocompleter,
-        // or if an autocompleter already exists, retargets it to the current element.
-        button.addEventListener("click", _activateAutocompleter);
 
         // If an autocompleter already exists with this key (because the target sheet is being re-rendered), re-activate the autocompleter.
         if (_registrations.has(key)) {
@@ -92,16 +91,19 @@ function registerSelector(sheetElement, selector, mode) {
 
             // Otherwise, create a new autocompleter
             let data = {};
-            switch (mode) {
-                case Autocompleter.DATA_MODE.ENTITY_DATA:
+            switch (fieldConfig.dataMode) {
+                case CONST.AIP.DATA_MODE.ENTITY_DATA:
                     data = entity.data;
                     break;
-                case Autocompleter.DATA_MODE.ROLL_DATA:
+                case CONST.AIP.DATA_MODE.ROLL_DATA:
                     data = entity.getRollData();
+                    break;
+                case CONST.AIP.DATA_MODE.CUSTOM:
+                    data = fieldConfig.customDataGetter(entity);
                     break;
             }
 
-            const autocompleter = new Autocompleter(data, element, selectionStart, selectionEnd, mode, () => {
+            const autocompleter = new Autocompleter(data, element, selectionStart, selectionEnd, fieldConfig.dataMode, () => {
                 // When this Autocompleter gets closed, clean up the registration for this element.
                 _registrations.delete(key);
             }).render(true);
