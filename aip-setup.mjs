@@ -62,7 +62,6 @@ function registerField(sheetElement, fieldConfig) {
         // If the user had the target element focused, remember their selection for use later when the Autocompleter inserts new content.
         let selectionStart = null, selectionEnd = null;
         targetElement.addEventListener("blur", function(event) {
-            console.log("blur", event);
             if (button && event.relatedTarget === button) {
                 selectionStart = this.selectionStart;
                 selectionEnd = this.selectionEnd;
