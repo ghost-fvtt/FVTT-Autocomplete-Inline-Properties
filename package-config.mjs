@@ -51,6 +51,12 @@ CONFIG.AIP = {
                         { selector: `.sheet.item .tab.details input[type="text"][name="data.formula"]`, showButton: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
                     ],
                 },
+                {
+                    name: "ActiveEffectConfig",
+                    fieldConfigs: [
+                        { selector: `.sheet.active-effect-sheet .tab[data-tab="effects"] .key input[type="text"]`, showButton: true, dataMode: CONST.AIP.DATA_MODE.ENTITY_DATA },
+                    ]
+                }
             ],
         }
     ]

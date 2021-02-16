@@ -144,10 +144,8 @@ export default class Autocompleter extends Application {
         input.focus();
         input.setSelectionRange(input.value.length, input.value.length);
 
-        input.addEventListener("blur", (event) => {
-            if (!event.path.includes(this.element[0])) {
-                this.close();
-            }
+        input.addEventListener("focusout", (event) => {
+            this.close();
         });
         input.addEventListener("input", this._onInputChanged.bind(this));
         input.addEventListener("keydown", this._onInputKeydown.bind(this));
@@ -166,6 +164,7 @@ export default class Autocompleter extends Application {
         })
         return super._render(force, options).then(result => {
             this.setPosition({ top: targetRect.top - this.element[0].getBoundingClientRect().height - 5 });
+            this.bringToTop();
             return result;
         })
     }
