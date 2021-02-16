@@ -46,22 +46,40 @@ export default class Autocompleter extends Application {
 
     get _dataAtPath() {
         const path = this.combinedPath;
-        return Object.entries(path?.length ? getProperty(this.targetData, path) : this.targetData)
-            .map(([key, value]) => ({
+        const value = path?.length ? getProperty(this.targetData, path) : this.targetData;
+        if (value === null || value === undefined) return [];
+        return Object.entries(value).map(([key, value]) => ({
                 "key": path + (path.length ? "." : "") + key,
                 value,
             }));
     }
 
-    static _formatData(entry) {
-        return {
-            key: entry.key,
-            value: typeof entry.value === "object" ? "{}" : entry.value.toString(),
+    /**
+     * @param {string} key
+     * @param {any} value
+     * @returns {{ key: string, value: string }}
+     * @private
+     */
+    static _formatData({ key, value }) {
+        let formattedValue;
+        switch (typeof value) {
+            case "undefined":
+                formattedValue = typeof value;
+                break
+            case "object":
+                if (!value) {
+                    formattedValue = "null";
+                } else {
+                    formattedValue = "{}";
+                }
+                break;
+            case "string":
+                formattedValue = `"${value}"`;
+                break
+            default:
+                formattedValue = value.toString();
         }
-    }
-
-    get dataAtPathFormatted() {
-        return this._dataAtPath.map(Autocompleter._formatData);
+        return { key, value: formattedValue };
     }
 
     get sortedDataAtPath() {
@@ -192,7 +210,7 @@ export default class Autocompleter extends Application {
                     this.rawPath = "";
                 } else {
                     const newEntry = bestMatch;
-                    this.rawPath = newEntry.key + (typeof newEntry.value === "object" ? "." : "");
+                    this.rawPath = newEntry.key + (typeof newEntry.value === "object" && newEntry.value ? "." : "");
                 }
                 this.render(false);
                 return;

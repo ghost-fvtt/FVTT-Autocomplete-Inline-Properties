@@ -29,35 +29,39 @@ Hooks.on("setup", () => {
 });
 
 /**
- * @param {HTMLElement} applicationElement - the sheet to register the selector for.
+ * @param {HTMLElement} sheetElement - the sheet to register the selector for.
  * @param {AIPFieldConfig} fieldConfig
  */
-function registerField(applicationElement, fieldConfig) {
-    const app = ui.windows[applicationElement.closest(`[data-appid]`).dataset.appid];
+function registerField(sheetElement, fieldConfig) {
+    const app = ui.windows[sheetElement.closest(`[data-appid]`).dataset.appid];
     if (!app) return;
     const entity = app.object;
 
-    const elements = Array.from(applicationElement.querySelectorAll(fieldConfig.selector)).filter(e => e.type === "text");
-    for (let element of elements) {
-        const key = app.appId + element.name;
+    // Check that we get valid data for the given entity. If not, skip adding Autocomplete to this field.
+    try {
+        const data = getData(entity, fieldConfig);
+        if (!data) {
+            if (CONFIG.debug.aip) console.log("Specified data for field not found", app, fieldConfig);
+            return;
+        }
+    } catch (e) {
+        console.error("Error registering AIP field", e, app, fieldConfig);
+        return;
+    }
+
+
+    const elements = Array.from(sheetElement.querySelectorAll(fieldConfig.selector)).filter(e => e.type === "text");
+    for (let targetElement of elements) {
+        const key = app.appId + targetElement.name;
 
         let button;
         if (fieldConfig.showButton) {
-            // Create autocompleter summon button
-            button = document.createElement("button");
-            button.innerHTML = `<i class="fas fa-at"></i>`;
-            button.classList.add("autocompleter-summon");
-            button.disabled = element.disabled;
-            element.parentNode.insertBefore(button, element);
-
-            // If the user clicks on the autocompleter summoner button, create a new autocompleter,
-            // or if an autocompleter already exists, retargets it to the current element.
-            button.addEventListener("click", _activateAutocompleter);
+            button = createSummonButton(targetElement);
         }
 
         // If the user had the target element focused, remember their selection for use later when the Autocompleter inserts new content.
         let selectionStart = null, selectionEnd = null;
-        element.addEventListener("blur", function(event) {
+        targetElement.addEventListener("blur", function(event) {
             console.log("blur", event);
             if (button && event.relatedTarget === button) {
                 selectionStart = this.selectionStart;
@@ -69,7 +73,8 @@ function registerField(applicationElement, fieldConfig) {
             }
         });
 
-        element.addEventListener("keydown", function(event) {
+        // If the user presses the "@" key while the target element is focused, open the Autocompleter
+        targetElement.addEventListener("keydown", function(event) {
             if (event.key === "@") {
                 _activateAutocompleter(event);
             }
@@ -77,7 +82,7 @@ function registerField(applicationElement, fieldConfig) {
 
         // If an autocompleter already exists with this key (because the target sheet is being re-rendered), re-activate the autocompleter.
         if (_registrations.has(key)) {
-            _registrations.get(key).retarget(element);
+            _registrations.get(key).retarget(targetElement);
         }
 
         // A function which creates a new autocompleter for this element, or if one already exists, retargets it to this element.
@@ -85,29 +90,42 @@ function registerField(applicationElement, fieldConfig) {
             event?.preventDefault();
 
             if (_registrations.has(key)) {
-                _registrations.get(key).retarget(element);
+                _registrations.get(key).retarget(targetElement);
                 return;
             }
 
             // Otherwise, create a new autocompleter
-            let data = {};
-            switch (fieldConfig.dataMode) {
-                case CONST.AIP.DATA_MODE.ENTITY_DATA:
-                    data = entity.data;
-                    break;
-                case CONST.AIP.DATA_MODE.ROLL_DATA:
-                    data = entity.getRollData();
-                    break;
-                case CONST.AIP.DATA_MODE.CUSTOM:
-                    data = fieldConfig.customDataGetter(entity);
-                    break;
-            }
-
-            const autocompleter = new Autocompleter(data, element, selectionStart, selectionEnd, fieldConfig.dataMode, () => {
+            const data = getData(entity, fieldConfig);
+            const autocompleter = new Autocompleter(data, targetElement, selectionStart, selectionEnd, fieldConfig.dataMode, () => {
                 // When this Autocompleter gets closed, clean up the registration for this element.
                 _registrations.delete(key);
             }).render(true);
             _registrations.set(key, autocompleter);
         }
     }
+}
+
+function getData(entity, fieldConfig) {
+    switch (fieldConfig.dataMode) {
+        case CONST.AIP.DATA_MODE.ENTITY_DATA:
+            return entity.data;
+        case CONST.AIP.DATA_MODE.ROLL_DATA:
+            return entity.getRollData();
+        case CONST.AIP.DATA_MODE.CUSTOM:
+            return fieldConfig.customDataGetter(entity);
+        default:
+            throw new Error(`Unrecognized data mode "${fieldConfig.dataMode}"`);
+    }
+}
+
+function createSummonButton(targetElement, _activateAutocompleter) {
+    const button = document.createElement("button");
+    button.innerHTML = `<i class="fas fa-at"></i>`;
+    button.classList.add("autocompleter-summon");
+    button.disabled = targetElement.disabled;
+    targetElement.parentNode.insertBefore(button, targetElement);
+
+    button.addEventListener("click", _activateAutocompleter);
+
+    return button;
 }
