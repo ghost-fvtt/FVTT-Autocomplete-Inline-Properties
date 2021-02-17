@@ -57,7 +57,7 @@ function registerField(sheetElement, fieldConfig) {
 
         if (fieldConfig.showButton && !targetElement.disabled) {
             // Show the summoner button when the user mouses over this field
-            targetElement.addEventListener("mouseenter", function(event) {
+            targetElement.addEventListener("mouseenter", function() {
                 if (!_summonerButton) {
                     // Create button
                     _summonerButton = document.createElement("button");
@@ -90,13 +90,13 @@ function registerField(sheetElement, fieldConfig) {
             });
 
             // Destroy the summoner button when the user starts typing in the target element
-            targetElement.addEventListener("input", function (event) {
+            targetElement.addEventListener("input", function () {
                 _summonerButton?.remove();
                 _summonerButton = null;
             })
 
             // Destroy the summoner button when the user scrolls this sheet
-            sheetElement.addEventListener("wheel", function(event) {
+            sheetElement.addEventListener("wheel", function() {
                 _summonerButton?.remove();
                 _summonerButton = null;
             });
