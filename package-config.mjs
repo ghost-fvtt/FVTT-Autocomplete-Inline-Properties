@@ -1,11 +1,16 @@
 CONST.AIP = {
     /**
      * @enum {string}
-     *
+     * Determines which data should be provided to the Autocompleter
      */
     DATA_MODE: {
+        // The data of the sheet's entity
         ENTITY_DATA: "entity",
+        // The roll data of the sheet's entity
         ROLL_DATA: "roll",
+        // The data of the sheet's entity's owning actor
+        OWNING_ACTOR_DATA: "owning-actor",
+        // Custom data as defined by the `customDataGetter`
         CUSTOM: "custom",
     },
 }
@@ -54,7 +59,7 @@ CONFIG.AIP = {
                 {
                     name: "ActiveEffectConfig",
                     fieldConfigs: [
-                        { selector: `.sheet.active-effect-sheet .tab[data-tab="effects"] .key input[type="text"]`, showButton: true, dataMode: CONST.AIP.DATA_MODE.ENTITY_DATA },
+                        { selector: `.sheet.active-effect-sheet .tab[data-tab="effects"] .key input[type="text"]`, showButton: true, dataMode: CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA },
                     ]
                 }
             ],

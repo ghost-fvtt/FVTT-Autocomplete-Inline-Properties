@@ -110,6 +110,8 @@ function getData(entity, fieldConfig) {
             return entity.data;
         case CONST.AIP.DATA_MODE.ROLL_DATA:
             return entity.getRollData();
+        case CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA:
+            return entity.actor?.data ?? entity.parent?.data;
         case CONST.AIP.DATA_MODE.CUSTOM:
             return fieldConfig.customDataGetter(entity);
         default:
