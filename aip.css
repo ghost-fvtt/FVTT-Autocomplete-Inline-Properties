@@ -10,12 +10,8 @@ button.autocompleter-summon {
 
 button.autocompleter-summon > i {
     margin: 0;
-    color: #333333;
-}
-
-button.autocompleter-summon[disabled] > i {
-    margin: 0;
-    opacity: 50%;
+    text-align: center;
+    color: #555555;
 }
 
 /* Autocompleter application */

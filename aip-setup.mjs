@@ -73,6 +73,7 @@ function registerField(sheetElement, fieldConfig) {
                 _summonerButton.style.height = targetElementRect.height - 4 + "px";
                 _summonerButton.style.top = targetElementRect.top + 2 + "px";
                 _summonerButton.style.left = targetElementRect.left + 2 + "px";
+                _summonerButton.firstElementChild.style.fontSize = (targetElementRect.height - 8) + "px";
 
                 _summonerButton.addEventListener("click", function(event) {
                     event.preventDefault();
@@ -86,6 +87,18 @@ function registerField(sheetElement, fieldConfig) {
                     _summonerButton?.remove();
                     _summonerButton = null;
                 }
+            });
+
+            // Destroy the summoner button when the user starts typing in the target element
+            targetElement.addEventListener("input", function (event) {
+                _summonerButton?.remove();
+                _summonerButton = null;
+            })
+
+            // Destroy the summoner button when the user scrolls this sheet
+            sheetElement.addEventListener("wheel", function(event) {
+                _summonerButton?.remove();
+                _summonerButton = null;
             });
         }
 
@@ -116,9 +129,7 @@ function registerField(sheetElement, fieldConfig) {
  * @private
  */
 function _activateAutocompleter(targetElement, targetKey, fieldConfig, entity) {
-    if (_autocompleter) {
-        _autocompleter.close();
-    }
+    _autocompleter?.close();
 
     // Otherwise, create a new autocompleter
     const data = Autocompleter.getData(entity, fieldConfig);
