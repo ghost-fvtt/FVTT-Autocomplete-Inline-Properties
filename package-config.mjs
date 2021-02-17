@@ -18,13 +18,13 @@ const DATA_MODE = {
  * Getter functions corresponding to the data modes defined in {@link CONST.AIP.DATA_MODE}
  */
 const DATA_GETTERS = {
-    [DATA_MODE.ENTITY_DATA]: (entity) => entity.data,
-    [DATA_MODE.ROLL_DATA]: (entity) => entity.getRollData(),
-    [DATA_MODE.OWNING_ACTOR_DATA]: (entity) => {
-        let parent = entity.actor ?? entity.parent;
+    [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
+    [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
+    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => {
+        let parent = sheet.object?.actor ?? sheet.object?.parent;
         return (parent && parent instanceof Actor) ? parent.data : null;
     },
-    [DATA_MODE.CUSTOM]: (entity, customDataGetter) => customDataGetter(entity),
+    [DATA_MODE.CUSTOM]: (sheet, customDataGetter) => customDataGetter(sheet),
 }
 
 CONST.AIP = { DATA_MODE, DATA_GETTERS };
@@ -54,7 +54,7 @@ CONST.AIP = { DATA_MODE, DATA_GETTERS };
  * @property {boolean} showButton - whether the AIP "@" button should be shown for this field.
  * @property {boolean} allowHotkey - whether pressing the "@" key on the keyboard should activate the Autocompleter for this field.
  * @property {CONST.AIP.DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
- * @property {(function(Entity): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called
+ * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called
  *     to produce the data for the Autocompleter.
  */
 

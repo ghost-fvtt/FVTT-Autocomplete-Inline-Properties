@@ -6,7 +6,7 @@ let _autocompleter = null;
 let _summonerButton = null;
 
 Hooks.on("setup", () => {
-    CONFIG.debug.aip = true; // TODO - disable debug logging by default;
+    CONFIG.debug.aip = false;
     console.log("AIP | Setting up Autocomplete Inline Properties");
 
     const packageConfig = CONFIG.AIP.PACKAGE_CONFIG;
@@ -37,11 +37,10 @@ Hooks.on("setup", () => {
 function registerField(sheetElement, fieldConfig) {
     const app = ui.windows[sheetElement.closest(`[data-appid]`).dataset.appid];
     if (!app) return;
-    const entity = app.object;
 
     // Check that we get valid data for the given entity. If not, skip adding Autocomplete to this field.
     try {
-        const data = Autocompleter.getEntityData(entity, fieldConfig);
+        const data = Autocompleter.getEntityData(app, fieldConfig);
         if (!data) {
             if (CONFIG.debug.aip) console.log("Specified data for field not found", app, fieldConfig);
             return;
@@ -77,7 +76,7 @@ function registerField(sheetElement, fieldConfig) {
 
                 _summonerButton.addEventListener("click", function(event) {
                     event.preventDefault();
-                    _activateAutocompleter(targetElement, key, fieldConfig, entity);
+                    _activateAutocompleter(targetElement, key, fieldConfig, app);
                 });
             });
 
@@ -107,7 +106,7 @@ function registerField(sheetElement, fieldConfig) {
             targetElement.addEventListener("keydown", function (event) {
                 if (event.key === "@") {
                     event.preventDefault();
-                    _activateAutocompleter(targetElement, key, fieldConfig, entity);
+                    _activateAutocompleter(targetElement, key, fieldConfig, app);
                 }
             });
         }
@@ -125,14 +124,14 @@ function registerField(sheetElement, fieldConfig) {
  * @param {HTMLInputElement} targetElement
  * @param {string} targetKey
  * @param {AIPFieldConfig} fieldConfig
- * @param {Entity} entity
+ * @param {Application} app
  * @private
  */
-function _activateAutocompleter(targetElement, targetKey, fieldConfig, entity) {
+function _activateAutocompleter(targetElement, targetKey, fieldConfig, app) {
     _autocompleter?.close();
 
     // Otherwise, create a new autocompleter
-    const data = Autocompleter.getEntityData(entity, fieldConfig);
+    const data = Autocompleter.getEntityData(app, fieldConfig);
     _autocompleter = new Autocompleter(data, targetElement, targetKey, fieldConfig.dataMode, function onClose() {
         // When this Autocompleter gets closed, clean up the registration for this element.
         _autocompleter = null;

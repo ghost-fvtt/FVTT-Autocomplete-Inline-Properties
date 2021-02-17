@@ -30,11 +30,14 @@ export default class Autocompleter extends Application {
 
     /**
      * Given an entity, the data mode, and, if necessary, a custom data getter, return the appropriate data for that data mode
+     * @param {Application} sheet
+     * @param {CONST.AIP.DATA_MODE} dataMode
+     * @param {(function(Application): object|null)} customDataGetter
      */
-    static getEntityData(entity, { dataMode, customDataGetter=null }) {
-        const result = CONST.AIP.DATA_GETTERS[dataMode]?.(entity, customDataGetter);
-        if (!result) throw new Error(`Unrecognized data mode "${dataMode}"`);
-        return result;
+    static getEntityData(sheet, { dataMode, customDataGetter=null }) {
+        const getter = CONST.AIP.DATA_GETTERS[dataMode];
+        if (!getter) throw new Error(`Unrecognized data mode "${dataMode}"`);
+        return getter(sheet, customDataGetter);
     }
 
     /** @override */
