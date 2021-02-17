@@ -22,7 +22,9 @@ export default class Autocompleter extends Application {
             case CONST.AIP.DATA_MODE.OWNING_ACTOR_ROLL_DATA:
                 this.keyPrefix = "@";
                 break;
-            case CONST.AIP.DATA_MODE.ENTITY_DATA:
+            case CONST.AIP.DATA_MODE.CUSTOM:
+                this.keyPrefix = fieldConfig.customInlinePrefix ?? "";
+                break;
             default:
                 this.keyPrefix = "";
                 break;

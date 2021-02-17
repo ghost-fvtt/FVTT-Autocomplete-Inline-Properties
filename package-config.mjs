@@ -67,8 +67,8 @@ CONST.AIP = { DATA_MODE, DATA_GETTERS };
  * @property {boolean} showButton - whether the AIP "@" button should be shown for this field.
  * @property {boolean} allowHotkey - whether pressing the "@" key on the keyboard should activate the Autocompleter for this field.
  * @property {CONST.AIP.DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
- * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called
- *     to produce the data for the Autocompleter.
+ * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called to produce the data for the Autocompleter.
+ * @property {string} customInlinePrefix - if `dataMode` is `CUSTOM`, this prefix will be inserted in the target field when the Autocompleter is submitted
  */
 
 CONFIG.AIP = {
