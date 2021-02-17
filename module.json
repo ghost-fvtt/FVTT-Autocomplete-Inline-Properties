@@ -1,7 +1,7 @@
 {
   "name": "autocomplete-inline-properties",
   "title": "Autocomplete Inline Properties",
-  "description": "Add inline property autocompletion for fields that can use them ",
+  "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference entity data.",
   "version": "1.0.0",
   "author": "Cole Schultz (cole#9640)",
   "languages": [
