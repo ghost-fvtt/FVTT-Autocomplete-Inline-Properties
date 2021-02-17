@@ -98,7 +98,7 @@ function registerField(sheetElement, fieldConfig) {
             sheetElement.addEventListener("wheel", function() {
                 _summonerButton?.remove();
                 _summonerButton = null;
-            });
+            }, { passive: true });
         }
 
         if (fieldConfig.allowHotkey) {
