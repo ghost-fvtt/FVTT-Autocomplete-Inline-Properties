@@ -1,7 +1,7 @@
 # Contributing
 
-Pull requests are welcome! I appreciate any bugfixes you can provide, and I am also very willing to accept support for new systems in the module.
-Note that I would prefer not to add explicit support for modules within AIP.
+Pull requests are welcome! I appreciate any bugfixes you can provide, and I am also very willing to accept support for new systems in this module.
+Note that I would prefer not to add explicit support for other modules within AIP.
 Other modules can, however, add their own configuration at runtime in the `init` hook if they wish.
 
 ## Adding support for new systems or modules
