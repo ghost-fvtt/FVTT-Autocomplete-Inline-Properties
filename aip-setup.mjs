@@ -69,11 +69,11 @@ function registerField(sheetElement, fieldConfig) {
 
                 // Position button
                 const targetElementRect = targetElement.getBoundingClientRect();
-                _summonerButton.style.width = targetElementRect.height - 4 + "px";
-                _summonerButton.style.height = targetElementRect.height - 4 + "px";
-                _summonerButton.style.top = targetElementRect.top + 2 + "px";
-                _summonerButton.style.left = targetElementRect.left + 2 + "px";
-                _summonerButton.firstElementChild.style.fontSize = (targetElementRect.height - 8) + "px";
+                _summonerButton.style.width = (targetElementRect.height - 4) + "px";
+                _summonerButton.style.height = (targetElementRect.height - 4) + "px";
+                _summonerButton.style.top = (targetElementRect.top + 2) + "px";
+                _summonerButton.style.left = (targetElementRect.left + 2) + "px";
+                _summonerButton.firstElementChild.style.fontSize = (targetElementRect.height - 10) + "px";
 
                 _summonerButton.addEventListener("click", function(event) {
                     event.preventDefault();
