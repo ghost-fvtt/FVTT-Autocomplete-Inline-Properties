@@ -73,6 +73,7 @@ function registerField(sheetElement, fieldConfig) {
                 _summonerButton.style.height = targetElementRect.height - 4 + "px";
                 _summonerButton.style.top = targetElementRect.top + 2 + "px";
                 _summonerButton.style.left = targetElementRect.left + 2 + "px";
+
                 _summonerButton.addEventListener("click", function(event) {
                     event.preventDefault();
                     _activateAutocompleter(targetElement, key, fieldConfig, entity);
@@ -98,7 +99,8 @@ function registerField(sheetElement, fieldConfig) {
             });
         }
 
-        // If an autocompleter already exists with this key (because the target sheet is being re-rendered), re-activate the autocompleter.
+        // If an autocompleter already exists with this key (because the target sheet is being re-rendered),
+        // retarget the autocompleter to the newly rendered target element.
         if (_autocompleter?.targetKey === key) {
             _autocompleter.retarget(targetElement);
         }

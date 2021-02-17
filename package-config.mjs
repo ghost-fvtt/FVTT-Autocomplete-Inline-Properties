@@ -25,7 +25,8 @@ CONST.AIP = {
 
 /**
  * @typedef {Object} AIPSheetClassConfig
- * A configuration object describing a specific sheet class and which fields within that sheet should have AIP applied
+ * A configuration object describing a specific sheet class and which fields within that sheet should have AIP applied.
+ * The default data modes assume that this sheet is a {@link FormApplication} which references an entity.
  *
  * @property {string} name - the name of the sheet class
  * @property {AIPFieldConfig[]} fieldConfigs - the fields within this sheet that should have AIP applied
