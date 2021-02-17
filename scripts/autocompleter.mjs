@@ -14,8 +14,8 @@ export default class Autocompleter extends Application {
         this.targetData = data;
         this.target = target;
         this.targetKey = targetKey;
-        this.targetSelectionStart = null;
-        this.targetSelectionEnd = null;
+
+        this.filteredKeys = fieldConfig.filteredKeys ?? null;
         this.mode = fieldConfig.dataMode;
         switch (this.mode) {
             case CONST.AIP.DATA_MODE.ROLL_DATA:
@@ -29,12 +29,16 @@ export default class Autocompleter extends Application {
                 this.keyPrefix = "";
                 break;
         }
-        this.onClose = onClose;
 
         this.rawPath = "";
         if (fieldConfig.defaultPath?.length) {
             this.rawPath = this._keyWithTrailingDot(fieldConfig.defaultPath);
         }
+        this.onClose = onClose;
+
+        // Currently unused
+        this.targetSelectionStart = null;
+        this.targetSelectionEnd = null;
     }
 
     /**
@@ -71,23 +75,46 @@ export default class Autocompleter extends Application {
         return key + ((data && typeof data === "object") ? "." : "");
     }
 
+    /**
+     * The Autocompleter path textbox
+     * @returns {HTMLInputElement}
+     */
     get inputElement() { return this.element?.[0]?.querySelector("input.aip-input"); }
 
+    /**
+     * The current raw path split into an array of path elements
+     * @returns {string[]}
+     */
     get splitPath() { return this.rawPath.split("."); }
-    get combinedFullPath() { return this.rawPath; }
-    get combinedPath() { return this.splitPath.slice(0, -1).join("."); }
 
+    /**
+     * The current raw path, with any partially entered key trimmed off
+     * @returns {string}
+     */
+    get pathWithoutPartial() { return this.splitPath.slice(0, -1).join("."); }
+
+    /**
+     * Gets the target data at the current rawPath, formatting the keys to include the full path until this point.
+     * @returns {{ key: string, value: any }[]}
+     * @private
+     */
     get _dataAtPath() {
-        const path = this.combinedPath;
+        const path = this.pathWithoutPartial;
         const value = path?.length ? getProperty(this.targetData, path) : this.targetData;
         if (value === null || value === undefined) return [];
-        return Object.entries(value).map(([key, value]) => ({
+        return Object.entries(value)
+            .map(([key, value]) => ({
                 "key": path + (path.length ? "." : "") + key,
                 value,
-            }));
+            }))
+            .filter(({ key }) => {
+                if (!this.filteredKeys) return true;
+                return !this.filteredKeys.some(filter => key.startsWith(filter));
+            });
     }
 
     /**
+     * Given a key value pair, "stringify" and format the value to be appropriate to display in the Autocompleter
      * @param {string} key
      * @param {any} value
      * @returns {{ key: string, value: string }}
@@ -115,6 +142,11 @@ export default class Autocompleter extends Application {
         return { key, value: formattedValue };
     }
 
+    /**
+     * Returns the sorted data at the current rawPath.
+     * Sorting is done lexicographically, except that primitive values are always sorted first
+     * @returns {{ key: string, value: any }[]}
+     */
     get sortedDataAtPath() {
         return this._dataAtPath
             .sort((a, b) => {
@@ -126,14 +158,26 @@ export default class Autocompleter extends Application {
             });
     }
 
+    /**
+     * Sorted data in which the values have been formatted appropriately for displaying in the Autocompleter
+     * @returns {{key: string, value: string}[]}
+     */
     get sortedDataAtPathFormatted() {
         return this.sortedDataAtPath.map(Autocompleter._formatData);
     }
 
+    /**
+     * The Autocompleter list entry that most closely matches the current rawPath
+     * @returns {({ key: string, value: any }|undefined)}
+     */
     get currentBestMatch() {
-        return this.sortedDataAtPath.filter(({ key }) => key.startsWith(this.combinedFullPath))?.[0];
+        return this.sortedDataAtPath.filter(({ key }) => key.startsWith(this.rawPath))?.[0];
     }
 
+    /**
+     * Assigns this Autocompleter a new target input element (in the case of a sheet re-render, for instance) and re-renders.
+     * @param newTarget
+     */
     retarget(newTarget) {
         this.target = newTarget;
         this.render(false);
@@ -142,7 +186,7 @@ export default class Autocompleter extends Application {
 
     /** @override */
     getData(options = {}) {
-        const escapedCombinedPath = "^" + this.combinedFullPath.replace(/\./, "\\.");
+        const escapedCombinedPath = "^" + this.rawPath.replace(/\./, "\\.");
         let highlightedEntry = null;
         const dataEntries = this.sortedDataAtPathFormatted
             .map(({ key, value }, index) => {
@@ -238,7 +282,7 @@ export default class Autocompleter extends Application {
                 event.preventDefault();
                 const bestMatch = this.currentBestMatch;
                 if (!bestMatch) {
-                    ui.notifications.warn(`The key "${this.combinedFullPath}" does not match any known keys.`);
+                    ui.notifications.warn(`The key "${this.rawPath}" does not match any known keys.`);
                     this.rawPath = "";
                 } else {
                     this.rawPath = this._keyWithTrailingDot(bestMatch.key);

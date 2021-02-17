@@ -66,6 +66,7 @@ CONST.AIP = { DATA_MODE, DATA_GETTERS };
  * @property {(string|undefined)} defaultPath - (optional) this path will be used as the default contents of the path field when the Autocompleter is first created
  * @property {boolean} showButton - whether the AIP "@" button should be shown for this field.
  * @property {boolean} allowHotkey - whether pressing the "@" key on the keyboard should activate the Autocompleter for this field.
+ * @property {(string[]|undefined)} filteredKeys - (optional) an array of keys that should not be shown in the Autocompleter.
  * @property {CONST.AIP.DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
  * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called to produce the data for the Autocompleter.
  * @property {string} customInlinePrefix - if `dataMode` is `CUSTOM`, this prefix will be inserted in the target field when the Autocompleter is submitted
@@ -86,7 +87,7 @@ CONFIG.AIP = {
                 {
                     name: "ItemSheet5e",
                     fieldConfigs: [
-                        { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                        { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA, filteredKeys: [ "pro", "abilities.dex" ] },
                         { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
                         { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
                     ]
