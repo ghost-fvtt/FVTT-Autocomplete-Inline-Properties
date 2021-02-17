@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.1.0] 2021-02-17
+
+### API
+
+- Added several field configuration properties
+  - `defaultPath`: sets the default path that will appear in the Autocompleter on initial load for the target field.
+  - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: a new data mode which will get the roll data of the owning actor.
+  - `customInlinePrefix`: a prefix that will be inserted in front of the final path in the target field when the Autocompleter is submitted.
+  - `filteredKeys`: an array of keys which should not be displayed in the Autocompleter for the target field.
+
 ## [1.0.1] 2021-02-17
 
 ### FIXED
