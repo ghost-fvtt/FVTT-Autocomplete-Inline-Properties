@@ -31,8 +31,7 @@ export default class Autocompleter extends Application {
 
         this.rawPath = "";
         if (fieldConfig.defaultPath?.length) {
-            const defaultPathData = getProperty(this.targetData, fieldConfig.defaultPath);
-            this.rawPath = fieldConfig.defaultPath + ((defaultPathData && typeof defaultPathData === "object") ? "." : "");
+            this.rawPath = this._keyWithTrailingDot(fieldConfig.defaultPath);
         }
     }
 
@@ -56,6 +55,18 @@ export default class Autocompleter extends Application {
             minWidth: 300,
             height: "auto",
         });
+    }
+
+    /**
+     * If the given key does not terminate in a primitive value, return the key with a dot appended, otherwise assume the key is final.
+     * If the key is not valid (does not exist in targetData), return the key with no modification
+     * @param {string} key
+     * @returns {string}
+     * @private
+     */
+    _keyWithTrailingDot(key) {
+        const data = getProperty(this.targetData, key);
+        return key + ((data && typeof data === "object") ? "." : "");
     }
 
     get inputElement() { return this.element?.[0]?.querySelector("input.aip-input"); }
@@ -228,8 +239,7 @@ export default class Autocompleter extends Application {
                     ui.notifications.warn(`The key "${this.combinedFullPath}" does not match any known keys.`);
                     this.rawPath = "";
                 } else {
-                    const newEntry = bestMatch;
-                    this.rawPath = newEntry.key + (typeof newEntry.value === "object" && newEntry.value ? "." : "");
+                    this.rawPath = this._keyWithTrailingDot(bestMatch.key);
                 }
                 this.render(false);
                 return;
