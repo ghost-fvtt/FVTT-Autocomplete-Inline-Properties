@@ -24,6 +24,7 @@ button.autocompleter-summon > i {
 .autocompleter .window-content {
     padding: 3px;
     border-radius: 5px;
+    overflow: hidden;
 }
 
 .autocompleter ol.aip-list {
