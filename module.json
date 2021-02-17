@@ -2,7 +2,7 @@
   "name": "autocomplete-inline-properties",
   "title": "Autocomplete Inline Properties",
   "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference entity data.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Cole Schultz (cole#9640)",
   "languages": [
     {
@@ -24,9 +24,9 @@
   "bugs": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/issues",
   "allowBugReporter": true,
   "manifest": "https://raw.githubusercontent.com/schultzcole/FVTT-Autocomplete-Inline-Properties/master/module.json",
-  "download": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/archive/1.0.0.zip",
-  "license": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.0/LICENSE",
-  "readme": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.0/README.md",
-  "changelog": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.0/CHANGELOG.md"
+  "download": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/archive/1.0.1.zip",
+  "license": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.1/LICENSE",
+  "readme": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.1/README.md",
+  "changelog": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.1/CHANGELOG.md"
 }
 

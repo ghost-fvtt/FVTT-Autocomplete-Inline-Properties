@@ -28,6 +28,8 @@ Module and system authors can enable or disable the option to press the "@" hotk
 This module currently offers built in support for the dnd5e system, though I am more than willing to accept pull requests to support other systems.
 Modules that add their own sheets and fields can add those fields to the AIP configuration as desired.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to add support for your system or module. 
+
 ## License
 
 Licensed under the GPLv3 License (see [LICENSE](LICENSE)).
