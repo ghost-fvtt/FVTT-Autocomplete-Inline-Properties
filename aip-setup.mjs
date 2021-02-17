@@ -132,7 +132,7 @@ function _activateAutocompleter(targetElement, targetKey, fieldConfig, app) {
 
     // Otherwise, create a new autocompleter
     const data = Autocompleter.getEntityData(app, fieldConfig);
-    _autocompleter = new Autocompleter(data, targetElement, targetKey, fieldConfig.dataMode, function onClose() {
+    _autocompleter = new Autocompleter(data, targetElement, targetKey, fieldConfig, function onClose() {
         // When this Autocompleter gets closed, clean up the registration for this element.
         _autocompleter = null;
     }).render(true);

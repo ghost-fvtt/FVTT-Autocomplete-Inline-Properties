@@ -4,11 +4,11 @@ export default class Autocompleter extends Application {
      * @param {object} data
      * @param {HTMLInputElement} target
      * @param {string} targetKey
-     * @param {CONST.AIP.DATA_MODE} mode
+     * @param {AIPFieldConfig} fieldConfig
      * @param {function} onClose
      * @param options
      */
-    constructor(data, target, targetKey, mode, onClose, options) {
+    constructor(data, target, targetKey, fieldConfig, onClose, options) {
         super(options);
 
         this.targetData = data;
@@ -16,7 +16,7 @@ export default class Autocompleter extends Application {
         this.targetKey = targetKey;
         this.targetSelectionStart = null;
         this.targetSelectionEnd = null;
-        this.mode = mode;
+        this.mode = fieldConfig.dataMode;
         switch (this.mode) {
             case CONST.AIP.DATA_MODE.ROLL_DATA:
             case CONST.AIP.DATA_MODE.OWNING_ACTOR_ROLL_DATA:
@@ -30,6 +30,10 @@ export default class Autocompleter extends Application {
         this.onClose = onClose;
 
         this.rawPath = "";
+        if (fieldConfig.defaultPath?.length) {
+            const defaultPathData = getProperty(this.targetData, fieldConfig.defaultPath);
+            this.rawPath = fieldConfig.defaultPath + ((defaultPathData && typeof defaultPathData === "object") ? "." : "");
+        }
     }
 
     /**

@@ -63,6 +63,7 @@ CONST.AIP = { DATA_MODE, DATA_GETTERS };
  * A configuration object describing a field to which AIP should be applied
  *
  * @property {string} selector - the selector string that should be used to find this field within the containing sheet
+ * @property {(string|undefined)} defaultPath - (optional) this path will be used as the default contents of the path field when the Autocompleter is first created
  * @property {boolean} showButton - whether the AIP "@" button should be shown for this field.
  * @property {boolean} allowHotkey - whether pressing the "@" key on the keyboard should activate the Autocompleter for this field.
  * @property {CONST.AIP.DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
@@ -93,7 +94,7 @@ CONFIG.AIP = {
                 {
                     name: "ActiveEffectConfig",
                     fieldConfigs: [
-                        { selector: `.tab[data-tab="effects"] .key input[type="text"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA },
+                        { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA },
                     ]
                 }
             ],
