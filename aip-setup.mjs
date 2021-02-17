@@ -41,7 +41,7 @@ function registerField(sheetElement, fieldConfig) {
 
     // Check that we get valid data for the given entity. If not, skip adding Autocomplete to this field.
     try {
-        const data = Autocompleter.getData(entity, fieldConfig);
+        const data = Autocompleter.getEntityData(entity, fieldConfig);
         if (!data) {
             if (CONFIG.debug.aip) console.log("Specified data for field not found", app, fieldConfig);
             return;
@@ -132,7 +132,7 @@ function _activateAutocompleter(targetElement, targetKey, fieldConfig, entity) {
     _autocompleter?.close();
 
     // Otherwise, create a new autocompleter
-    const data = Autocompleter.getData(entity, fieldConfig);
+    const data = Autocompleter.getEntityData(entity, fieldConfig);
     _autocompleter = new Autocompleter(data, targetElement, targetKey, fieldConfig.dataMode, function onClose() {
         // When this Autocompleter gets closed, clean up the registration for this element.
         _autocompleter = null;

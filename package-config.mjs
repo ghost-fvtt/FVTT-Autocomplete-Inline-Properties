@@ -1,19 +1,33 @@
-CONST.AIP = {
-    /**
-     * @enum {string}
-     * Determines which data should be provided to the Autocompleter
-     */
-    DATA_MODE: {
-        // The data of the sheet's entity
-        ENTITY_DATA: "entity",
-        // The roll data of the sheet's entity
-        ROLL_DATA: "roll",
-        // The data of the sheet's entity's owning actor
-        OWNING_ACTOR_DATA: "owning-actor",
-        // Custom data as defined by the `customDataGetter`
-        CUSTOM: "custom",
+
+/**
+ * @enum {string}
+ * Determines which data should be provided to the Autocompleter
+ */
+const DATA_MODE = {
+    // The data of the sheet's entity
+    ENTITY_DATA: "entity",
+    // The roll data of the sheet's entity
+    ROLL_DATA: "roll",
+    // The data of the sheet's entity's owning actor
+    OWNING_ACTOR_DATA: "owning-actor",
+    // Custom data as defined by the `customDataGetter`
+    CUSTOM: "custom",
+};
+
+/**
+ * Getter functions corresponding to the data modes defined in {@link CONST.AIP.DATA_MODE}
+ */
+const DATA_GETTERS = {
+    [DATA_MODE.ENTITY_DATA]: (entity) => entity.data,
+    [DATA_MODE.ROLL_DATA]: (entity) => entity.getRollData(),
+    [DATA_MODE.OWNING_ACTOR_DATA]: (entity) => {
+        let parent = entity.actor ?? entity.parent;
+        return (parent && parent instanceof Actor) ? parent.data : null;
     },
+    [DATA_MODE.CUSTOM]: (entity, customDataGetter) => customDataGetter(entity),
 }
+
+CONST.AIP = { DATA_MODE, DATA_GETTERS };
 
 /**
  * @typedef {Object} AIPPackageConfig

@@ -28,19 +28,13 @@ export default class Autocompleter extends Application {
         this.rawPath = "";
     }
 
-    static getData(entity, fieldConfig) {
-        switch (fieldConfig.dataMode) {
-            case CONST.AIP.DATA_MODE.ENTITY_DATA:
-                return entity.data;
-            case CONST.AIP.DATA_MODE.ROLL_DATA:
-                return entity.getRollData();
-            case CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA:
-                return entity.actor?.data ?? entity.parent?.data;
-            case CONST.AIP.DATA_MODE.CUSTOM:
-                return fieldConfig.customDataGetter(entity);
-            default:
-                throw new Error(`Unrecognized data mode "${fieldConfig.dataMode}"`);
-        }
+    /**
+     * Given an entity, the data mode, and, if necessary, a custom data getter, return the appropriate data for that data mode
+     */
+    static getEntityData(entity, { dataMode, customDataGetter=null }) {
+        const result = CONST.AIP.DATA_GETTERS[dataMode]?.(entity, customDataGetter);
+        if (!result) throw new Error(`Unrecognized data mode "${dataMode}"`);
+        return result;
     }
 
     /** @override */
