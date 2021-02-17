@@ -159,7 +159,7 @@ export default class Autocompleter extends Application {
         input.focus();
         input.setSelectionRange(input.value.length, input.value.length);
 
-        input.addEventListener("focusout", (event) => {
+        input.addEventListener("focusout", () => {
             this.close();
         });
         input.addEventListener("input", this._onInputChanged.bind(this));
