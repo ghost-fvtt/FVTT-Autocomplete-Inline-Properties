@@ -18,7 +18,7 @@ Hooks.on("setup", () => {
 
         for (let sheetClass of pkg.sheetClasses) {
             if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
-            Hooks.on(`render${sheetClass.name}`, (sheet, $element, templateData) => {
+            Hooks.on(`render${sheetClass.name}`, (sheet, $element, _) => {
                 const sheetElement = $element[0];
                 for (let fieldDef of sheetClass.fieldConfigs) {
                     registerField(sheetElement, fieldDef);
@@ -95,7 +95,7 @@ function registerField(sheetElement, fieldConfig) {
 
             // Otherwise, create a new autocompleter
             const data = getData(entity, fieldConfig);
-            const autocompleter = new Autocompleter(data, targetElement, selectionStart, selectionEnd, fieldConfig.dataMode, () => {
+            const autocompleter = new Autocompleter(data, targetElement, selectionStart, selectionEnd, fieldConfig.dataMode, function onClose() {
                 // When this Autocompleter gets closed, clean up the registration for this element.
                 _registrations.delete(key);
             }).render(true);

@@ -217,10 +217,10 @@ export default class Autocompleter extends Application {
     }
 
     /**
-     * @param {MouseEvent} event
+     * @param {Event} event
      * @private
      */
-    _onSubmit(event) {
+    async _onSubmit(event) {
         event.preventDefault();
         const oldValue = this.target.value;
 
@@ -238,7 +238,7 @@ export default class Autocompleter extends Application {
         const insert = this.inputElement.value;
         this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
 
-        this.close();
+        await this.close();
         this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
     }
 }
