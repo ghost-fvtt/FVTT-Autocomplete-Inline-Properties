@@ -18,10 +18,14 @@ export default class Autocompleter extends Application {
         this.targetSelectionEnd = null;
         this.mode = mode;
         switch (this.mode) {
-            case CONST.AIP.DATA_MODE.ROLL_DATA: this.keyPrefix = "@"; break;
+            case CONST.AIP.DATA_MODE.ROLL_DATA:
+            case CONST.AIP.DATA_MODE.OWNING_ACTOR_ROLL_DATA:
+                this.keyPrefix = "@";
+                break;
             case CONST.AIP.DATA_MODE.ENTITY_DATA:
             default:
-                this.keyPrefix = ""; break;
+                this.keyPrefix = "";
+                break;
         }
         this.onClose = onClose;
 

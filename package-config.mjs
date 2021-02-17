@@ -10,6 +10,8 @@ const DATA_MODE = {
     ROLL_DATA: "roll",
     // The data of the sheet's entity's owning actor
     OWNING_ACTOR_DATA: "owning-actor",
+    // The roll data of the sheet's entity's owning actor
+    OWNING_ACTOR_ROLL_DATA: "actor-roll",
     // Custom data as defined by the `customDataGetter`
     CUSTOM: "custom",
 };
@@ -20,11 +22,21 @@ const DATA_MODE = {
 const DATA_GETTERS = {
     [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
     [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
-    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => {
-        let parent = sheet.object?.actor ?? sheet.object?.parent;
-        return (parent && parent instanceof Actor) ? parent.data : null;
-    },
+    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.data ?? null,
+    [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.getRollData() ?? null,
     [DATA_MODE.CUSTOM]: (sheet, customDataGetter) => customDataGetter(sheet),
+}
+
+/**
+ * Gets the owning actor of a given `FormApplication`'s entity.
+ * If the entity does not have a parent, or the parent is not an Actor, returns null.
+ * @param {FormApplication} sheet
+ * @returns {Actor|null}
+ * @private
+ */
+function _getSheetEntityParentActor(sheet) {
+    const parent = sheet.object?.actor ?? sheet.object?.parent;
+    return (parent && parent instanceof Actor) ? parent : null;
 }
 
 CONST.AIP = { DATA_MODE, DATA_GETTERS };
