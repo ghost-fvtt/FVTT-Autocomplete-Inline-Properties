@@ -1,12 +1,11 @@
 /* Autocompleter summon button */
 button.autocompleter-summon {
-    flex: 0 0 20px !important;
-    width: 20px !important;
-    height: 20px !important;
-    padding: 0 !important;
-    margin: auto 2px !important;
-    line-height: 0 !important;
-    border-radius: 10px;
+    position: fixed;
+    padding: 0;
+    max-height: 25px;
+    max-width: 25px;
+    line-height: 0;
+    z-index: 9999;
 }
 
 button.autocompleter-summon > i {
@@ -23,7 +22,6 @@ button.autocompleter-summon[disabled] > i {
 .window-app.app.autocompleter {
     min-height: 25px;
     box-shadow: 0 0 5px #555555;
-    /*border: 2px #333333 solid;*/
     border-radius: 5px;
 }
 

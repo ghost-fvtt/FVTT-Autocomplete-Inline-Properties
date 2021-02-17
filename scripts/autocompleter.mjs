@@ -3,19 +3,19 @@ export default class Autocompleter extends Application {
      *
      * @param {object} data
      * @param {HTMLInputElement} target
-     * @param {(number|null)} targetSelectionStart
-     * @param {(number|null)} targetSelectionEnd
+     * @param {string} targetKey
      * @param {CONST.AIP.DATA_MODE} mode
      * @param {function} onClose
      * @param options
      */
-    constructor(data, target, targetSelectionStart, targetSelectionEnd, mode, onClose, options) {
+    constructor(data, target, targetKey, mode, onClose, options) {
         super(options);
 
         this.targetData = data;
         this.target = target;
-        this.targetSelectionStart = targetSelectionStart;
-        this.targetSelectionEnd = targetSelectionEnd;
+        this.targetKey = targetKey;
+        this.targetSelectionStart = null;
+        this.targetSelectionEnd = null;
         this.mode = mode;
         switch (this.mode) {
             case CONST.AIP.DATA_MODE.ROLL_DATA: this.keyPrefix = "@"; break;
@@ -26,6 +26,21 @@ export default class Autocompleter extends Application {
         this.onClose = onClose;
 
         this.rawPath = "";
+    }
+
+    static getData(entity, fieldConfig) {
+        switch (fieldConfig.dataMode) {
+            case CONST.AIP.DATA_MODE.ENTITY_DATA:
+                return entity.data;
+            case CONST.AIP.DATA_MODE.ROLL_DATA:
+                return entity.getRollData();
+            case CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA:
+                return entity.actor?.data ?? entity.parent?.data;
+            case CONST.AIP.DATA_MODE.CUSTOM:
+                return fieldConfig.customDataGetter(entity);
+            default:
+                throw new Error(`Unrecognized data mode "${fieldConfig.dataMode}"`);
+        }
     }
 
     /** @override */
