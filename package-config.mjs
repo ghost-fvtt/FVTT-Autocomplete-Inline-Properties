@@ -87,7 +87,7 @@ CONFIG.AIP = {
                 {
                     name: "ItemSheet5e",
                     fieldConfigs: [
-                        { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA, filteredKeys: [ "pro", "abilities.dex" ] },
+                        { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
                         { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
                         { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
                     ]
