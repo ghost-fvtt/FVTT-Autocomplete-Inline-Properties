@@ -88,13 +88,15 @@ function registerField(sheetElement, fieldConfig) {
             });
         }
 
-        // If the user presses the "@" key while the target element is focused, open the Autocompleter
-        targetElement.addEventListener("keydown", function(event) {
-            if (event.key === "@") {
-                event.preventDefault();
-                _activateAutocompleter(targetElement, key, fieldConfig, entity);
-            }
-        });
+        if (fieldConfig.allowHotkey) {
+            // If the user presses the "@" key while the target element is focused, open the Autocompleter
+            targetElement.addEventListener("keydown", function (event) {
+                if (event.key === "@") {
+                    event.preventDefault();
+                    _activateAutocompleter(targetElement, key, fieldConfig, entity);
+                }
+            });
+        }
 
         // If an autocompleter already exists with this key (because the target sheet is being re-rendered), re-activate the autocompleter.
         if (_autocompleter?.targetKey === key) {
