@@ -48,7 +48,7 @@ export default class Autocompleter extends Application {
         return mergeObject(super.defaultOptions, {
             classes: ["autocompleter"],
             template: "./modules/autocomplete-inline-properties/templates/autocompleter.hbs",
-            minWidth: 250,
+            minWidth: 300,
             height: "auto",
         });
     }

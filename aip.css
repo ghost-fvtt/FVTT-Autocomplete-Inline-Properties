@@ -38,6 +38,7 @@ button.autocompleter-summon > i {
     background: #99999922;
     padding: 1px 3px;
     margin: 1px 0;
+    font-size: .8rem;
 }
 
 .autocompleter ol.aip-list li.aip-data-entry.highlighted {
@@ -58,10 +59,15 @@ button.autocompleter-summon > i {
 }
 
 .autocompleter ol.aip-list li.aip-data-entry .aip-value {
-    flex: 0 0 30px;
-    text-align: center;
-    font-family: monospace;
+    flex: 0 0 40px;
     opacity: 50%;
+    padding: 0 3px;
+    text-align: right;
+    font-family: monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: #99999955;
 }
 
 .autocompleter .aip-form > :not(:last-child) {
