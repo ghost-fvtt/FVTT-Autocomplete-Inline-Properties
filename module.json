@@ -21,6 +21,8 @@
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "url": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties",
+  "bugs": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/issues",
+  "allowBugReporter": true,
   "manifest": "https://raw.githubusercontent.com/schultzcole/FVTT-Autocomplete-Inline-Properties/master/module.json",
   "download": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/archive/1.0.0.zip",
   "license": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/1.0.0/LICENSE",
