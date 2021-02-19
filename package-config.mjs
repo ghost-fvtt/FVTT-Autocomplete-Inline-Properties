@@ -76,6 +76,7 @@ CONFIG.AIP = {
     /** @type {AIPPackageConfig[]} */
     PACKAGE_CONFIG: [
         {
+            // contributed by https://github.com/schultzcole
             packageName: "dnd5e",
             sheetClasses: [
                 {
@@ -101,6 +102,7 @@ CONFIG.AIP = {
             ],
         },
         {
+            // contributed by https://github.com/MikauSchekzen
             packageName: "pf1",
             sheetClasses: [
                 {
