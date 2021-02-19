@@ -50,7 +50,8 @@ function registerField(sheetElement, fieldConfig) {
         return;
     }
 
-    const elements = Array.from(sheetElement.querySelectorAll(fieldConfig.selector)).filter(e => e.type === "text");
+    const elements = Array.from(sheetElement.querySelectorAll(fieldConfig.selector))
+        .filter(e => e.tagName === "textarea" || (e.tagName === "input" && e.type === "text"));
     for (let targetElement of elements) {
         const key = app.appId + targetElement.name;
 
