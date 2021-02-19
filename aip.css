@@ -2,8 +2,8 @@
 button.autocompleter-summon {
     position: fixed;
     padding: 0;
-    max-height: 25px;
-    max-width: 25px;
+    max-height: 22px;
+    max-width: 22px;
     line-height: 0;
     z-index: 9999;
 }
