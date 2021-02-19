@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.2.0] 2021-02-19
+
+### ADDED
+
+- Added pf1 support (thank you @MikauScekzen for the contribution!)
+- Added support for `<textarea>` tags in addition to text `<input>` tags
+
 ## [1.1.0] 2021-02-17
 
 ### API
