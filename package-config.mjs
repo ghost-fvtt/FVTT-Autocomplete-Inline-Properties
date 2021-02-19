@@ -99,6 +99,25 @@ CONFIG.AIP = {
                     ]
                 }
             ],
+        },
+        {
+            packageName: "pf1",
+            sheetClasses: [
+                {
+                    name: "ItemSheetPF",
+                    fieldConfigs: [
+                        { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                        { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                    ]
+                },
+                {
+                    name: "ActorSheetPF",
+                    fieldConfigs: [
+                        { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                        { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                    ]
+                }
+            ],
         }
     ]
 }
