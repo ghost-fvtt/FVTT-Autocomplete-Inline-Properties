@@ -23,6 +23,10 @@ Pressing "Enter", or clicking on the insert button to the right of the path text
 
 Module and system authors can enable or disable the option to press the "@" hotkey, or the floating "@" button on a per-field basis.
 
+## Limitations
+
+Currently, AIP will not work for items that are not owned by an actor. It should be possible to resolve this limitation once core 0.8 is released, but for now you'll only be able to use it when the item is on an actor.
+
 ## Compatibility
 
 This module currently offers built in support for the dnd5e system, though I am more than willing to accept pull requests to support other systems.
