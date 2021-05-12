@@ -120,6 +120,32 @@ CONFIG.AIP = {
                     ]
                 }
             ],
+        },
+        {
+            // contributed by https://github.com/cyr-
+            packageName: "sw5e",
+            sheetClasses: [
+                {
+                    name: "ActorSheetFlags",
+                    fieldConfigs: [
+                        { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                    ]
+                },
+                {
+                    name: "ItemSheet5e",
+                    fieldConfigs: [
+                        { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                        { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                        { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                    ]
+                },
+                {
+                    name: "ActiveEffectConfig",
+                    fieldConfigs: [
+                        { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA },
+                    ]
+                }
+            ],
         }
     ]
 }
