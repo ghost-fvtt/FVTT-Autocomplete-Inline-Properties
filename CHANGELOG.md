@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.1.1] 2021-06-05
+
+### FIXED
+
+- Fixed an error that would occur on startup because the SW5e config was still referring to the old location of AIP constants
+- Fixed an error that would occur on startup because a symbol was used before it had been initialized.
+
 ## [2.1.0] 2021-06-05
 
 ### ADDED
