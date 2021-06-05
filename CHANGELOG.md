@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2.1.0] 2021-06-05
+
+### ADDED
+
+- Added compatibility with SW5e system. (Thanks Cyr-)
+
 ## [2.0.0] 2021-06-05
 
 *Compatibility with 0.8.x*
