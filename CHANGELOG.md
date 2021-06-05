@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2.0.0] 2021-06-05
+
+*Compatibility with 0.8.x*
+
+### CHANGED
+
+- [BREAKING] moved publicly accessible AIP properties from the global CONST and CONFIG into `game.modules.get("autocomplete-inline-properties").API`.
+
 ## [1.2.0] 2021-02-19
 
 ### ADDED
