@@ -1,11 +1,5 @@
 import { MODULE_NAME } from "./scripts/const.mjs";
 
-Hooks.on("init", () => {
-    const api = game.modules.get(MODULE_NAME).API = {};
-    api.CONST = { DATA_MODE, DATA_GETTERS };
-    api.PACKAGE_CONFIG = PACKAGE_CONFIG;
-});
-
 /**
  * @enum {string}
  * Determines which data should be provided to the Autocompleter
@@ -132,23 +126,29 @@ const PACKAGE_CONFIG = [
             {
                 name: "ActorSheetFlags",
                 fieldConfigs: [
-                    { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                    { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
                 ]
             },
             {
                 name: "ItemSheet5e",
                 fieldConfigs: [
-                    { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                    { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                    { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
+                    { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                    { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                    { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
                 ]
             },
             {
                 name: "ActiveEffectConfig",
                 fieldConfigs: [
-                    { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA },
+                    { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: DATA_MODE.OWNING_ACTOR_DATA },
                 ]
             }
         ],
     },
 ];
+
+Hooks.on("init", () => {
+    const api = game.modules.get(MODULE_NAME).API = {};
+    api.CONST = { DATA_MODE, DATA_GETTERS };
+    api.PACKAGE_CONFIG = PACKAGE_CONFIG;
+});
