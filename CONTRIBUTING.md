@@ -8,14 +8,14 @@ Other modules can, however, add their own configuration at runtime in the `init`
 
 Adding support for a new system is relatively simple, and happens in the
 [`package-config.mjs`](https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/master/package-config.mjs) file.
-Modules can add their own configuration to `CONFIG.AIP.PACKAGE_CONFIG` in the `init` hook.
+Modules can add their own configuration to `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` in the `init` hook.
 There are some documentation comments in that file with an explanation of the structure that AIP expects for its configuration,
 and the dnd5e system can also serve as an example,
 however I'll also briefly cover it here.
 
 ### Package Config
 
-Each package (system or module) that wants to specify fields for autocompletion support gets an entry in the `CONFIG.AIP.PACKAGE_CONFIG` array.
+Each package (system or module) that wants to specify fields for autocompletion support gets an entry in the `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` array.
 Each entry in this array has a `packageName` property to define the package that the entry belongs to.
 AIP will search for an active system or module that matches the `packageName`, and if it doesn't find a match, it will not use the configuration for that package.
 Each entry also has an array of sheet configuration objects, each of which corresponds with a foundry sheet `Application`
@@ -35,11 +35,11 @@ Each field config *must* define the following:
  - `allowHotkey`: whether pressing the "@" key on the keyboard while this field is focused should open the Autocompleter interface.
  - [`filteredKeys`]: (optional) an array of keys that should not be shown in the Autocompleter.
  - `dataMode`: this defines what data is shown in the Autocompleter interface. This can take the following values:
-   - `CONST.AIP.DATA_MODE.ENTITY_DATA`: The data of the sheet's entity
-   - `CONST.AIP.DATA_MODE.ROLL_DATA`: The roll data of the sheet's entity
-   - `CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's entity's owning actor
-   - `CONST.AIP.DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's entity's owning actor
-   - `CONST.AIP.DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`
+   - `DATA_MODE.ENTITY_DATA`: The data of the sheet's entity
+   - `DATA_MODE.ROLL_DATA`: The roll data of the sheet's entity
+   - `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's entity's owning actor
+   - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's entity's owning actor
+   - `DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`
  - `customDataGetter`: when `dataMode` is `CUSTOM`, the function provided here will be used to get the data to be shown in the Autocompleter interface.
     When `dataMode` is `CUSTOM`, this field is *required*.
 - [`customInlinePrefix`]: (optional) if `dataMode` is `CUSTOM`, this prefix will be inserted in the target field when the Autocompleter is submitted.
@@ -50,6 +50,9 @@ Here's an example of how you might add a new package config for a module or syst
 
 ```js
 Hooks.on("init", () => {
+    const api = game.modules.get("autocomplete-inline-properties").API;
+    const DATA_MODE = api.CONST.DATA_MODE;
+    
     // Define the config for our package
     const config = {
         packageName: "my-package",
@@ -61,7 +64,7 @@ Hooks.on("init", () => {
                         selector: `.tab[data-tab="details"] input[type="text"]`, // this will target all text input fields on the "details" tab. Any css selector should work here.
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: CONST.AIP.DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.ROLL_DATA,
                     },
                     // Add more field configs if necessary
                 ]
@@ -71,6 +74,6 @@ Hooks.on("init", () => {
     };
     
     // Add our config
-    CONFIG.AIP.PACKAGE_CONFIG.push(config);
+    api.PACKAGE_CONFIG.push(config);
 });
 ```

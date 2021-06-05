@@ -1,3 +1,10 @@
+import { MODULE_NAME } from "./scripts/const.mjs";
+
+Hooks.on("init", () => {
+    const api = game.modules.get(MODULE_NAME).API = {};
+    api.CONST = { DATA_MODE, DATA_GETTERS };
+    api.PACKAGE_CONFIG = PACKAGE_CONFIG;
+});
 
 /**
  * @enum {string}
@@ -17,7 +24,7 @@ const DATA_MODE = {
 };
 
 /**
- * Getter functions corresponding to the data modes defined in {@link CONST.AIP.DATA_MODE}
+ * Getter functions corresponding to the data modes defined in {@link DATA_MODE}
  */
 const DATA_GETTERS = {
     [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
@@ -38,8 +45,6 @@ function _getSheetEntityParentActor(sheet) {
     const parent = sheet.object?.actor ?? sheet.object?.parent;
     return (parent && parent instanceof Actor) ? parent : null;
 }
-
-CONST.AIP = { DATA_MODE, DATA_GETTERS };
 
 /**
  * @typedef {Object} AIPPackageConfig
@@ -67,60 +72,58 @@ CONST.AIP = { DATA_MODE, DATA_GETTERS };
  * @property {boolean} showButton - whether the AIP "@" button should be shown for this field.
  * @property {boolean} allowHotkey - whether pressing the "@" key on the keyboard should activate the Autocompleter for this field.
  * @property {(string[]|undefined)} filteredKeys - (optional) an array of keys that should not be shown in the Autocompleter.
- * @property {CONST.AIP.DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
+ * @property {DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
  * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called to produce the data for the Autocompleter.
  * @property {string} customInlinePrefix - if `dataMode` is `CUSTOM`, this prefix will be inserted in the target field when the Autocompleter is submitted
  */
 
-CONFIG.AIP = {
-    /** @type {AIPPackageConfig[]} */
-    PACKAGE_CONFIG: [
-        {
-            // contributed by https://github.com/schultzcole
-            packageName: "dnd5e",
-            sheetClasses: [
-                {
-                    name: "ActorSheetFlags",
-                    fieldConfigs: [
-                        { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                    ]
-                },
-                {
-                    name: "ItemSheet5e",
-                    fieldConfigs: [
-                        { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                        { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                        { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                    ]
-                },
-                {
-                    name: "ActiveEffectConfig",
-                    fieldConfigs: [
-                        { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.OWNING_ACTOR_DATA },
-                    ]
-                }
-            ],
-        },
-        {
-            // contributed by https://github.com/MikauSchekzen
-            packageName: "pf1",
-            sheetClasses: [
-                {
-                    name: "ItemSheetPF",
-                    fieldConfigs: [
-                        { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                        { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                    ]
-                },
-                {
-                    name: "ActorSheetPF",
-                    fieldConfigs: [
-                        { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                        { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: CONST.AIP.DATA_MODE.ROLL_DATA },
-                    ]
-                }
-            ],
-        },
+/** @type {AIPPackageConfig[]} */
+const PACKAGE_CONFIG = [
+    {
+        // contributed by https://github.com/schultzcole
+        packageName: "dnd5e",
+        sheetClasses: [
+            {
+                name: "ActorSheetFlags",
+                fieldConfigs: [
+                    { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                ]
+            },
+            {
+                name: "ItemSheet5e",
+                fieldConfigs: [
+                    { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                    { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                    { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                ]
+            },
+            {
+                name: "ActiveEffectConfig",
+                fieldConfigs: [
+                    { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: DATA_MODE.OWNING_ACTOR_DATA },
+                ]
+            }
+        ],
+    },
+    {
+        // contributed by https://github.com/MikauSchekzen
+        packageName: "pf1",
+        sheetClasses: [
+            {
+                name: "ItemSheetPF",
+                fieldConfigs: [
+                    { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                    { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                ]
+            },
+            {
+                name: "ActorSheetPF",
+                fieldConfigs: [
+                    { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                    { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
+                ]
+            }
+        ],
         {
             // contributed by https://github.com/cyr-
             packageName: "sw5e",
@@ -147,5 +150,5 @@ CONFIG.AIP = {
                 }
             ],
         }
-    ]
-}
+    }
+];

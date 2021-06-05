@@ -1,3 +1,5 @@
+import { MODULE_NAME } from "./const.mjs";
+
 export default class Autocompleter extends Application {
     /**
      *
@@ -17,12 +19,13 @@ export default class Autocompleter extends Application {
 
         this.filteredKeys = fieldConfig.filteredKeys ?? null;
         this.mode = fieldConfig.dataMode;
+        const DATA_MODE = game.modules.get(MODULE_NAME).API.CONST.DATA_MODE;
         switch (this.mode) {
-            case CONST.AIP.DATA_MODE.ROLL_DATA:
-            case CONST.AIP.DATA_MODE.OWNING_ACTOR_ROLL_DATA:
+            case DATA_MODE.ROLL_DATA:
+            case DATA_MODE.OWNING_ACTOR_ROLL_DATA:
                 this.keyPrefix = "@";
                 break;
-            case CONST.AIP.DATA_MODE.CUSTOM:
+            case DATA_MODE.CUSTOM:
                 this.keyPrefix = fieldConfig.customInlinePrefix ?? "";
                 break;
             default:
@@ -44,11 +47,11 @@ export default class Autocompleter extends Application {
     /**
      * Given an entity, the data mode, and, if necessary, a custom data getter, return the appropriate data for that data mode
      * @param {Application} sheet
-     * @param {CONST.AIP.DATA_MODE} dataMode
+     * @param {DATA_MODE} dataMode
      * @param {(function(Application): object|null)} customDataGetter
      */
     static getEntityData(sheet, { dataMode, customDataGetter=null }) {
-        const getter = CONST.AIP.DATA_GETTERS[dataMode];
+        const getter = game.modules.get(MODULE_NAME).API.CONST.DATA_GETTERS[dataMode];
         if (!getter) throw new Error(`Unrecognized data mode "${dataMode}"`);
         return getter(sheet, customDataGetter);
     }

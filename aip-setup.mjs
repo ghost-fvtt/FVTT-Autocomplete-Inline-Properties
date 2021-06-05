@@ -1,4 +1,5 @@
 import Autocompleter from "./scripts/autocompleter.mjs";
+import { MODULE_NAME } from "./scripts/const.mjs";
 
 /** @type {(Autocompleter|null)} */
 let _autocompleter = null;
@@ -9,7 +10,7 @@ Hooks.on("setup", () => {
     CONFIG.debug.aip = false;
     console.log("AIP | Setting up Autocomplete Inline Properties");
 
-    const packageConfig = CONFIG.AIP.PACKAGE_CONFIG;
+    const packageConfig = game.modules.get(MODULE_NAME).API.PACKAGE_CONFIG;
 
     if (!packageConfig.find(pkg => pkg.packageName === game.system.id)) {
         ui.notifications.warn(game.i18n.localize("AIP.SystemNotSupported"));
