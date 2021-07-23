@@ -194,6 +194,31 @@ const PACKAGE_CONFIG = [
             }
         ],
     },
+    {
+        packageName: "ds4",
+        sheetClasses: [
+            {
+                name: "ActiveEffectConfig",
+                fieldConfigs: [
+                    {
+                        selector: `.tab[data-tab="effects"] .key input[type="text"]`,
+                        defaultPath: "data",
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.OWNING_ACTOR_DATA,
+                    },
+                    {
+                        selector: `.tab[data-tab="effects"] .value input[type="text"]`,
+                        defaultPath: "data",
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.OWNING_ACTOR_DATA,
+                        inlinePrefix: "@"
+                    },
+                ],
+            },
+        ],
+    },
 ];
 
 Hooks.on("init", () => {
