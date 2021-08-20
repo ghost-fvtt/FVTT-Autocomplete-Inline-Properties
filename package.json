@@ -1,0 +1,32 @@
+{
+    "name": "autocomplete-inline-properties",
+    "version": "2.1.1",
+    "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference entity data.",
+    "private": true,
+    "scripts": {
+      "release": "standard-version"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties.git"
+    },
+    "contributors": [
+        {
+            "name": "Cole Schultz",
+            "discord": "cole#9640"
+        },
+        {
+            "name": "Johannes Loher",
+            "email": "johannes.loher@fg4f.de",
+            "discord": "ghost#2000"
+        }
+    ],
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues"
+    },
+    "homepage": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties#readme",
+    "devDependencies": {
+        "standard-version": "^9.3.1"
+    }
+}
