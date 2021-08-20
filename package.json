@@ -4,7 +4,7 @@
     "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference entity data.",
     "private": true,
     "scripts": {
-      "release": "standard-version"
+        "release": "standard-version"
     },
     "repository": {
         "type": "git",
@@ -27,6 +27,9 @@
     },
     "homepage": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties#readme",
     "devDependencies": {
+        "@commitlint/cli": "^13.1.0",
+        "@commitlint/config-conventional": "^13.1.0",
+        "husky": "^7.0.1",
         "standard-version": "^9.3.1"
     }
 }
