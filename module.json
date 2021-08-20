@@ -3,7 +3,18 @@
   "title": "Autocomplete Inline Properties",
   "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference entity data.",
   "version": "2.1.1",
-  "author": "Cole Schultz (cole#9640)",
+  "author": "Cole Schultz (cole#9640), Johannes Loher (ghost#2000)",
+  "authors": [
+    {
+      "name": "Cole Schultz",
+      "discord":"cole#9640"
+    },
+    {
+      "name": "Johannes Loher",
+      "email": "johannes.loher@fg4f.de",
+      "discord": "ghost#2000"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
@@ -19,14 +30,14 @@
     "./aip.css"
   ],
   "minimumCoreVersion": "0.8.5",
-  "compatibleCoreVersion": "0.8.6",
-  "url": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties",
-  "bugs": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/issues",
+  "compatibleCoreVersion": "0.8.9",
+  "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties",
+  "bugs": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues",
   "allowBugReporter": true,
-  "manifest": "https://raw.githubusercontent.com/schultzcole/FVTT-Autocomplete-Inline-Properties/master/module.json",
-  "download": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/archive/2.1.1.zip",
-  "license": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/2.1.1/LICENSE",
-  "readme": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/2.1.1/README.md",
-  "changelog": "https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/2.1.1/CHANGELOG.md"
+  "manifest": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/latest/download/module.json",
+  "download": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/download/v2.1.1/module.json",
+  "license": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/blob/master/LICENSE",
+  "readme": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties#readme",
+  "changelog": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/blob/master/CHANGELOG.md"
 }
 
