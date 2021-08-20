@@ -23,8 +23,8 @@ const DATA_MODE = {
 const DATA_GETTERS = {
     [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
     [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
-    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.data ?? null,
-    [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.getRollData() ?? null,
+    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.data ?? _getFallbackActorData(),
+    [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.getRollData() ?? _getFallbackActorRollData(),
     [DATA_MODE.CUSTOM]: (sheet, customDataGetter) => customDataGetter(sheet),
 }
 
@@ -35,10 +35,58 @@ const DATA_GETTERS = {
  * @returns {Actor|null}
  * @private
  */
-function _getSheetEntityParentActor(sheet) {
+ function _getSheetEntityParentActor(sheet) {
     const parent = sheet.object?.actor ?? sheet.object?.parent;
     return (parent && parent instanceof Actor) ? parent : null;
 }
+
+/**
+ * The cached merged actor data to use as fallback for unowned documents
+ * @type {object}
+ * @private
+ */
+let _fallbackActorData;
+
+/**
+ * Gets an object containing the merged data of all actor types.
+ * @returns {object}
+ * @private
+ */
+function _getFallbackActorData() {
+    if(!_fallbackActorData) {
+        const cls = getDocumentClass("Actor");
+        _fallbackActorData = {};
+        for(const type of game.system.template.Actor.types) {
+            const actorData = new cls({ type, name: "dummy" }).data;
+            foundry.utils.mergeObject(_fallbackActorData, actorData)
+        }
+    }
+    return _fallbackActorData;
+}
+
+/**
+ * The cached merged actor roll data to use as fallback for unowned documents
+ * @type {object}
+ * @private
+ */
+ let _fallbackActorRollData;
+
+ /**
+  * Gets an object containing the merged roll data of all actor types.
+  * @returns {object}
+  * @private
+  */
+ function _getFallbackActorRollData() {
+     if(!_fallbackActorRollData) {
+         const cls = getDocumentClass("Actor");
+         _fallbackActorData = {};
+         for(const type of game.system.template.Actor.types) {
+             const actorRollData = new cls({ type, name: "dummy" }).getRollData();
+             foundry.utils.mergeObject(_fallbackActorRollData, actorRollData)
+         }
+     }
+     return _fallbackActorRollData;
+ }
 
 /**
  * @typedef {Object} AIPPackageConfig

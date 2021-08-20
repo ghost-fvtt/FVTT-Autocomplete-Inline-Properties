@@ -37,8 +37,8 @@ Each field config *must* define the following:
  - `dataMode`: this defines what data is shown in the Autocompleter interface. This can take the following values:
    - `DATA_MODE.ENTITY_DATA`: The data of the sheet's entity
    - `DATA_MODE.ROLL_DATA`: The roll data of the sheet's entity
-   - `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's entity's owning actor
-   - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's entity's owning actor
+   - `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's entity's owning actor, falling back to the merged data of dummy actors of all types if the entity is not owned
+   - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's entity's owning actor, falling back to the merged roll data of dummy actors of all types if the entity is not owned
    - `DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`
  - `customDataGetter`: when `dataMode` is `CUSTOM`, the function provided here will be used to get the data to be shown in the Autocompleter interface.
     When `dataMode` is `CUSTOM`, this field is *required*.
