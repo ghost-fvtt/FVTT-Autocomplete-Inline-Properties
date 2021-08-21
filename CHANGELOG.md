@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.2.0...v2.3.0) (2021-08-21)
+
+
+### Features
+
+* re-focus text area after inserting ([a7f2553](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/a7f2553817a5f941c36236dff6ab87230ac0f5af))
+
 ## 2.2.0 (2021-08-21)
 
 
