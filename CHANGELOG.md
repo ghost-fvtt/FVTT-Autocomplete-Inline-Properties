@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.2.0 (2021-08-21)
+
+
+### Features
+
+* add support for effects and unowned items ([71b9b97](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/71b9b97b6abaedd8637a1d626a5600d63857fd8a))
+* add support for the ds4 system ([8cb3dee](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/8cb3dee38b6828b7b41f18835394898879ad7b0c))
+* allow specifying an `inlinePrefix` for every `dataMode` ([c200bfb](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/c200bfbcf391d64f3bd849edaf169b7962737ec7))
+
 ### 2.1.1 (2021-06-05)
 
 
