@@ -20,16 +20,21 @@ export default class Autocompleter extends Application {
         this.filteredKeys = fieldConfig.filteredKeys ?? null;
         this.mode = fieldConfig.dataMode;
         const DATA_MODE = game.modules.get(MODULE_NAME).API.CONST.DATA_MODE;
+
+        let inlinePrefix;
+        if(fieldConfig.customInlinePrefix !== undefined) {
+            console.warn('AIP | You are using customInlinePrefix which has been deprecated in favor of inlinePrefix and will be removed in a future version.');
+            inlinePrefix = fieldConfig.customInlinePrefix;
+        }
+        inlinePrefix = fieldConfig.inlinePrefix ?? inlinePrefix;
+
         switch (this.mode) {
             case DATA_MODE.ROLL_DATA:
             case DATA_MODE.OWNING_ACTOR_ROLL_DATA:
-                this.keyPrefix = "@";
-                break;
-            case DATA_MODE.CUSTOM:
-                this.keyPrefix = fieldConfig.customInlinePrefix ?? "";
+                this.keyPrefix = inlinePrefix ?? "@";
                 break;
             default:
-                this.keyPrefix = "";
+                this.keyPrefix = inlinePrefix ?? "";
                 break;
         }
 
