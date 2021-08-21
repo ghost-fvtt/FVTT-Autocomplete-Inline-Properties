@@ -110,13 +110,14 @@ function _getFallbackActorData() {
  * A configuration object describing a field to which AIP should be applied
  *
  * @property {string} selector - the selector string that should be used to find this field within the containing sheet
- * @property {(string|undefined)} defaultPath - (optional) this path will be used as the default contents of the path field when the Autocompleter is first created
+ * @property {(string)} [defaultPath] - this path will be used as the default contents of the path field when the Autocompleter is first created
  * @property {boolean} showButton - whether the AIP "@" button should be shown for this field.
  * @property {boolean} allowHotkey - whether pressing the "@" key on the keyboard should activate the Autocompleter for this field.
- * @property {(string[]|undefined)} filteredKeys - (optional) an array of keys that should not be shown in the Autocompleter.
+ * @property {(string[])} [filteredKeys] - an array of keys that should not be shown in the Autocompleter.
  * @property {DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
+ * @property {string} [inlinePrefix] - if provided, this prefix will be inserted in the target field when the Autocompleter is submitted. Otherwise, the default for the chosen `dataMode` is used.
  * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called to produce the data for the Autocompleter.
- * @property {string} customInlinePrefix - if `dataMode` is `CUSTOM`, this prefix will be inserted in the target field when the Autocompleter is submitted
+ * @property {string} [customInlinePrefix] - deprecated, use `inlinePrefix` instead.
  */
 
 /** @type {AIPPackageConfig[]} */
