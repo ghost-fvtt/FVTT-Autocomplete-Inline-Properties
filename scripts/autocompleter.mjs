@@ -320,8 +320,8 @@ export default class Autocompleter extends Application {
         const postString = oldValue.slice(spliceEnd);
         const postSpacer = (!postString.length || postString[postString.length - 1] === " ") ? "" : " ";
         const insert = this.inputElement.value;
+        this.target.focus();
         this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
-
         await this.close();
         this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
     }
