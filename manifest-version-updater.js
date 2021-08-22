@@ -10,5 +10,5 @@ module.exports.writeVersion = function (contents, version) {
     const json = JSON.parse(contents);
     json.version = version;
     json.download = `${githubRepository}/releases/download/v${version}/module.zip`;
-    return stringifyPackage(json);
+    return stringifyPackage(json, 4);
 };
