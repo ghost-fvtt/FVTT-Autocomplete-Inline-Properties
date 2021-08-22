@@ -24,9 +24,10 @@ const DATA_GETTERS = {
     [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
     [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
     [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.data ?? _getFallbackActorData(),
-    [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.getRollData() ?? _getFallbackActorRollData(),
+    [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) =>
+        _getSheetEntityParentActor(sheet)?.getRollData() ?? _getFallbackActorRollData(),
     [DATA_MODE.CUSTOM]: (sheet, customDataGetter) => customDataGetter(sheet),
-}
+};
 
 /**
  * Gets the owning actor of a given `FormApplication`'s entity.
@@ -35,9 +36,9 @@ const DATA_GETTERS = {
  * @returns {Actor|null}
  * @private
  */
- function _getSheetEntityParentActor(sheet) {
+function _getSheetEntityParentActor(sheet) {
     const parent = sheet.object?.actor ?? sheet.object?.parent;
-    return (parent && parent instanceof Actor) ? parent : null;
+    return parent && parent instanceof Actor ? parent : null;
 }
 
 /**
@@ -53,12 +54,12 @@ let _fallbackActorData;
  * @private
  */
 function _getFallbackActorData() {
-    if(!_fallbackActorData) {
+    if (!_fallbackActorData) {
         const cls = getDocumentClass("Actor");
         _fallbackActorData = {};
-        for(const type of game.system.template.Actor.types) {
+        for (const type of game.system.template.Actor.types) {
             const actorData = new cls({ type, name: "dummy" }).data;
-            foundry.utils.mergeObject(_fallbackActorData, actorData)
+            foundry.utils.mergeObject(_fallbackActorData, actorData);
         }
     }
     return _fallbackActorData;
@@ -69,24 +70,24 @@ function _getFallbackActorData() {
  * @type {object}
  * @private
  */
- let _fallbackActorRollData;
+let _fallbackActorRollData;
 
- /**
-  * Gets an object containing the merged roll data of all actor types.
-  * @returns {object}
-  * @private
-  */
- function _getFallbackActorRollData() {
-     if(!_fallbackActorRollData) {
-         const cls = getDocumentClass("Actor");
-         _fallbackActorData = {};
-         for(const type of game.system.template.Actor.types) {
-             const actorRollData = new cls({ type, name: "dummy" }).getRollData();
-             foundry.utils.mergeObject(_fallbackActorRollData, actorRollData)
-         }
-     }
-     return _fallbackActorRollData;
- }
+/**
+ * Gets an object containing the merged roll data of all actor types.
+ * @returns {object}
+ * @private
+ */
+function _getFallbackActorRollData() {
+    if (!_fallbackActorRollData) {
+        const cls = getDocumentClass("Actor");
+        _fallbackActorData = {};
+        for (const type of game.system.template.Actor.types) {
+            const actorRollData = new cls({ type, name: "dummy" }).getRollData();
+            foundry.utils.mergeObject(_fallbackActorRollData, actorRollData);
+        }
+    }
+    return _fallbackActorRollData;
+}
 
 /**
  * @typedef {Object} AIPPackageConfig
@@ -129,23 +130,49 @@ const PACKAGE_CONFIG = [
             {
                 name: "ActorSheetFlags",
                 fieldConfigs: [
-                    { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                ]
+                    {
+                        selector: `input[type="text"][name^="data.bonuses"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
             },
             {
                 name: "ItemSheet5e",
                 fieldConfigs: [
-                    { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                    { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                    { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                ]
+                    {
+                        selector: `.tab.details input[type="text"][name="data.attackBonus"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                    {
+                        selector: `.tab.details input[type="text"][name^="data.damage"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                    {
+                        selector: `.tab.details input[type="text"][name="data.formula"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
             },
             {
                 name: "ActiveEffectConfig",
                 fieldConfigs: [
-                    { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: DATA_MODE.OWNING_ACTOR_DATA },
-                ]
-            }
+                    {
+                        selector: `.tab[data-tab="effects"] .key input[type="text"]`,
+                        defaultPath: "data",
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.OWNING_ACTOR_DATA,
+                    },
+                ],
+            },
         ],
     },
     {
@@ -155,17 +182,37 @@ const PACKAGE_CONFIG = [
             {
                 name: "ItemSheetPF",
                 fieldConfigs: [
-                    { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                    { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                ]
+                    {
+                        selector: `input.formula[type="text"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                    {
+                        selector: `textarea.context-text`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
             },
             {
                 name: "ActorSheetPF",
                 fieldConfigs: [
-                    { selector: `input.formula[type="text"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                    { selector: `textarea.context-text`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                ]
-            }
+                    {
+                        selector: `input.formula[type="text"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                    {
+                        selector: `textarea.context-text`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
+            },
         ],
     },
     {
@@ -175,23 +222,49 @@ const PACKAGE_CONFIG = [
             {
                 name: "ActorSheetFlags",
                 fieldConfigs: [
-                    { selector: `input[type="text"][name^="data.bonuses"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                ]
+                    {
+                        selector: `input[type="text"][name^="data.bonuses"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
             },
             {
                 name: "ItemSheet5e",
                 fieldConfigs: [
-                    { selector: `.tab.details input[type="text"][name="data.attackBonus"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                    { selector: `.tab.details input[type="text"][name^="data.damage"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                    { selector: `.tab.details input[type="text"][name="data.formula"]`, showButton: true, allowHotkey: true, dataMode: DATA_MODE.ROLL_DATA },
-                ]
+                    {
+                        selector: `.tab.details input[type="text"][name="data.attackBonus"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                    {
+                        selector: `.tab.details input[type="text"][name^="data.damage"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                    {
+                        selector: `.tab.details input[type="text"][name="data.formula"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
             },
             {
                 name: "ActiveEffectConfig",
                 fieldConfigs: [
-                    { selector: `.tab[data-tab="effects"] .key input[type="text"]`, defaultPath: "data", showButton: true, allowHotkey: true, dataMode: DATA_MODE.OWNING_ACTOR_DATA },
-                ]
-            }
+                    {
+                        selector: `.tab[data-tab="effects"] .key input[type="text"]`,
+                        defaultPath: "data",
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.OWNING_ACTOR_DATA,
+                    },
+                ],
+            },
         ],
     },
     {
@@ -213,7 +286,7 @@ const PACKAGE_CONFIG = [
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.OWNING_ACTOR_DATA,
-                        inlinePrefix: "@"
+                        inlinePrefix: "@",
                     },
                 ],
             },
@@ -222,7 +295,7 @@ const PACKAGE_CONFIG = [
 ];
 
 Hooks.on("init", () => {
-    const api = game.modules.get(MODULE_NAME).API = {};
+    const api = (game.modules.get(MODULE_NAME).API = {});
     api.CONST = { DATA_MODE, DATA_GETTERS };
     api.PACKAGE_CONFIG = PACKAGE_CONFIG;
 });

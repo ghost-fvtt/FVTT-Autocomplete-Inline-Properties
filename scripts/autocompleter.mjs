@@ -22,8 +22,10 @@ export default class Autocompleter extends Application {
         const DATA_MODE = game.modules.get(MODULE_NAME).API.CONST.DATA_MODE;
 
         let inlinePrefix;
-        if(fieldConfig.customInlinePrefix !== undefined) {
-            console.warn('AIP | You are using customInlinePrefix which has been deprecated in favor of inlinePrefix and will be removed in a future version.');
+        if (fieldConfig.customInlinePrefix !== undefined) {
+            console.warn(
+                "AIP | You are using customInlinePrefix which has been deprecated in favor of inlinePrefix and will be removed in a future version.",
+            );
             inlinePrefix = fieldConfig.customInlinePrefix;
         }
         inlinePrefix = fieldConfig.inlinePrefix ?? inlinePrefix;
@@ -55,7 +57,7 @@ export default class Autocompleter extends Application {
      * @param {DATA_MODE} dataMode
      * @param {(function(Application): object|null)} customDataGetter
      */
-    static getEntityData(sheet, { dataMode, customDataGetter=null }) {
+    static getEntityData(sheet, { dataMode, customDataGetter = null }) {
         const getter = game.modules.get(MODULE_NAME).API.CONST.DATA_GETTERS[dataMode];
         if (!getter) throw new Error(`Unrecognized data mode "${dataMode}"`);
         return getter(sheet, customDataGetter);
@@ -80,26 +82,32 @@ export default class Autocompleter extends Application {
      */
     _keyWithTrailingDot(key) {
         const data = getProperty(this.targetData, key);
-        return key + ((data && typeof data === "object") ? "." : "");
+        return key + (data && typeof data === "object" ? "." : "");
     }
 
     /**
      * The Autocompleter path textbox
      * @returns {HTMLInputElement}
      */
-    get inputElement() { return this.element?.[0]?.querySelector("input.aip-input"); }
+    get inputElement() {
+        return this.element?.[0]?.querySelector("input.aip-input");
+    }
 
     /**
      * The current raw path split into an array of path elements
      * @returns {string[]}
      */
-    get splitPath() { return this.rawPath.split("."); }
+    get splitPath() {
+        return this.rawPath.split(".");
+    }
 
     /**
      * The current raw path, with any partially entered key trimmed off
      * @returns {string}
      */
-    get pathWithoutPartial() { return this.splitPath.slice(0, -1).join("."); }
+    get pathWithoutPartial() {
+        return this.splitPath.slice(0, -1).join(".");
+    }
 
     /**
      * Gets the target data at the current rawPath, formatting the keys to include the full path until this point.
@@ -112,12 +120,12 @@ export default class Autocompleter extends Application {
         if (value === null || value === undefined) return [];
         return Object.entries(value)
             .map(([key, value]) => ({
-                "key": path + (path.length ? "." : "") + key,
+                key: path + (path.length ? "." : "") + key,
                 value,
             }))
             .filter(({ key }) => {
                 if (!this.filteredKeys) return true;
-                return !this.filteredKeys.some(filter => key.startsWith(filter));
+                return !this.filteredKeys.some((filter) => key.startsWith(filter));
             });
     }
 
@@ -133,7 +141,7 @@ export default class Autocompleter extends Application {
         switch (typeof value) {
             case "undefined":
                 formattedValue = typeof value;
-                break
+                break;
             case "object":
                 if (!value) {
                     formattedValue = "null";
@@ -143,7 +151,7 @@ export default class Autocompleter extends Application {
                 break;
             case "string":
                 formattedValue = `"${value}"`;
-                break
+                break;
             default:
                 formattedValue = value.toString();
         }
@@ -156,14 +164,13 @@ export default class Autocompleter extends Application {
      * @returns {{ key: string, value: any }[]}
      */
     get sortedDataAtPath() {
-        return this._dataAtPath
-            .sort((a, b) => {
-                if (typeof a.value !== "object" && typeof b.value !== "object") return a.key.localeCompare(b.key);
-                if (typeof a.value !== "object") return -1;
-                if (typeof b.value !== "object") return 1;
+        return this._dataAtPath.sort((a, b) => {
+            if (typeof a.value !== "object" && typeof b.value !== "object") return a.key.localeCompare(b.key);
+            if (typeof a.value !== "object") return -1;
+            if (typeof b.value !== "object") return 1;
 
-                return a.key.localeCompare(b.key);
-            });
+            return a.key.localeCompare(b.key);
+        });
     }
 
     /**
@@ -193,23 +200,22 @@ export default class Autocompleter extends Application {
     }
 
     /** @override */
-    getData(options = {}) {
+    getData() {
         const escapedCombinedPath = "^" + this.rawPath.replace(/\./, "\\.");
         let highlightedEntry = null;
-        const dataEntries = this.sortedDataAtPathFormatted
-            .map(({ key, value }, index) => {
-                const match = key.match(escapedCombinedPath)?.[0];
-                if (!match) return { key, value };
-                const matchedKey = key.slice(0, match.length);
-                const unmatchedKey = key.slice(match.length);
+        const dataEntries = this.sortedDataAtPathFormatted.map(({ key, value }, index) => {
+            const match = key.match(escapedCombinedPath)?.[0];
+            if (!match) return { key, value };
+            const matchedKey = key.slice(0, match.length);
+            const unmatchedKey = key.slice(match.length);
 
-                if (highlightedEntry === null) highlightedEntry = index;
+            if (highlightedEntry === null) highlightedEntry = index;
 
-                return {
-                    "key": `<span class="match">${matchedKey}</span>${unmatchedKey}`,
-                    value,
-                }
-            });
+            return {
+                key: `<span class="match">${matchedKey}</span>${unmatchedKey}`,
+                value,
+            };
+        });
 
         highlightedEntry = highlightedEntry ?? 0;
         return {
@@ -246,17 +252,17 @@ export default class Autocompleter extends Application {
         mergeObject(this.position, {
             width: targetRect.width,
             left: targetRect.left,
-        })
-        return super._render(force, options).then(result => {
+        });
+        return super._render(force, options).then((result) => {
             this.setPosition({ top: targetRect.top - this.element[0].getBoundingClientRect().height - 5 });
             this.bringToTop();
             return result;
-        })
+        });
     }
 
     /** @override */
     async _renderOuter(options) {
-        return super._renderOuter(options).then(html => {
+        return super._renderOuter(options).then((html) => {
             // Remove the header added to normal Application windows
             html[0].querySelector("header.window-header").remove();
             return html;
@@ -273,7 +279,7 @@ export default class Autocompleter extends Application {
      * @param {InputEvent} event
      * @private
      */
-    _onInputChanged(event) {
+    _onInputChanged() {
         const input = this.inputElement;
         this.rawPath = input.value;
         this.render(false);
@@ -285,8 +291,11 @@ export default class Autocompleter extends Application {
      */
     _onInputKeydown(event) {
         switch (event.key) {
-            case "Escape": this.close(); return;
-            case "Tab":
+            case "Escape": {
+                this.close();
+                return;
+            }
+            case "Tab": {
                 event.preventDefault();
                 const bestMatch = this.currentBestMatch;
                 if (!bestMatch) {
@@ -297,6 +306,7 @@ export default class Autocompleter extends Application {
                 }
                 this.render(false);
                 return;
+            }
         }
     }
 
@@ -316,9 +326,9 @@ export default class Autocompleter extends Application {
         }
 
         const preString = oldValue.slice(0, spliceStart);
-        const preSpacer = (!preString.length || preString[preString.length - 1] === " ") ? "" : " ";
+        const preSpacer = !preString.length || preString[preString.length - 1] === " " ? "" : " ";
         const postString = oldValue.slice(spliceEnd);
-        const postSpacer = (!postString.length || postString[postString.length - 1] === " ") ? "" : " ";
+        const postSpacer = !postString.length || postString[postString.length - 1] === " " ? "" : " ";
         const insert = this.inputElement.value;
         this.target.focus();
         this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;

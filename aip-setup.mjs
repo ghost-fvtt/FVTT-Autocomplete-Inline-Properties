@@ -12,7 +12,7 @@ Hooks.on("setup", () => {
 
     const packageConfig = game.modules.get(MODULE_NAME).API.PACKAGE_CONFIG;
 
-    if (!packageConfig.find(pkg => pkg.packageName === game.system.id)) {
+    if (!packageConfig.find((pkg) => pkg.packageName === game.system.id)) {
         ui.notifications.warn(game.i18n.localize("AIP.SystemNotSupported"));
     }
 
@@ -21,7 +21,7 @@ Hooks.on("setup", () => {
 
         for (let sheetClass of pkg.sheetClasses) {
             if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
-            Hooks.on(`render${sheetClass.name}`, (sheet, $element, _) => {
+            Hooks.on(`render${sheetClass.name}`, (sheet, $element) => {
                 const sheetElement = $element[0];
                 for (let fieldDef of sheetClass.fieldConfigs) {
                     registerField(sheetElement, fieldDef);
@@ -51,14 +51,15 @@ function registerField(sheetElement, fieldConfig) {
         return;
     }
 
-    const elements = Array.from(sheetElement.querySelectorAll(fieldConfig.selector))
-        .filter(e => e.tagName === "TEXTAREA" || (e.tagName === "INPUT" && e.type === "text"));
+    const elements = Array.from(sheetElement.querySelectorAll(fieldConfig.selector)).filter(
+        (e) => e.tagName === "TEXTAREA" || (e.tagName === "INPUT" && e.type === "text"),
+    );
     for (let targetElement of elements) {
         const key = app.appId + targetElement.name;
 
         if (fieldConfig.showButton && !targetElement.disabled) {
             // Show the summoner button when the user mouses over this field
-            targetElement.addEventListener("mouseenter", function() {
+            targetElement.addEventListener("mouseenter", function () {
                 if (!_summonerButton) {
                     // Create button
                     _summonerButton = document.createElement("button");
@@ -70,21 +71,21 @@ function registerField(sheetElement, fieldConfig) {
 
                 // Position button
                 const targetElementRect = targetElement.getBoundingClientRect();
-                _summonerButton.style.width = (targetElementRect.height - 4) + "px";
-                _summonerButton.style.height = (targetElementRect.height - 4) + "px";
-                _summonerButton.style.top = (targetElementRect.top + 2) + "px";
+                _summonerButton.style.width = targetElementRect.height - 4 + "px";
+                _summonerButton.style.height = targetElementRect.height - 4 + "px";
+                _summonerButton.style.top = targetElementRect.top + 2 + "px";
                 const buttonElementRect = _summonerButton.getBoundingClientRect();
-                _summonerButton.style.left = (targetElementRect.right - buttonElementRect.height - 4) + "px";
-                _summonerButton.firstElementChild.style.fontSize = (buttonElementRect.height - 8) + "px";
+                _summonerButton.style.left = targetElementRect.right - buttonElementRect.height - 4 + "px";
+                _summonerButton.firstElementChild.style.fontSize = buttonElementRect.height - 8 + "px";
 
-                _summonerButton.addEventListener("click", function(event) {
+                _summonerButton.addEventListener("click", function (event) {
                     event.preventDefault();
                     _activateAutocompleter(targetElement, key, fieldConfig, app);
                 });
             });
 
             // Destroy the summoner button when the user moves away from this field
-            targetElement.addEventListener("mouseout", function(event) {
+            targetElement.addEventListener("mouseout", function (event) {
                 if (!event.relatedTarget?.closest("button.autocompleter-summon")) {
                     _summonerButton?.remove();
                     _summonerButton = null;
@@ -95,13 +96,17 @@ function registerField(sheetElement, fieldConfig) {
             targetElement.addEventListener("input", function () {
                 _summonerButton?.remove();
                 _summonerButton = null;
-            })
+            });
 
             // Destroy the summoner button when the user scrolls this sheet
-            sheetElement.addEventListener("wheel", function() {
-                _summonerButton?.remove();
-                _summonerButton = null;
-            }, { passive: true });
+            sheetElement.addEventListener(
+                "wheel",
+                function () {
+                    _summonerButton?.remove();
+                    _summonerButton = null;
+                },
+                { passive: true },
+            );
         }
 
         if (fieldConfig.allowHotkey) {
