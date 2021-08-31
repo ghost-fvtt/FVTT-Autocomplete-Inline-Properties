@@ -82,6 +82,15 @@ function registerField(app, sheetElement, fieldConfig) {
                     event.preventDefault();
                     _activateAutocompleter(targetElement, key, fieldConfig, app);
                 });
+                _summonerButton.addEventListener("mouseout", (event) => {
+                    if (
+                        !event.relatedTarget?.closest("i.autocompleter-button-icon") &&
+                        !event.relatedTarget?.closest(fieldConfig.selector) &&
+                        !event.relatedTarget?.closest("button.autocompleter-summon")
+                    ) {
+                        _removeSummonerButton();
+                    }
+                });
             });
 
             // Destroy the summoner button when the user moves away from this field
