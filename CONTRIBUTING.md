@@ -35,10 +35,10 @@ Each field config *must* define the following:
  - `allowHotkey`: whether pressing the "@" key on the keyboard while this field is focused should open the Autocompleter interface.
  - \[`filteredKeys`\]: (optional) an array of keys that should not be shown in the Autocompleter.
  - `dataMode`: this defines what data is shown in the Autocompleter interface. This can take the following values:
-   - `DATA_MODE.ENTITY_DATA`: The data of the sheet's entity
-   - `DATA_MODE.ROLL_DATA`: The roll data of the sheet's entity
-   - `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's entity's owning actor, falling back to the merged data of dummy actors of all types if the entity is not owned
-   - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's entity's owning actor, falling back to the merged roll data of dummy actors of all types if the entity is not owned
+   - `DATA_MODE.DOCUMENT_DATA`: The data of the sheet's document
+   - `DATA_MODE.ROLL_DATA`: The roll data of the sheet's document
+   - `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's document's owning actor, falling back to the merged data of dummy actors of all types if the document is not owned
+   - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's document's owning actor, falling back to the merged roll data of dummy actors of all types if the document is not owned
    - `DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`
 - \[`inlinePrefix`\]: (optional) if provided, this prefix will be inserted in the target field when the Autocompleter is submitted. Otherwise, the default for the chosen `dataMode` is used.
  - `customDataGetter`: when `dataMode` is `CUSTOM`, the function provided here will be used to get the data to be shown in the Autocompleter interface.
@@ -53,7 +53,7 @@ Here's an example of how you might add a new package config for a module or syst
 Hooks.on("init", () => {
     const api = game.modules.get("autocomplete-inline-properties").API;
     const DATA_MODE = api.CONST.DATA_MODE;
-    
+
     // Define the config for our package
     const config = {
         packageName: "my-package",
@@ -73,7 +73,7 @@ Hooks.on("init", () => {
             // Add more sheet classes if necessary
         ]
     };
-    
+
     // Add our config
     api.PACKAGE_CONFIG.push(config);
 });

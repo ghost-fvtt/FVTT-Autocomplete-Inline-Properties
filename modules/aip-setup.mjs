@@ -16,15 +16,15 @@ Hooks.on("setup", () => {
         ui.notifications.warn(game.i18n.localize("AIP.SystemNotSupported"));
     }
 
-    for (let pkg of packageConfig) {
+    for (const pkg of packageConfig) {
         if (pkg.packageName !== game.system.id && !game.modules.get(pkg.packageName)?.active) continue;
 
-        for (let sheetClass of pkg.sheetClasses) {
+        for (const sheetClass of pkg.sheetClasses) {
             if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
-            Hooks.on(`render${sheetClass.name}`, (sheet, $element) => {
+            Hooks.on(`render${sheetClass.name}`, (app, $element) => {
                 const sheetElement = $element[0];
-                for (let fieldDef of sheetClass.fieldConfigs) {
-                    registerField(sheetElement, fieldDef);
+                for (const fieldDef of sheetClass.fieldConfigs) {
+                    registerField(app, sheetElement, fieldDef);
                 }
             });
         }
@@ -32,16 +32,16 @@ Hooks.on("setup", () => {
 });
 
 /**
- * @param {HTMLElement} sheetElement - the sheet to register the selector for.
- * @param {AIPFieldConfig} fieldConfig
+ * Register autocompletion for a field according to the given `fieldConfig`.
+ *
+ * @param {Application} app            - The `Application` on which the selector should be registered
+ * @param {HTMLElement} sheetElement   - The inner HTML of the `Application` on which the selector should be registered
+ * @param {AIPFieldConfig} fieldConfig - The configuration object describing the field
  */
-function registerField(sheetElement, fieldConfig) {
-    const app = ui.windows[sheetElement.closest(`[data-appid]`).dataset.appid];
-    if (!app) return;
-
-    // Check that we get valid data for the given entity. If not, skip adding Autocomplete to this field.
+function registerField(app, sheetElement, fieldConfig) {
+    // Check that we get valid data for the given application. If not, skip adding Autocomplete to this field.
     try {
-        const data = Autocompleter.getEntityData(app, fieldConfig);
+        const data = Autocompleter.getData(app, fieldConfig);
         if (!data) {
             if (CONFIG.debug.aip) console.log("Specified data for field not found", app, fieldConfig);
             return;
@@ -54,7 +54,7 @@ function registerField(sheetElement, fieldConfig) {
     const elements = Array.from(sheetElement.querySelectorAll(fieldConfig.selector)).filter(
         (e) => e.tagName === "TEXTAREA" || (e.tagName === "INPUT" && e.type === "text"),
     );
-    for (let targetElement of elements) {
+    for (const targetElement of elements) {
         const key = app.appId + targetElement.name;
 
         if (fieldConfig.showButton && !targetElement.disabled) {
@@ -64,7 +64,7 @@ function registerField(sheetElement, fieldConfig) {
                     // Create button
                     _summonerButton = document.createElement("button");
                     _summonerButton.classList.add("autocompleter-summon");
-                    _summonerButton.innerHTML = `<i class="fas fa-at"></i>`;
+                    _summonerButton.innerHTML = `<i class="fas fa-at autocompleter-button-icon"></i>`;
 
                     document.body.appendChild(_summonerButton);
                 }
@@ -85,28 +85,17 @@ function registerField(sheetElement, fieldConfig) {
             });
 
             // Destroy the summoner button when the user moves away from this field
-            targetElement.addEventListener("mouseout", function (event) {
+            targetElement.addEventListener("mouseout", (event) => {
                 if (!event.relatedTarget?.closest("button.autocompleter-summon")) {
-                    _summonerButton?.remove();
-                    _summonerButton = null;
+                    _removeSummonerButton();
                 }
             });
 
             // Destroy the summoner button when the user starts typing in the target element
-            targetElement.addEventListener("input", function () {
-                _summonerButton?.remove();
-                _summonerButton = null;
-            });
+            targetElement.addEventListener("input", _removeSummonerButton);
 
             // Destroy the summoner button when the user scrolls this sheet
-            sheetElement.addEventListener(
-                "wheel",
-                function () {
-                    _summonerButton?.remove();
-                    _summonerButton = null;
-                },
-                { passive: true },
-            );
+            sheetElement.addEventListener("wheel", _removeSummonerButton, { passive: true });
         }
 
         if (fieldConfig.allowHotkey) {
@@ -128,6 +117,15 @@ function registerField(sheetElement, fieldConfig) {
 }
 
 /**
+ * Removes the summoner button of it currently exists.
+ * @private
+ */
+function _removeSummonerButton() {
+    _summonerButton?.remove();
+    _summonerButton = null;
+}
+
+/**
  * Creates a new autocompleter, or if one already exists, closes it and creates a new one targeting the provided target element.
  * @param {HTMLInputElement} targetElement
  * @param {string} targetKey
@@ -139,8 +137,8 @@ function _activateAutocompleter(targetElement, targetKey, fieldConfig, app) {
     _autocompleter?.close();
 
     // Otherwise, create a new autocompleter
-    const data = Autocompleter.getEntityData(app, fieldConfig);
-    _autocompleter = new Autocompleter(data, targetElement, targetKey, fieldConfig, function onClose() {
+    const data = Autocompleter.getData(app, fieldConfig);
+    _autocompleter = new Autocompleter(data, targetElement, targetKey, fieldConfig, () => {
         // When this Autocompleter gets closed, clean up the registration for this element.
         _autocompleter = null;
     }).render(true);

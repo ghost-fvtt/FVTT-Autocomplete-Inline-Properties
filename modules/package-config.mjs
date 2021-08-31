@@ -5,15 +5,35 @@ import { MODULE_NAME } from "./const.mjs";
  * Determines which data should be provided to the Autocompleter
  */
 const DATA_MODE = {
-    // The data of the sheet's entity
+    /**
+     * The data of the sheet's entity
+     * @deprecated since 2.4.0, use {@link DATA_MODE.DOCUMENT_DATA} instead.
+     */
     ENTITY_DATA: "entity",
-    // The roll data of the sheet's entity
+
+    /**
+     * The data of the sheet's document
+     */
+    DOCUMENT_DATA: "document",
+
+    /**
+     * The roll data of the sheet's document
+     */
     ROLL_DATA: "roll",
-    // The data of the sheet's entity's owning actor
+
+    /**
+     * The data of the sheet's document's owning actor
+     */
     OWNING_ACTOR_DATA: "owning-actor",
-    // The roll data of the sheet's entity's owning actor
+
+    /**
+     * The roll data of the sheet's document's owning actor
+     */
     OWNING_ACTOR_ROLL_DATA: "actor-roll",
-    // Custom data as defined by the `customDataGetter`
+
+    /**
+     * Custom data as defined by the `customDataGetter`
+     */
     CUSTOM: "custom",
 };
 
@@ -22,21 +42,22 @@ const DATA_MODE = {
  */
 const DATA_GETTERS = {
     [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
+    [DATA_MODE.DOCUMENT_DATA]: (sheet) => sheet.object?.data,
     [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
-    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetEntityParentActor(sheet)?.data ?? _getFallbackActorData(),
+    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetDocumentParentActor(sheet)?.data ?? _getFallbackActorData(),
     [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) =>
-        _getSheetEntityParentActor(sheet)?.getRollData() ?? _getFallbackActorRollData(),
+        _getSheetDocumentParentActor(sheet)?.getRollData() ?? _getFallbackActorRollData(),
     [DATA_MODE.CUSTOM]: (sheet, customDataGetter) => customDataGetter(sheet),
 };
 
 /**
- * Gets the owning actor of a given `FormApplication`'s entity.
- * If the entity does not have a parent, or the parent is not an Actor, returns null.
+ * Gets the owning actor of a given `FormApplication`'s document.
+ * If the document does not have a parent, or the parent is not an Actor, returns null.
  * @param {FormApplication} sheet
  * @returns {Actor|null}
  * @private
  */
-function _getSheetEntityParentActor(sheet) {
+function _getSheetDocumentParentActor(sheet) {
     const parent = sheet.object?.actor ?? sheet.object?.parent;
     return parent && parent instanceof Actor ? parent : null;
 }
@@ -100,7 +121,7 @@ function _getFallbackActorRollData() {
 /**
  * @typedef {Object} AIPSheetClassConfig
  * A configuration object describing a specific sheet class and which fields within that sheet should have AIP applied.
- * The default data modes assume that this sheet is a {@link FormApplication} which references an entity.
+ * The default data modes assume that this sheet is a {@link FormApplication} which references a document.
  *
  * @property {string} name - the name of the sheet class
  * @property {AIPFieldConfig[]} fieldConfigs - the fields within this sheet that should have AIP applied
