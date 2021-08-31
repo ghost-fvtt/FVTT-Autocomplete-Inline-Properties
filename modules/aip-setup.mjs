@@ -65,7 +65,7 @@ function registerField(app, sheetElement, fieldConfig) {
                     // Create button
                     _summonerButton = document.createElement("button");
                     _summonerButton.classList.add("autocompleter-summon");
-                    _summonerButton.innerHTML = `<i class="fas fa-at autocompleter-button-icon"></i>`;
+                    _summonerButton.innerHTML = `<i class="fas fa-at autocompleter-summon-icon"></i>`;
 
                     document.body.appendChild(_summonerButton);
                 }
@@ -85,7 +85,7 @@ function registerField(app, sheetElement, fieldConfig) {
                 });
                 _summonerButton.addEventListener("mouseout", (event) => {
                     if (
-                        !event.relatedTarget?.closest("i.autocompleter-button-icon") &&
+                        !event.relatedTarget?.closest("i.autocompleter-summon-icon") &&
                         !event.relatedTarget?.closest(fieldConfig.selector) &&
                         !event.relatedTarget?.closest("button.autocompleter-summon")
                     ) {
