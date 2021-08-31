@@ -1,4 +1,4 @@
-import { MODULE_NAME } from "./scripts/const.mjs";
+import { MODULE_NAME } from "./const.mjs";
 
 /**
  * @enum {string}

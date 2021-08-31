@@ -1,5 +1,5 @@
-import Autocompleter from "./scripts/autocompleter.mjs";
-import { MODULE_NAME } from "./scripts/const.mjs";
+import Autocompleter from "./autocompleter.mjs";
+import { MODULE_NAME } from "./const.mjs";
 
 /** @type {(Autocompleter|null)} */
 let _autocompleter = null;
