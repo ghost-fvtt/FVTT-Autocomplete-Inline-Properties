@@ -1,7 +1,7 @@
 {
     "name": "autocomplete-inline-properties",
     "version": "2.3.0",
-    "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference entity data.",
+    "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference document data.",
     "private": true,
     "type": "commonjs",
     "scripts": {

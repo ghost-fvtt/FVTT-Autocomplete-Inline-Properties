@@ -52,12 +52,19 @@ export default class Autocompleter extends Application {
     }
 
     /**
-     * Given an entity, the data mode, and, if necessary, a custom data getter, return the appropriate data for that data mode
+     * Given a sheet, the data mode, and, if necessary, a custom data getter, return the appropriate data for that data mode
      * @param {Application} sheet
      * @param {DATA_MODE} dataMode
      * @param {(function(Application): object|null)} customDataGetter
      */
-    static getEntityData(sheet, { dataMode, customDataGetter = null }) {
+    static getData(sheet, { dataMode, customDataGetter = null }) {
+        const api = game.modules.get(MODULE_NAME).API;
+        if (dataMode === api.CONST.DATA_MODE.ENTITY_DATA) {
+            console.warn(
+                "AIP | You are using DATA_MODE.ENTITY_DATA which has been deprecated in favor of DATA_MODE.DOCUMENT_DATA and will be removed in a future version.",
+            );
+        }
+
         const getter = game.modules.get(MODULE_NAME).API.CONST.DATA_GETTERS[dataMode];
         if (!getter) throw new Error(`Unrecognized data mode "${dataMode}"`);
         return getter(sheet, customDataGetter);
@@ -276,7 +283,6 @@ export default class Autocompleter extends Application {
     }
 
     /**
-     * @param {InputEvent} event
      * @private
      */
     _onInputChanged() {
