@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "./const.mjs";
+import logger from "./logger.mjs";
 
 export default class Autocompleter extends Application {
     /**
@@ -23,8 +24,8 @@ export default class Autocompleter extends Application {
 
         let inlinePrefix;
         if (fieldConfig.customInlinePrefix !== undefined) {
-            console.warn(
-                "AIP | You are using customInlinePrefix which has been deprecated in favor of inlinePrefix and will be removed in a future version.",
+            logger.warn(
+                "You are using customInlinePrefix which has been deprecated in favor of inlinePrefix and will be removed in a future version.",
             );
             inlinePrefix = fieldConfig.customInlinePrefix;
         }
@@ -60,7 +61,7 @@ export default class Autocompleter extends Application {
     static getData(sheet, { dataMode, customDataGetter = null }) {
         const api = game.modules.get(MODULE_NAME).API;
         if (dataMode === api.CONST.DATA_MODE.ENTITY_DATA) {
-            console.warn(
+            logger.warn(
                 "AIP | You are using DATA_MODE.ENTITY_DATA which has been deprecated in favor of DATA_MODE.DOCUMENT_DATA and will be removed in a future version.",
             );
         }

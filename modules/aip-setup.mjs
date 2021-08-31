@@ -1,5 +1,6 @@
 import Autocompleter from "./autocompleter.mjs";
 import { MODULE_NAME } from "./const.mjs";
+import logger from "./logger.mjs";
 
 /** @type {(Autocompleter|null)} */
 let _autocompleter = null;
@@ -8,7 +9,7 @@ let _summonerButton = null;
 
 Hooks.on("setup", () => {
     CONFIG.debug.aip = false;
-    console.log("AIP | Setting up Autocomplete Inline Properties");
+    logger.info("Setting up Autocomplete Inline Properties");
 
     const packageConfig = game.modules.get(MODULE_NAME).API.PACKAGE_CONFIG;
 
@@ -20,7 +21,7 @@ Hooks.on("setup", () => {
         if (pkg.packageName !== game.system.id && !game.modules.get(pkg.packageName)?.active) continue;
 
         for (const sheetClass of pkg.sheetClasses) {
-            if (CONFIG.debug.aip) console.log(`AIP | Registering hook for "render${sheetClass.name}"`);
+            logger.debug(`Registering hook for "render${sheetClass.name}"`);
             Hooks.on(`render${sheetClass.name}`, (app, $element) => {
                 const sheetElement = $element[0];
                 for (const fieldDef of sheetClass.fieldConfigs) {
@@ -43,11 +44,11 @@ function registerField(app, sheetElement, fieldConfig) {
     try {
         const data = Autocompleter.getData(app, fieldConfig);
         if (!data) {
-            if (CONFIG.debug.aip) console.log("Specified data for field not found", app, fieldConfig);
+            logger.debug("Specified data for field not found", app, fieldConfig);
             return;
         }
     } catch (e) {
-        console.error("Error registering AIP field", e, app, fieldConfig);
+        logger.error("Error registering AIP field", e, app, fieldConfig);
         return;
     }
 
