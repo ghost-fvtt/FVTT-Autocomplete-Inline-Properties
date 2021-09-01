@@ -74,7 +74,7 @@ jobs:
                   tags: true
 
             - name: Create zip file
-              run: zip -r ./module.zip module.json LICENSE aip-setup.mjs package-config.mjs aip.css scripts/ templates/ lang/
+              run: zip -r ./module.zip module.json LICENSE modules/ styles/ templates/ lang/
 
             - name: Extract version
               run: |
