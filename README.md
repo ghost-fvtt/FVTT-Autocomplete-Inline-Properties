@@ -31,4 +31,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to add support for you
 
 ## License
 
-Licensed under the GPLv3 License (see [LICENSE](LICENSE)).
+Licensed under the MIT License (see [LICENSE](LICENSE)).
