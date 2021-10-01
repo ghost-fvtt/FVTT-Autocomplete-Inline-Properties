@@ -25,7 +25,7 @@
             "discord": "ghost#2000"
         }
     ],
-    "license": "GPL-3.0-or-later",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues"
     },
