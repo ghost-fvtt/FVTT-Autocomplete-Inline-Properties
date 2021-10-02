@@ -12,7 +12,8 @@
         {
             "name": "Johannes Loher",
             "email": "johannes.loher@fg4f.de",
-            "discord": "ghost#2000"
+            "discord": "ghost#2000",
+            "ko-fi": "ghostfvtt"
         }
     ],
     "languages": [
@@ -22,13 +23,8 @@
             "path": "./lang/en.json"
         }
     ],
-    "esmodules": [
-        "./modules/package-config.mjs",
-        "./modules/aip-setup.mjs"
-    ],
-    "styles": [
-        "./styles/aip.css"
-    ],
+    "esmodules": ["./modules/package-config.mjs", "./modules/aip-setup.mjs"],
+    "styles": ["./styles/aip.css"],
     "minimumCoreVersion": "0.8.5",
     "compatibleCoreVersion": "0.8.9",
     "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties",
