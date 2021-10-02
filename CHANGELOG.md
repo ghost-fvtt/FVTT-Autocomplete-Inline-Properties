@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.3.3...v2.4.0) (2021-10-02)
+
+
+### Features
+
+* allow selecting properties with arrow keys ([2481102](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/2481102e6e9151cd7ccab19a501bc6680cec4d95)), closes [#3](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues/3)
+* use highlighted entry when pressing enter ([194ed13](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/194ed13a09f9a987d8299bae129cb4c93617ec19)), closes [#9](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues/9)
+
 ### [2.3.3](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.3.2...v2.3.3) (2021-10-01)
 
 ### [2.3.2](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.3.1...v2.3.2) (2021-09-01)
