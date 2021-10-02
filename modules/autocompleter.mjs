@@ -41,11 +41,14 @@ export default class Autocompleter extends Application {
                 break;
         }
 
-        this.rawPath = "";
-        if (fieldConfig.defaultPath?.length) {
-            this.rawPath = this._keyWithTrailingDot(fieldConfig.defaultPath);
-        }
+        this.rawPath = fieldConfig.defaultPath?.length ? this._keyWithTrailingDot(fieldConfig.defaultPath) : "";
         this.onClose = onClose;
+
+        /**
+         * The index of the currently selected candidate.
+         * @type {number | null}
+         */
+        this.selectedCandidateIndex = null;
 
         // Currently unused
         this.targetSelectionStart = null;
@@ -62,7 +65,7 @@ export default class Autocompleter extends Application {
         const api = game.modules.get(MODULE_NAME).API;
         if (dataMode === api.CONST.DATA_MODE.ENTITY_DATA) {
             logger.warn(
-                "AIP | You are using DATA_MODE.ENTITY_DATA which has been deprecated in favor of DATA_MODE.DOCUMENT_DATA and will be removed in a future version.",
+                "You are using DATA_MODE.ENTITY_DATA which has been deprecated in favor of DATA_MODE.DOCUMENT_DATA and will be removed in a future version.",
             );
         }
 
@@ -190,19 +193,39 @@ export default class Autocompleter extends Application {
     }
 
     /**
-     * The Autocompleter list entry that most closely matches the current rawPath
-     * @returns {({ key: string, value: any }|undefined)}
+     * The Autocompleter list entry that most closely matches the current `rawPath`
+     * @returns {{ key: string, value: any } | undefined}
      */
     get currentBestMatch() {
-        return this.sortedDataAtPath.filter(({ key }) => key.startsWith(this.rawPath))?.[0];
+        return this.sortedDataAtPath.find(({ key }) => key.startsWith(this.rawPath));
     }
 
     /**
-     * Assigns this Autocompleter a new target input element (in the case of a sheet re-render, for instance) and re-renders.
+     * The index of the Autocompleter list entry that most closely matches the current `rawPath`, respective to the
+     * `sortedDataAtPath`.
+     */
+    get indexOfCurrentBestMatch() {
+        return this.sortedDataAtPath.map(({ key }) => key).indexOf(this.currentBestMatch?.key);
+    }
+
+    /**
+     * The Autocompleter list entry that has been selected, if any, otherwise the one that most closely matchs the
+     * current `rawPath`.
+     */
+    get selectedOrBestMatch() {
+        return this.selectedCandidateIndex !== null
+            ? this.sortedDataAtPath[this.selectedCandidateIndex]
+            : this.currentBestMatch;
+    }
+
+    /**
+     * Assigns this Autocompleter a new target input element (in the case of a sheet re-render, for instance) and
+     * re-renders.
      * @param newTarget
      */
     retarget(newTarget) {
         this.target = newTarget;
+        this.selectedCandidateIndex = null;
         this.render(false);
         this.bringToTop();
     }
@@ -210,7 +233,7 @@ export default class Autocompleter extends Application {
     /** @override */
     getData() {
         const escapedCombinedPath = "^" + this.rawPath.replace(/\./, "\\.");
-        let highlightedEntry = null;
+        let highlightedEntry = this.selectedCandidateIndex;
         const dataEntries = this.sortedDataAtPathFormatted.map(({ key, value }, index) => {
             const match = key.match(escapedCombinedPath)?.[0];
             if (!match) return { key, value };
@@ -289,6 +312,7 @@ export default class Autocompleter extends Application {
     _onInputChanged() {
         const input = this.inputElement;
         this.rawPath = input.value;
+        this.selectedCandidateIndex = null;
         this.render(false);
     }
 
@@ -302,15 +326,38 @@ export default class Autocompleter extends Application {
                 this.close();
                 return;
             }
+            case "ArrowUp": {
+                event.preventDefault();
+                this.selectedCandidateIndex =
+                    this.sortedDataAtPath.length > 0
+                        ? ((this.selectedCandidateIndex ?? this.indexOfCurrentBestMatch) + 1) %
+                          this.sortedDataAtPath.length
+                        : null;
+                this.render(false);
+                return;
+            }
+            case "ArrowDown": {
+                event.preventDefault();
+                this.selectedCandidateIndex =
+                    this.sortedDataAtPath.length > 0
+                        ? ((this.selectedCandidateIndex ?? this.indexOfCurrentBestMatch) -
+                              1 +
+                              this.sortedDataAtPath.length) %
+                          this.sortedDataAtPath.length
+                        : null;
+                this.render(false);
+                return;
+            }
             case "Tab": {
                 event.preventDefault();
-                const bestMatch = this.currentBestMatch;
-                if (!bestMatch) {
+                const selectedOrBestMatch = this.selectedOrBestMatch;
+                if (!selectedOrBestMatch) {
                     ui.notifications.warn(`The key "${this.rawPath}" does not match any known keys.`);
                     this.rawPath = "";
                 } else {
-                    this.rawPath = this._keyWithTrailingDot(bestMatch.key);
+                    this.rawPath = this._keyWithTrailingDot(selectedOrBestMatch.key);
                 }
+                this.selectedCandidateIndex = null;
                 this.render(false);
                 return;
             }
@@ -336,7 +383,7 @@ export default class Autocompleter extends Application {
         const preSpacer = !preString.length || preString[preString.length - 1] === " " ? "" : " ";
         const postString = oldValue.slice(spliceEnd);
         const postSpacer = !postString.length || postString[postString.length - 1] === " " ? "" : " ";
-        const insert = this.currentBestMatch?.key ?? this.inputElement.value;
+        const insert = this.selectedOrBestMatch?.key ?? this.inputElement.value;
         this.target.focus();
         this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
         await this.close();
