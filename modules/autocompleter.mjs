@@ -336,7 +336,7 @@ export default class Autocompleter extends Application {
         const preSpacer = !preString.length || preString[preString.length - 1] === " " ? "" : " ";
         const postString = oldValue.slice(spliceEnd);
         const postSpacer = !postString.length || postString[postString.length - 1] === " " ? "" : " ";
-        const insert = this.inputElement.value;
+        const insert = this.currentBestMatch?.key ?? this.inputElement.value;
         this.target.focus();
         this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
         await this.close();
