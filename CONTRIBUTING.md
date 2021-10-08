@@ -1,53 +1,71 @@
 # Contributing
 
-Pull requests are welcome! I appreciate any bugfixes you can provide, and I am also very willing to accept support for new systems in this module.
-Note that I would prefer not to add explicit support for other modules within AIP.
-Other modules can, however, add their own configuration at runtime in the `init` hook if they wish.
+Pull requests are more than welcome! Any provided bug fixes are highly appreciated and PRs that add support for
+additional systems will also be accepted.
 
-## Adding support for new systems or modules
+Unless there is a very specific need, support for sheets from other modules will _not_ be added to AIP. Instead, it is
+recommended that those modules add the support on their side by injecting corresponding configuration into the AIP
+configuration during the `init` hook.
 
-Adding support for a new system is relatively simple, and happens in the
-[`package-config.mjs`](https://github.com/schultzcole/FVTT-Autocomplete-Inline-Properties/blob/master/package-config.mjs) file.
-Modules can add their own configuration to `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` in the `init` hook.
-There are some documentation comments in that file with an explanation of the structure that AIP expects for its configuration,
-and the dnd5e system can also serve as an example,
-however I'll also briefly cover it here.
+## Adding support for new systems and modules
+
+Adding support for a new system in AIP is quite simple. All that is needed is adding a corresponding entry in the
+[`package-config.mjs`](modules/package-config.mjs) file.
+
+Modules can add their own configuration to `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG`
+during the `init` hook.
+
+The [`package-config.mjs`](modules/package-config.mjs) file contains detailed documentation that explains the structure
+of the AIP configuration. Additionally, the configurations for the already supported systems can serve as examples.
+
+For convenience here is a short overview of the configuration.
 
 ### Package Config
 
-Each package (system or module) that wants to specify fields for autocompletion support gets an entry in the `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` array.
-Each entry in this array has a `packageName` property to define the package that the entry belongs to.
-AIP will search for an active system or module that matches the `packageName`, and if it doesn't find a match, it will not use the configuration for that package.
-Each entry also has an array of sheet configuration objects, each of which corresponds with a foundry sheet `Application`
+Every supported package (system or module) has a corresponding entry in the
+`game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` array. Each entry in this array has a
+`packageName` property to define the package that the entry belongs to. AIP searches for an active system or module that
+matches the `packageName`, and if it doesn't find a match, it simply ignores the configuration for that entry. Each
+entry also has an array of sheet class config objects (`sheetClasses`), each of which corresponds to a foundry sheet
+`Application`.
 
 ### Sheet Class Config
 
-Each sheet class defines the following: A `name`, which is the name of the `Application` subclass, and an array of field configs.
-Sheet classes are *assumed* to be `FormApplications`, however with a bit of extra configuration, other `Application`s can work as well.
+Each sheet class config consists of:
+* A `name`, which is the name of the `Application` subclass.
+* An array of field config objects (`fieldConfigs`).
+
+By default, sheet classes are _assumed_ to be `FormApplication`s, however with a bit of extra configuration, other
+`Application`s can work, too.
 
 ### Field Config
 
 This is where the actual configuration happens.
-Each field config *must* define the following:
- - `selector`: a css selector that matches the field(s) you want to add autocompletion to.
- - \[`defaultPath`\]: (optional) this path will be used as the default contents of the path field when the Autocompleter is first created.
- - `showButton`: whether the "@" ui button should be shown when the user hovers over this field.
- - `allowHotkey`: whether pressing the "@" key on the keyboard while this field is focused should open the Autocompleter interface.
- - \[`filteredKeys`\]: (optional) an array of keys that should not be shown in the Autocompleter.
- - `dataMode`: this defines what data is shown in the Autocompleter interface. This can take the following values:
-   - `DATA_MODE.DOCUMENT_DATA`: The data of the sheet's document
-   - `DATA_MODE.ROLL_DATA`: The roll data of the sheet's document
-   - `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's document's owning actor, falling back to the merged data of dummy actors of all types if the document is not owned
-   - `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's document's owning actor, falling back to the merged roll data of dummy actors of all types if the document is not owned
-   - `DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`
-- \[`inlinePrefix`\]: (optional) if provided, this prefix will be inserted in the target field when the Autocompleter is submitted. Otherwise, the default for the chosen `dataMode` is used.
- - `customDataGetter`: when `dataMode` is `CUSTOM`, the function provided here will be used to get the data to be shown in the Autocompleter interface.
-    When `dataMode` is `CUSTOM`, this field is *required*.
-- \[`customInlinePrefix`\]: (optional) deprecated, use `inlinePrefix` instead.
+Each field config object consists of the following properties:
+ * `selector`: A CSS selector that matches the field(s) that autocompletion should be added to.
+ * \[`defaultPath`\] (optional): This path is used as the default content of the path field when the Autocompleter is
+   invoked.
+ * `showButton`: Whether the floating `@` button should be shown when the user hovers over the field.
+ * `allowHotkey`: Whether pressing the `@` key on the keyboard while this field is focused should invoke the
+   Autocompleter.
+ * \[`filteredKeys`\] (optional): An array of keys that should not be shown in the Autocompleter.
+ * `dataMode`: This defines what data is shown in the Autocompleter. The following values are possible:
+   * `DATA_MODE.DOCUMENT_DATA`: The data of the sheet's document.
+   * `DATA_MODE.ROLL_DATA`: The roll data of the sheet's document.
+   * `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's document's owning actor, falling back to the merged data of
+     dummy actors of all types if the document is not owned.
+   * `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's document's owning actor, falling back to the
+     merged roll data of dummy actors of all types if the document is not owned.
+   * `DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`.
+ * \[`inlinePrefix`\] (optional): If provided, this prefix is inserted in the target field when the Autocompleter is
+   submitted. Otherwise, the default for the chosen `dataMode` is used.
+ * `customDataGetter`: When `dataMode` is `CUSTOM`, the function provided here is used to get the data to be shown in
+   the Autocompleter. When `dataMode` is `CUSTOM`, this field is _required_.
+ * \[`customInlinePrefix`\] (optional): Deprecated, use `inlinePrefix` instead.
 
 ## Example
 
-Here's an example of how you might add a new package config for a module or system (assuming you don't create a PR for it to be included in AIP directly):
+Here's an example of how adding a new package config for a module or system might look like:
 
 ```js
 Hooks.on("init", () => {
@@ -59,10 +77,10 @@ Hooks.on("init", () => {
         packageName: "my-package",
         sheetClasses: [
             {
-                name: "ItemSheet5e", // this *must* be the class name of the `Application` you want it to apply to
+                name: "ItemSheet5e", // this _must_ be the class name of the `Application` you want it to apply to
                 fieldConfigs: [
                     {
-                        selector: `.tab[data-tab="details"] input[type="text"]`, // this will target all text input fields on the "details" tab. Any css selector should work here.
+                        selector: `.tab[data-tab="details"] input[type="text"]`, // this targets all text input fields on the "details" tab. Any css selector should work here.
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.ROLL_DATA,
