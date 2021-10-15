@@ -1,5 +1,13 @@
 # Autocomplete Inline Properties
 
+[![Checks](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/workflows/Checks/badge.svg)](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/actions)
+![Supported Foundry Versions](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/master/module.json)
+![Latest Release Download Count](https://img.shields.io/github/downloads/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/latest/module.zip)
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautocomplete-inline-properties&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=autocomplete-inline-properties)
+[![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fautocomplete-inline-properties%2Fshield%2Fendorsements)](https://www.foundryvtt-hub.com/package/autocomplete-inline-properties/)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-ghostfvtt-00B9FE?logo=kofi)](https://ko-fi.com/ghostfvtt)
+
+
 This module adds an autocompletion and hint UI for sheet fields that can accept inline properties or other document data
 references, for instance a damage field referencing an ability modifier (e.g. `@abilities.dex.mod`), or an
 `ActiveEffect` key (e.g. `data.bonuses.mwak.attack`).

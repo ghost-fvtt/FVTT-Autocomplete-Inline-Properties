@@ -8,7 +8,8 @@
         "lint": "eslint --ext .js,.mjs .",
         "lint:fix": "eslint --ext .js,.mjs --fix .",
         "format": "prettier --write \"./**/*.(js|mjs|json|css|yml)\"",
-        "release": "standard-version"
+        "release": "standard-version",
+        "postinstall": "husky install"
     },
     "repository": {
         "type": "git",
