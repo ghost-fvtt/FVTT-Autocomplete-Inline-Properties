@@ -12,6 +12,7 @@ Hooks.on("setup", () => {
     logger.info("Setting up Autocomplete Inline Properties");
 
     const packageConfig = game.modules.get(MODULE_NAME).API.PACKAGE_CONFIG;
+    Hooks.callAll("aipSetup", packageConfig);
 
     if (!packageConfig.find((pkg) => pkg.packageName === game.system.id)) {
         ui.notifications.warn(game.i18n.localize("AIP.SystemNotSupported"));
@@ -21,7 +22,7 @@ Hooks.on("setup", () => {
         if (pkg.packageName !== game.system.id && !game.modules.get(pkg.packageName)?.active) continue;
 
         for (const sheetClass of pkg.sheetClasses) {
-            logger.debug(`Registering hook for "render${sheetClass.name}"`);
+            logger.debug(`Registering for "render${sheetClass.name}" hook event`);
             Hooks.on(`render${sheetClass.name}`, (app, $element) => {
                 const sheetElement = $element[0];
                 for (const fieldDef of sheetClass.fieldConfigs) {

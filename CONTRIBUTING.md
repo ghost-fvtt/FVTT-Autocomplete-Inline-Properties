@@ -5,15 +5,19 @@ additional systems will also be accepted.
 
 Unless there is a very specific need, support for sheets from other modules will _not_ be added to AIP. Instead, it is
 recommended that those modules add the support on their side by injecting corresponding configuration into the AIP
-configuration during the `init` hook.
+configuration using the `aipSetup` hook event.
 
 ## Adding support for new systems and modules
 
 Adding support for a new system in AIP is quite simple. All that is needed is adding a corresponding entry in the
 [`package-config.mjs`](modules/package-config.mjs) file.
 
-Modules can add their own configuration to `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG`
-during the `init` hook.
+Modules can add their own configuration to the `packageConfig` that is passed as a parameter with the `aipSetup` hook
+event.
+
+**⚠️ Note:** The previous way of adding configurations to
+`game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` during the `init` hook event is deprecated and
+will be removed in a future version.
 
 The [`package-config.mjs`](modules/package-config.mjs) file contains detailed documentation that explains the structure
 of the AIP configuration. Additionally, the configurations for the already supported systems can serve as examples.
@@ -22,12 +26,11 @@ For convenience here is a short overview of the configuration.
 
 ### Package Config
 
-Every supported package (system or module) has a corresponding entry in the
-`game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` array. Each entry in this array has a
-`packageName` property to define the package that the entry belongs to. AIP searches for an active system or module that
-matches the `packageName`, and if it doesn't find a match, it simply ignores the configuration for that entry. Each
-entry also has an array of sheet class config objects (`sheetClasses`), each of which corresponds to a foundry sheet
-`Application`.
+The package config is an array of objects where each element represents the configuration for a system or module. Each
+entry in this array has a `packageName` property to define the package that the entry belongs to. AIP searches for an
+active system or module that matches the `packageName`, and if it doesn't find a match, it simply ignores the
+configuration for that entry. Each entry also has an array of sheet class config objects (`sheetClasses`), each of which
+corresponds to a foundry sheet `Application`.
 
 ### Sheet Class Config
 
@@ -68,7 +71,7 @@ Each field config object consists of the following properties:
 Here's an example of how adding a new package config for a module or system might look like:
 
 ```js
-Hooks.on("init", () => {
+Hooks.on("aipSetup", (packageConfig) => {
     const api = game.modules.get("autocomplete-inline-properties").API;
     const DATA_MODE = api.CONST.DATA_MODE;
 
@@ -93,6 +96,6 @@ Hooks.on("init", () => {
     };
 
     // Add our config
-    api.PACKAGE_CONFIG.push(config);
+    packageConfig.push(config);
 });
 ```
