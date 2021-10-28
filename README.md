@@ -45,7 +45,7 @@ This module currently offers built in support for the following systems:
 Pull requests to support additional systems are more than welcome!
 
 Systems and modules can also add support for their sheets on their own side by inject corresponding configuration into
-the AIP configuration. See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to add support for your system or
+the AIP configuration using the `aipSetup` hook event. See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to add support for your system or
 module.
 
 ## License
