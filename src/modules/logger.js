@@ -1,4 +1,4 @@
-import { MODULE_ABBREVIATION } from "./const";
+import { MODULE_ABBREVIATION, MODULE_NAME } from "./const";
 
 const loggingContext = MODULE_ABBREVIATION;
 const loggingSeparator = "|";
@@ -14,7 +14,7 @@ function getLoggingFunction(type = "info") {
     const log = console[type];
     if (type === "debug") {
         return (...data) => {
-            if (CONFIG.debug.aip) {
+            if (game.settings.get(MODULE_NAME, "debug")) {
                 log(loggingContext, loggingSeparator, ...data);
             }
         };
