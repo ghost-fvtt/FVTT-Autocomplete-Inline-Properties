@@ -23,7 +23,7 @@
             "path": "./lang/en.json"
         }
     ],
-    "esmodules": ["./modules/package-config.mjs", "./modules/aip-setup.mjs"],
+    "esmodules": ["./modules/aip.js"],
     "styles": ["./styles/aip.css"],
     "minimumCoreVersion": "0.8.5",
     "compatibleCoreVersion": "0.8.9",
