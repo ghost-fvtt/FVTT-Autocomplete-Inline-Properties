@@ -3,8 +3,8 @@
     "version": "2.5.0",
     "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference document data.",
     "private": true,
-    "type": "commonjs",
     "scripts": {
+        "build": "rollup -c",
         "lint": "eslint --ext .js,.mjs .",
         "lint:fix": "eslint --ext .js,.mjs --fix .",
         "format": "prettier --write \"./**/*.(js|mjs|json|css|yml)\"",
@@ -41,6 +41,10 @@
         "husky": "^7.0.2",
         "lint-staged": "^11.1.2",
         "prettier": "^2.4.1",
+        "rollup": "^2.58.3",
+        "rollup-plugin-copy": "^3.4.0",
+        "rollup-plugin-sourcemaps": "^0.6.3",
+        "rollup-plugin-terser": "^7.0.2",
         "standard-version": "^9.3.1",
         "stringify-package": "^1.0.1"
     },

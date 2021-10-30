@@ -1,10 +1,8 @@
-import { MODULE_NAME } from "./const.mjs";
-
 /**
  * @enum {string}
  * Determines which data should be provided to the Autocompleter
  */
-const DATA_MODE = {
+export const DATA_MODE = {
     /**
      * The data of the sheet's entity
      * @deprecated since 2.4.0, use {@link DATA_MODE.DOCUMENT_DATA} instead.
@@ -40,7 +38,7 @@ const DATA_MODE = {
 /**
  * Getter functions corresponding to the data modes defined in {@link DATA_MODE}
  */
-const DATA_GETTERS = {
+export const DATA_GETTERS = {
     [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
     [DATA_MODE.DOCUMENT_DATA]: (sheet) => sheet.object?.data,
     [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
@@ -54,7 +52,7 @@ const DATA_GETTERS = {
  * Gets the owning actor of a given `FormApplication`'s document.
  * If the document does not have a parent, or the parent is not an Actor, returns null.
  * @param {FormApplication} sheet
- * @returns {Actor|null}
+ * @returns {Actor | null}
  * @private
  */
 function _getSheetDocumentParentActor(sheet) {
@@ -138,12 +136,12 @@ function _getFallbackActorRollData() {
  * @property {(string[])} [filteredKeys] - an array of keys that should not be shown in the Autocompleter.
  * @property {DATA_MODE} dataMode - determines what data is provided to the Autocompleter for this field.
  * @property {string} [inlinePrefix] - if provided, this prefix will be inserted in the target field when the Autocompleter is submitted. Otherwise, the default for the chosen `dataMode` is used.
- * @property {(function(Application): object|undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called to produce the data for the Autocompleter.
+ * @property {(function(Application): object | undefined)} customDataGetter - if `dataMode` is `CUSTOM`, this function will be called to produce the data for the Autocompleter.
  * @property {string} [customInlinePrefix] - deprecated, use `inlinePrefix` instead.
  */
 
 /** @type {AIPPackageConfig[]} */
-const PACKAGE_CONFIG = [
+export const PACKAGE_CONFIG = [
     {
         // contributed by https://github.com/schultzcole
         packageName: "dnd5e",
@@ -314,9 +312,3 @@ const PACKAGE_CONFIG = [
         ],
     },
 ];
-
-Hooks.on("init", () => {
-    const api = (game.modules.get(MODULE_NAME).API = {});
-    api.CONST = { DATA_MODE, DATA_GETTERS };
-    api.PACKAGE_CONFIG = PACKAGE_CONFIG;
-});

@@ -1,19 +1,11 @@
-import Autocompleter from "./autocompleter.mjs";
-import { MODULE_NAME } from "./const.mjs";
-import logger from "./logger.mjs";
+import { Autocompleter } from "./autocompleter";
 
-/** @type {(Autocompleter|null)} */
-let _autocompleter = null;
-/** @type {(HTMLButtonElement|null)} */
-let _summonerButton = null;
-
-Hooks.on("setup", () => {
-    CONFIG.debug.aip = false;
-    logger.info("Setting up Autocomplete Inline Properties");
-
-    const packageConfig = game.modules.get(MODULE_NAME).API.PACKAGE_CONFIG;
-    Hooks.callAll("aipSetup", packageConfig);
-
+/**
+ * Register autocompletion for the given `packageConfig`
+ * @param {import("./package-config").AIPPackageConfig[]} packageConfig
+ * @returns {void}
+ */
+export function registerFields(packageConfig) {
     if (!packageConfig.find((pkg) => pkg.packageName === game.system.id)) {
         ui.notifications.warn(game.i18n.localize("AIP.SystemNotSupported"));
     }
@@ -31,14 +23,19 @@ Hooks.on("setup", () => {
             });
         }
     }
-});
+}
+
+/** @type {Autocompleter | null} */
+let _autocompleter = null;
+/** @type {HTMLButtonElement | null} */
+let _summonerButton = null;
 
 /**
  * Register autocompletion for a field according to the given `fieldConfig`.
  *
- * @param {Application} app            - The `Application` on which the selector should be registered
- * @param {HTMLElement} sheetElement   - The inner HTML of the `Application` on which the selector should be registered
- * @param {AIPFieldConfig} fieldConfig - The configuration object describing the field
+ * @param {Application} app                                           - The `Application` on which the selector should be registered
+ * @param {HTMLElement} sheetElement                                  - The inner HTML of the `Application` on which the selector should be registered
+ * @param {import("../package-config").AIPFieldConfig} fieldConfig - The configuration object describing the field
  */
 function registerField(app, sheetElement, fieldConfig) {
     // Check that we get valid data for the given application. If not, skip adding Autocomplete to this field.
@@ -140,7 +137,7 @@ function _removeSummonerButton() {
  * Creates a new autocompleter, or if one already exists, closes it and creates a new one targeting the provided target element.
  * @param {HTMLInputElement} targetElement
  * @param {string} targetKey
- * @param {AIPFieldConfig} fieldConfig
+ * @param {import("../package-config").AIPFieldConfig} fieldConfig
  * @param {Application} app
  * @private
  */

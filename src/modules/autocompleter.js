@@ -1,15 +1,15 @@
-import { MODULE_NAME } from "./const.mjs";
-import logger from "./logger.mjs";
+import { logger } from "./logger";
+import { DATA_GETTERS, DATA_MODE } from "./package-config";
 
-export default class Autocompleter extends Application {
+export class Autocompleter extends Application {
     /**
      *
      * @param {object} data
      * @param {HTMLInputElement} target
      * @param {string} targetKey
-     * @param {AIPFieldConfig} fieldConfig
-     * @param {function} onClose
-     * @param options
+     * @param {import("./package-config").AIPFieldConfig} fieldConfig
+     * @param {() => void} onClose
+     * @param {object} options
      */
     constructor(data, target, targetKey, fieldConfig, onClose, options) {
         super(options);
@@ -20,7 +20,6 @@ export default class Autocompleter extends Application {
 
         this.filteredKeys = fieldConfig.filteredKeys ?? null;
         this.mode = fieldConfig.dataMode;
-        const DATA_MODE = game.modules.get(MODULE_NAME).API.CONST.DATA_MODE;
 
         let inlinePrefix;
         if (fieldConfig.customInlinePrefix !== undefined) {
@@ -58,18 +57,17 @@ export default class Autocompleter extends Application {
     /**
      * Given a sheet, the data mode, and, if necessary, a custom data getter, return the appropriate data for that data mode
      * @param {Application} sheet
-     * @param {DATA_MODE} dataMode
-     * @param {(function(Application): object|null)} customDataGetter
+     * @param {import("./package-config").AIPFieldConfig} options
+     * @returns {object | null}
      */
     static getData(sheet, { dataMode, customDataGetter = null }) {
-        const api = game.modules.get(MODULE_NAME).API;
-        if (dataMode === api.CONST.DATA_MODE.ENTITY_DATA) {
+        if (dataMode === DATA_MODE.ENTITY_DATA) {
             logger.warn(
                 "You are using DATA_MODE.ENTITY_DATA which has been deprecated in favor of DATA_MODE.DOCUMENT_DATA and will be removed in a future version.",
             );
         }
 
-        const getter = game.modules.get(MODULE_NAME).API.CONST.DATA_GETTERS[dataMode];
+        const getter = DATA_GETTERS[dataMode];
         if (!getter) throw new Error(`Unrecognized data mode "${dataMode}"`);
         return getter(sheet, customDataGetter);
     }

@@ -1,4 +1,4 @@
-import { MODULE_ABBREVIATION } from "./const.mjs";
+import { MODULE_ABBREVIATION } from "./const";
 
 const loggingContext = MODULE_ABBREVIATION;
 const loggingSeparator = "|";
@@ -25,12 +25,10 @@ function getLoggingFunction(type = "info") {
 /**
  * A singleton logger object.
  */
-const logger = Object.freeze({
+export const logger = Object.freeze({
     debug: getLoggingFunction("debug"),
     info: getLoggingFunction("info"),
     warn: getLoggingFunction("warn"),
     error: getLoggingFunction("error"),
     getLoggingFunction,
 });
-
-export default logger;
