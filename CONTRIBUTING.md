@@ -10,7 +10,7 @@ configuration using the `aipSetup` hook event.
 ## Adding support for new systems and modules
 
 Adding support for a new system in AIP is quite simple. All that is needed is adding a corresponding entry in the
-[`package-config.mjs`](modules/package-config.mjs) file.
+[`package-config.js`](src/modules/package-config.js) file.
 
 Modules can add their own configuration to the `packageConfig` that is passed as a parameter with the `aipSetup` hook
 event.
@@ -19,7 +19,7 @@ event.
 `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` during the `init` hook event is deprecated and
 will be removed in a future version.
 
-The [`package-config.mjs`](modules/package-config.mjs) file contains detailed documentation that explains the structure
+The [`package-config.js`](src/modules/package-config.js) file contains detailed documentation that explains the structure
 of the AIP configuration. Additionally, the configurations for the already supported systems can serve as examples.
 
 For convenience here is a short overview of the configuration.
@@ -66,9 +66,27 @@ Each field config object consists of the following properties:
    the Autocompleter. When `dataMode` is `CUSTOM`, this field is _required_.
  * \[`customInlinePrefix`\] (optional): Deprecated, use `inlinePrefix` instead.
 
-## Example
 
-Here's an example of how adding a new package config for a module or system might look like:
+## API
+
+Autocomplete Inline Properties provides an API that other packages can use to interact with it. The API is available as
+soon as the `aipSetup` hook event is fired and can be accessed via
+
+```js
+game.modules.get("autocomplete-inline-properties").API
+```
+
+The API is defined in [api.js](src/modules/api.js) and currently consists of
+| Property               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CONST.DATA_MODE`      | An enum for the available data modes                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `CONST.DATA_GETTERS`   | The data getters provided by AIP                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `PACKAGE_CONFIG`       | The [package config](#package-config)                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `refreshPackageConfig` | A function that allows to refresh the package config for a given application. It takes the application as its first parameter and accepts a package name as an optional second parameter (if given, only the config for that package is considered). Calling this may be necessary if the package config changes and needs to be applied to an already rendered application, or if new elements to which the config applies are added to the application dynamically. |
+
+## Example
+### Adding a Package Config
+Here is an example of how adding a new package config for a module or system might look like:
 
 ```js
 Hooks.on("aipSetup", (packageConfig) => {
@@ -99,3 +117,21 @@ Hooks.on("aipSetup", (packageConfig) => {
     packageConfig.push(config);
 });
 ```
+
+### Refreshing the Package Config for an Application
+
+Here is an example of how refreshing the package config for an application could look like, for example after
+dynamically adding additional fields that match the selector of one of the field configs.
+
+```js
+/**
+ * @param {ActiveEffectConfig} activeEffectConfig
+ */
+function addAdditionalFields(activeEffectConfig) {
+    /* code to add the additional fields to the activeEffectConfig */
+
+    /* ... */
+
+    const { refreshPackageConfig } =  game.modules.get("autocomplete-inline-properties").API;
+    refreshPackageConfig(activeEffectConfig); // alternatively, refreshPackageConfig(activeEffectConfig, "my-package");
+}
