@@ -12,4 +12,5 @@ function setup() {
 
     Hooks.callAll("aipSetup", PACKAGE_CONFIG);
     registerFields(PACKAGE_CONFIG);
+    Hooks.callAll("aipReady");
 }
