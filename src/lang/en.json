@@ -1,5 +1,7 @@
 {
     "AIP": {
-        "SystemNotSupported": "Your game system is not yet supported by Autocomplete Inline Properties."
+        "SystemNotSupported": "Your game system is not yet supported by Autocomplete Inline Properties.",
+        "DebugName": "Debug Mode",
+        "DebugHint": "Enable to print debug logs. Other debugging features might be added in the future."
     }
 }

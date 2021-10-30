@@ -1,4 +1,5 @@
 import { Autocompleter } from "./autocompleter";
+import { logger } from "./logger";
 
 /**
  * Register autocompletion for the given `packageConfig`
