@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.5.0...v2.6.0) (2021-11-05)
+
+
+### Features
+
+* add debug mode setting ([33141d2](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/33141d20e3a56c2b723f83be8cfb9f76e78d01a9))
+* add functionality to refresh the package config for an application ([eed5d3e](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/eed5d3e674b4b459e7e88f1d519188b1d8adfa69))
+
 ## [2.5.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.4.1...v2.5.0) (2021-10-28)
 
 
