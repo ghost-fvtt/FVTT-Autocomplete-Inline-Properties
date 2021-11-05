@@ -42,11 +42,41 @@ This module currently offers built in support for the following systems:
 * sw5e
 * ds4
 
+## Development
+
 Pull requests to support additional systems are more than welcome!
 
 Systems and modules can also add support for their sheets on their own side by inject corresponding configuration into
-the AIP configuration using the `aipSetup` hook event. See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to add support for your system or
-module.
+the AIP configuration using the `aipSetup` hook event. See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to add
+support for your system or module.
+
+
+### Prerequisites
+
+In order to build this module, recent versions of `node` and `npm` are required. Most likely using `yarn` also works but
+only `npm` is officially supported. We recommend using the latest lts version of `node`.  You also need to install the
+project's dependencies. To do so, run
+
+```
+npm install
+```
+
+### Building
+
+You can build the project by running
+
+```
+npm run build
+```
+
+The built module will be put into the `dist` folder. In order to test things locally, create a soft link to that folder
+in the `modules` folder of your foundry data folder. On Linux, this can be done by the following command:
+
+```
+ln -s /path/to/FVTT-Autocomplete-Inline-Properties/dist/ ~/.local/share/FoundryVTT/Data/modules/autocomplete-inline-properties
+```
+
+On Windows and OS X, adjust the command accordingly.
 
 ## License
 
