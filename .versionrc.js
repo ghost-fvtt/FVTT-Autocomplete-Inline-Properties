@@ -1,5 +1,5 @@
 const manifest = {
-    filename: "module.json",
+    filename: "src/module.json",
     updater: require("./manifest-version-updater"),
 };
 
