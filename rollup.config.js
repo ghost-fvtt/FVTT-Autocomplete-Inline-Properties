@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: MIT
 
-const copy = require("rollup-plugin-copy");
-const sourcemaps = require("rollup-plugin-sourcemaps");
-const { terser } = require("rollup-plugin-terser");
+import copy from "@guanghechen/rollup-plugin-copy";
+import sourcemaps from "rollup-plugin-sourcemaps";
+import { terser } from "rollup-plugin-terser";
 
 const staticFiles = ["styles", "templates", "lang", "module.json"].map((file) => `src/${file}`);
 
@@ -22,7 +22,6 @@ const config = {
         sourcemaps(),
         process.env.NODE_ENV === "production" && terser({ ecma: 2020, keep_fnames: true }),
         copy({
-            watch: staticFiles,
             targets: staticFiles.map((file) => ({
                 src: `${file}`,
                 dest: "dist",
@@ -31,4 +30,4 @@ const config = {
     ],
 };
 
-module.exports = config;
+export default config;
