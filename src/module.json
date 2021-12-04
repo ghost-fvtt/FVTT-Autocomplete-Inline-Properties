@@ -26,7 +26,7 @@
     "esmodules": ["./modules/aip.js"],
     "styles": ["./styles/aip.css"],
     "minimumCoreVersion": "0.8.5",
-    "compatibleCoreVersion": "0.8.9",
+    "compatibleCoreVersion": "9",
     "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties",
     "bugs": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues",
     "allowBugReporter": true,
