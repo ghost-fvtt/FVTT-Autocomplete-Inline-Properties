@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.6.0...v2.7.0) (2021-12-04)
+
+
+### Features
+
+* mark compatibility wih foundry V9 ([eb1ca48](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/eb1ca4867e05a5d918088650b9cee44bb343481d))
+
 ## [2.6.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.5.0...v2.6.0) (2021-11-05)
 
 
