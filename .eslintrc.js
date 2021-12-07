@@ -1,12 +1,12 @@
 module.exports = {
     parserOptions: {
-        ecmaVersion: 2020,
+        ecmaVersion: 2022,
         sourceType: "module",
     },
 
     env: {
         browser: true,
-        es2020: true,
+        es2021: true,
     },
 
     extends: ["eslint:recommended", "@typhonjs-fvtt/eslint-config-foundry.js/0.8.0", "plugin:prettier/recommended"],
@@ -21,9 +21,10 @@ module.exports = {
 
     overrides: [
         {
-            files: ["./*.js"],
+            files: ["./*.js", "./tools/**/*"],
             env: {
                 node: true,
+                browser: false,
             },
         },
     ],

@@ -3,3 +3,4 @@
 node_modules/
 foundry.js
 dist/
+foundryconfig.json
