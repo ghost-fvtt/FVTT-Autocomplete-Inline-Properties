@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.2](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.1...v2.7.2) (2022-01-31)
+
+
+### Bug Fixes
+
+* switch to new way of enabling bug reporter ([b0842ac](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/b0842acf33d1b35ad5daacc8846f420bff31ae56))
+
 ### [2.7.1](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.0...v2.7.1) (2021-12-07)
 
 ## [2.7.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.6.0...v2.7.0) (2021-12-04)
