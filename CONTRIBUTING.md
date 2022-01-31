@@ -53,15 +53,22 @@ Each field config object consists of the following properties:
    Autocompleter.
  * \[`filteredKeys`\] (optional): An array of keys that should not be shown in the Autocompleter.
  * `dataMode`: This defines what data is shown in the Autocompleter. The following values are possible:
-   * `DATA_MODE.DOCUMENT_DATA`: The data of the sheet's document.
-   * `DATA_MODE.ROLL_DATA`: The roll data of the sheet's document.
-   * `DATA_MODE.OWNING_ACTOR_DATA`: The data of the sheet's document's owning actor, falling back to the merged data of
-     dummy actors of all types if the document is not owned.
-   * `DATA_MODE.OWNING_ACTOR_ROLL_DATA`: The roll data of the sheet's document's owning actor, falling back to the
-     merged roll data of dummy actors of all types if the document is not owned.
-   * `DATA_MODE.CUSTOM`: Custom data as defined by the `customDataGetter`.
+   | Data Mode                          | Description                                                                                                                                               |
+   | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | `DATA_MODE.DOCUMENT_DATA`          | The data of the sheet's document.                                                                                                                         |
+   | `DATA_MODE.ROLL_DATA`              | The roll data of the sheet's document.                                                                                                                    |
+   | `DATA_MODE.OWNING_ACTOR_DATA`      | The data of the sheet's document's owning actor, falling back to the merged data of     dummy actors of all types if the document is not owned.           |
+   | `DATA_MODE.OWNING_ACTOR_ROLL_DATA` | The roll data of the sheet's document's owning actor, falling back to the     merged roll data of dummy actors of all types if the document is not owned. |
+   | `DATA_MODE.CUSTOM`                 | Custom data as defined by the `customDataGetter`.                                                                                                         |
  * \[`inlinePrefix`\] (optional): If provided, this prefix is inserted in the target field when the Autocompleter is
-   submitted. Otherwise, the default for the chosen `dataMode` is used.
+   submitted. Otherwise, the default for the chosen `dataMode` is used. The defaults are:
+   | Data Mode                          | Default Inline Prefix |
+   | ---------------------------------- | :-------------------: |
+   | `DATA_MODE.DOCUMENT_DATA`          |         `""`          |
+   | `DATA_MODE.ROLL_DATA`              |         `"@"`         |
+   | `DATA_MODE.OWNING_ACTOR_DATA`      |         `""`          |
+   | `DATA_MODE.OWNING_ACTOR_ROLL_DATA` |         `"@"`         |
+   | `DATA_MODE.CUSTOM`                 |         `""`          |
  * `customDataGetter`: When `dataMode` is `CUSTOM`, the function provided here is used to get the data to be shown in
    the Autocompleter. When `dataMode` is `CUSTOM`, this field is _required_.
  * \[`customInlinePrefix`\] (optional): Deprecated, use `inlinePrefix` instead.
@@ -76,12 +83,12 @@ soon as the `aipSetup` hook event is fired and can be accessed via
 game.modules.get("autocomplete-inline-properties").API
 ```
 
-The API is defined in [api.js](src/modules/api.js) and currently consists of
-| Property               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CONST.DATA_MODE`      | An enum for the available data modes                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `CONST.DATA_GETTERS`   | The data getters provided by AIP                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `PACKAGE_CONFIG`       | The [package config](#package-config)                                                                                                                                                                                                                                                                                                                                                                                                                       |
+The API is defined in [api.js](src/module/api.js) and currently consists of
+| Property               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CONST.DATA_MODE`      | An enum for the available data modes                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `CONST.DATA_GETTERS`   | The data getters provided by AIP                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `PACKAGE_CONFIG`       | The [package config](#package-config)                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `refreshPackageConfig` | A function that allows to refresh the package config for a given application. It takes the application as its first parameter and accepts a package name as an optional second parameter (if given, only the config for that package is considered). Calling this may be necessary if the package config changes and needs to be applied to an already rendered application, or if new elements to which the config applies are added to the application dynamically. |
 
 ## Example
