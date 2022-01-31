@@ -1,7 +1,7 @@
 # Autocomplete Inline Properties
 
 [![Checks](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/workflows/Checks/badge.svg)](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/actions)
-![Supported Foundry Versions](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/master/src/module.json)
+![Supported Foundry Versions](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/latest/download/module.json)
 ![Latest Release Download Count](https://img.shields.io/github/downloads/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/latest/module.zip)
 [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautocomplete-inline-properties&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=autocomplete-inline-properties)
 [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fautocomplete-inline-properties%2Fshield%2Fendorsements)](https://www.foundryvtt-hub.com/package/autocomplete-inline-properties/)
@@ -69,14 +69,33 @@ You can build the project by running
 npm run build
 ```
 
-The built module will be put into the `dist` folder. In order to test things locally, create a soft link to that folder
-in the `modules` folder of your foundry data folder. On Linux, this can be done by the following command:
+Alternatively, you can run
 
 ```
-ln -s /path/to/FVTT-Autocomplete-Inline-Properties/dist/ ~/.local/share/FoundryVTT/Data/modules/autocomplete-inline-properties
+npm run watch
 ```
 
-On Windows and OS X, adjust the command accordingly.
+to watch for changes and automatically build as necessary.
+
+### Linking the built project to Foundry VTT
+
+In order to provide a fluent development experience, it is recommended to link the built project to your local Foundry
+VTT installation's data folder. In order to do so, first add a file called `foundryconfig.json` to the project root with
+the following content:
+
+```
+{
+    "dataPath": "<path to your home directory>/.local/share/FoundryVTT"
+}
+```
+
+On platforms other than Linux you need to adjust the path accordingly.
+
+Then run
+
+```
+npm run link-package
+```
 
 ## License
 
