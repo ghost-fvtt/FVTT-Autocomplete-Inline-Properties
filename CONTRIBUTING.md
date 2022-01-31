@@ -10,7 +10,7 @@ configuration using the `aipSetup` hook event.
 ## Adding support for new systems and modules
 
 Adding support for a new system in AIP is quite simple. All that is needed is adding a corresponding entry in the
-[`package-config.js`](src/modules/package-config.js) file.
+[`package-config.js`](src/module/package-config.js) file.
 
 Modules can add their own configuration to the `packageConfig` that is passed as a parameter with the `aipSetup` hook
 event.
@@ -19,7 +19,7 @@ event.
 `game.modules.get("autocomplete-inline-properties").API.PACKAGE_CONFIG` during the `init` hook event is deprecated and
 will be removed in a future version.
 
-The [`package-config.js`](src/modules/package-config.js) file contains detailed documentation that explains the structure
+The [`package-config.js`](src/module/package-config.js) file contains detailed documentation that explains the structure
 of the AIP configuration. Additionally, the configurations for the already supported systems can serve as examples.
 
 For convenience here is a short overview of the configuration.
