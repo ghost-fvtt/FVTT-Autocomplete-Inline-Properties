@@ -2,7 +2,6 @@
     "name": "autocomplete-inline-properties",
     "title": "Autocomplete Inline Properties",
     "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference document data.",
-    "version": "2.7.3",
     "author": "Cole Schultz (cole#9640), Johannes Loher (ghost#2000)",
     "authors": [
         {
@@ -16,6 +15,16 @@
             "ko-fi": "ghostfvtt"
         }
     ],
+    "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties",
+    "license": "./LICENSE",
+    "readme": "./README.md",
+    "bugs": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues",
+    "changelog": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/blob/master/CHANGELOG.md",
+    "version": "2.7.3",
+    "minimumCoreVersion": "0.8.5",
+    "compatibleCoreVersion": "9",
+    "esmodules": ["./aip.js"],
+    "styles": ["./styles/aip.css"],
     "languages": [
         {
             "lang": "en",
@@ -23,17 +32,8 @@
             "path": "./lang/en.json"
         }
     ],
-    "esmodules": ["./aip.js"],
-    "styles": ["./styles/aip.css"],
-    "minimumCoreVersion": "0.8.5",
-    "compatibleCoreVersion": "9",
-    "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties",
-    "bugs": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues",
     "manifest": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/latest/download/module.json",
     "download": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/download/v2.7.3/module.zip",
-    "license": "./LICENSE",
-    "readme": "./README.md",
-    "changelog": "./CHANGELOG.md",
     "manifestPlusVersion": "1.2.0",
     "media": [
         {
