@@ -60,6 +60,16 @@ function _getSheetDocumentParentActor(sheet) {
     return parent && parent instanceof Actor ? parent : null;
 }
 
+let _dummyActors;
+
+function _getDummyActors() {
+    if (!_dummyActors) {
+        const cls = getDocumentClass("Actor");
+        _dummyActors = game.system.template.Actor.types.map((type) => new cls({ type, name: "dummy" }));
+    }
+    return _dummyActors;
+}
+
 /**
  * The cached merged actor data to use as fallback for unowned documents
  * @type {object}
@@ -74,11 +84,9 @@ let _fallbackActorData;
  */
 function _getFallbackActorData() {
     if (!_fallbackActorData) {
-        const cls = getDocumentClass("Actor");
         _fallbackActorData = {};
-        for (const type of game.system.template.Actor.types) {
-            const actorData = new cls({ type, name: "dummy" }).data;
-            foundry.utils.mergeObject(_fallbackActorData, actorData);
+        for (const actor of _getDummyActors()) {
+            foundry.utils.mergeObject(_fallbackActorData, actor.data);
         }
     }
     return _fallbackActorData;
@@ -98,14 +106,23 @@ let _fallbackActorRollData;
  */
 function _getFallbackActorRollData() {
     if (!_fallbackActorRollData) {
-        const cls = getDocumentClass("Actor");
-        _fallbackActorData = {};
-        for (const type of game.system.template.Actor.types) {
-            const actorRollData = new cls({ type, name: "dummy" }).getRollData();
-            foundry.utils.mergeObject(_fallbackActorRollData, actorRollData);
+        _fallbackActorRollData = {};
+        for (const actor of _getDummyActors()) {
+            foundry.utils.mergeObject(_fallbackActorRollData, actor.getRollData());
         }
     }
     return _fallbackActorRollData;
+}
+
+function _getFallbackParentItemRollData(item) {
+    const itemData = item.toObject();
+    const fallbackActorItemRollData = {};
+    const cls = getDocumentClass("Item");
+    for (const actor of _getDummyActors()) {
+        const tempItem = new cls(itemData, { parent: actor });
+        foundry.utils.mergeObject(fallbackActorItemRollData, tempItem.getRollData());
+    }
+    return fallbackActorItemRollData;
 }
 
 /**
@@ -164,19 +181,25 @@ export const PACKAGE_CONFIG = [
                         selector: `.tab.details input[type="text"][name="data.attackBonus"]`,
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.CUSTOM,
+                        customDataGetter: (sheet) =>
+                            sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
                     },
                     {
                         selector: `.tab.details input[type="text"][name^="data.damage"]`,
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.CUSTOM,
+                        customDataGetter: (sheet) =>
+                            sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
                     },
                     {
                         selector: `.tab.details input[type="text"][name="data.formula"]`,
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.CUSTOM,
+                        customDataGetter: (sheet) =>
+                            sheet.object.getRollData() ?? _getFallbackParentItemRollData(sheet.object),
                     },
                 ],
             },
@@ -256,19 +279,25 @@ export const PACKAGE_CONFIG = [
                         selector: `.tab.details input[type="text"][name="data.attackBonus"]`,
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.CUSTOM,
+                        customDataGetter: (sheet) =>
+                            sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
                     },
                     {
                         selector: `.tab.details input[type="text"][name^="data.damage"]`,
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.CUSTOM,
+                        customDataGetter: (sheet) =>
+                            sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
                     },
                     {
                         selector: `.tab.details input[type="text"][name="data.formula"]`,
                         showButton: true,
                         allowHotkey: true,
-                        dataMode: DATA_MODE.ROLL_DATA,
+                        dataMode: DATA_MODE.CUSTOM,
+                        customDataGetter: (sheet) =>
+                            sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
                     },
                 ],
             },
