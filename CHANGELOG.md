@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.6](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.5...v2.7.6) (2022-05-26)
+
+
+### Bug Fixes
+
+* properly handle unowned items in dnd5e and sw5e ([3454814](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/34548145efe235f031a2da159f5b883197981705))
+
 ### [2.7.5](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.4...v2.7.5) (2022-02-08)
 
 ### [2.7.4](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.3...v2.7.4) (2022-02-01)

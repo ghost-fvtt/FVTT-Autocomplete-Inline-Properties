@@ -16,11 +16,11 @@
         }
     ],
     "url": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties",
-    "license": "https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/v2.7.5/LICENSE.md",
-    "readme": "https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/v2.7.5/README.md",
+    "license": "https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/v2.7.6/LICENSE.md",
+    "readme": "https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/v2.7.6/README.md",
     "bugs": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues",
-    "changelog": "https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/v2.7.5/CHANGELOG.md",
-    "version": "2.7.5",
+    "changelog": "https://raw.githubusercontent.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/v2.7.6/CHANGELOG.md",
+    "version": "2.7.6",
     "minimumCoreVersion": "0.8.5",
     "compatibleCoreVersion": "9",
     "esmodules": ["./aip.js"],
@@ -33,7 +33,7 @@
         }
     ],
     "manifest": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/latest/download/module.json",
-    "download": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/download/v2.7.5/module.zip",
+    "download": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/releases/download/v2.7.6/module.zip",
     "manifestPlusVersion": "1.2.0",
     "media": [
         {
