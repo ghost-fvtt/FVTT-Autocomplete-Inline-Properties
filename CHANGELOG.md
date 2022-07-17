@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.7...v2.8.0) (2022-07-17)
+
+
+### Features
+
+* get rid of v10 compatibility warnings and add support for dnd5e v2.0.0 ([9831d33](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/9831d33a434b3947284c51a88cf153b591e3ad62))
+
 ### [2.7.7](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.6...v2.7.7) (2022-07-17)
 
 
