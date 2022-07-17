@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.7](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.6...v2.7.7) (2022-07-17)
+
+
+### Bug Fixes
+
+* restore the inline prefix (@) for dnd5e and sw5e ([ae5b14f](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/ae5b14fc42e8728f5f610b91a399a5a741dcde35)), closes [#157](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues/157)
+
 ### [2.7.6](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.5...v2.7.6) (2022-05-26)
 
 
