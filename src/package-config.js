@@ -184,6 +184,7 @@ export const PACKAGE_CONFIG = [
                         dataMode: DATA_MODE.CUSTOM,
                         customDataGetter: (sheet) =>
                             sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
+                        inlinePrefix: "@",
                     },
                     {
                         selector: `.tab.details input[type="text"][name^="data.damage"]`,
@@ -192,6 +193,7 @@ export const PACKAGE_CONFIG = [
                         dataMode: DATA_MODE.CUSTOM,
                         customDataGetter: (sheet) =>
                             sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
+                        inlinePrefix: "@",
                     },
                     {
                         selector: `.tab.details input[type="text"][name="data.formula"]`,
@@ -200,6 +202,7 @@ export const PACKAGE_CONFIG = [
                         dataMode: DATA_MODE.CUSTOM,
                         customDataGetter: (sheet) =>
                             sheet.object.getRollData() ?? _getFallbackParentItemRollData(sheet.object),
+                        inlinePrefix: "@",
                     },
                 ],
             },
@@ -282,6 +285,7 @@ export const PACKAGE_CONFIG = [
                         dataMode: DATA_MODE.CUSTOM,
                         customDataGetter: (sheet) =>
                             sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
+                        inlinePrefix: "@",
                     },
                     {
                         selector: `.tab.details input[type="text"][name^="data.damage"]`,
@@ -290,6 +294,7 @@ export const PACKAGE_CONFIG = [
                         dataMode: DATA_MODE.CUSTOM,
                         customDataGetter: (sheet) =>
                             sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
+                        inlinePrefix: "@",
                     },
                     {
                         selector: `.tab.details input[type="text"][name="data.formula"]`,
@@ -298,6 +303,7 @@ export const PACKAGE_CONFIG = [
                         dataMode: DATA_MODE.CUSTOM,
                         customDataGetter: (sheet) =>
                             sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
+                        inlinePrefix: "@",
                     },
                 ],
             },
