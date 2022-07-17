@@ -39,10 +39,11 @@ export const DATA_MODE = {
  * Getter functions corresponding to the data modes defined in {@link DATA_MODE}
  */
 export const DATA_GETTERS = {
-    [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.data,
-    [DATA_MODE.DOCUMENT_DATA]: (sheet) => sheet.object?.data,
+    [DATA_MODE.ENTITY_DATA]: (sheet) => sheet.object?.toObject(false),
+    [DATA_MODE.DOCUMENT_DATA]: (sheet) => sheet.object?.toObject(false),
     [DATA_MODE.ROLL_DATA]: (sheet) => sheet.object?.getRollData(),
-    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) => _getSheetDocumentParentActor(sheet)?.data ?? _getFallbackActorData(),
+    [DATA_MODE.OWNING_ACTOR_DATA]: (sheet) =>
+        _getSheetDocumentParentActor(sheet)?.toObject(false) ?? _getFallbackActorData(),
     [DATA_MODE.OWNING_ACTOR_ROLL_DATA]: (sheet) =>
         _getSheetDocumentParentActor(sheet)?.getRollData() ?? _getFallbackActorRollData(),
     [DATA_MODE.CUSTOM]: (sheet, customDataGetter) => customDataGetter(sheet),
@@ -86,7 +87,7 @@ function _getFallbackActorData() {
     if (!_fallbackActorData) {
         _fallbackActorData = {};
         for (const actor of _getDummyActors()) {
-            foundry.utils.mergeObject(_fallbackActorData, actor.data);
+            foundry.utils.mergeObject(_fallbackActorData, actor.toObject(false));
         }
     }
     return _fallbackActorData;
@@ -165,20 +166,20 @@ export const PACKAGE_CONFIG = [
         sheetClasses: [
             {
                 name: "ActorSheetFlags",
-                fieldConfigs: [
+                fieldConfigs: ["system", "data"].flatMap((key) => [
                     {
-                        selector: `input[type="text"][name^="data.bonuses"]`,
+                        selector: `input[type="text"][name^="${key}.bonuses"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.ROLL_DATA,
                     },
-                ],
+                ]),
             },
             {
                 name: "ItemSheet5e",
-                fieldConfigs: [
+                fieldConfigs: ["system", "data"].flatMap((key) => [
                     {
-                        selector: `.tab.details input[type="text"][name="data.attackBonus"]`,
+                        selector: `.tab.details input[type="text"][name="${key}.attackBonus"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.CUSTOM,
@@ -187,7 +188,7 @@ export const PACKAGE_CONFIG = [
                         inlinePrefix: "@",
                     },
                     {
-                        selector: `.tab.details input[type="text"][name^="data.damage"]`,
+                        selector: `.tab.details input[type="text"][name^="${key}.damage"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.CUSTOM,
@@ -196,7 +197,7 @@ export const PACKAGE_CONFIG = [
                         inlinePrefix: "@",
                     },
                     {
-                        selector: `.tab.details input[type="text"][name="data.formula"]`,
+                        selector: `.tab.details input[type="text"][name="${key}.formula"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.CUSTOM,
@@ -204,7 +205,7 @@ export const PACKAGE_CONFIG = [
                             sheet.object.getRollData() ?? _getFallbackParentItemRollData(sheet.object),
                         inlinePrefix: "@",
                     },
-                ],
+                ]),
             },
             {
                 name: "ActiveEffectConfig",
@@ -266,20 +267,20 @@ export const PACKAGE_CONFIG = [
         sheetClasses: [
             {
                 name: "ActorSheetFlags",
-                fieldConfigs: [
+                fieldConfigs: ["system", "data"].flatMap((key) => [
                     {
-                        selector: `input[type="text"][name^="data.bonuses"]`,
+                        selector: `input[type="text"][name^="${key}.bonuses"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.ROLL_DATA,
                     },
-                ],
+                ]),
             },
             {
                 name: "ItemSheet5e",
-                fieldConfigs: [
+                fieldConfigs: ["system", "data"].flatMap((key) => [
                     {
-                        selector: `.tab.details input[type="text"][name="data.attackBonus"]`,
+                        selector: `.tab.details input[type="text"][name="${key}.attackBonus"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.CUSTOM,
@@ -288,7 +289,7 @@ export const PACKAGE_CONFIG = [
                         inlinePrefix: "@",
                     },
                     {
-                        selector: `.tab.details input[type="text"][name^="data.damage"]`,
+                        selector: `.tab.details input[type="text"][name^="${key}.damage"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.CUSTOM,
@@ -297,7 +298,7 @@ export const PACKAGE_CONFIG = [
                         inlinePrefix: "@",
                     },
                     {
-                        selector: `.tab.details input[type="text"][name="data.formula"]`,
+                        selector: `.tab.details input[type="text"][name="${key}.formula"]`,
                         showButton: true,
                         allowHotkey: true,
                         dataMode: DATA_MODE.CUSTOM,
@@ -305,7 +306,7 @@ export const PACKAGE_CONFIG = [
                             sheet.object.getRollData() ?? _getFallbackActorRollData(sheet.object),
                         inlinePrefix: "@",
                     },
-                ],
+                ]),
             },
             {
                 name: "ActiveEffectConfig",
