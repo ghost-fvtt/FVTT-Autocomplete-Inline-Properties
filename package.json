@@ -1,6 +1,6 @@
 {
     "name": "autocomplete-inline-properties",
-    "version": "2.8.0",
+    "version": "2.8.1",
     "description": "Add inline property autocompletion for fields that can use inline properties or otherwise reference document data.",
     "private": true,
     "scripts": {

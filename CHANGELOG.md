@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.1](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.8.0...v2.8.1) (2022-08-24)
+
+
+### Bug Fixes
+
+* avoid triggering any foundry keybindings when pressing keys in the autocompletion window ([96ab33d](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/96ab33d05ae89eb4f19b3f6c1b646e54dc372f68))
+* don't crash the autocompletion window when rerendering it ([7697fee](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/7697fee93399fecec07f3684658ead978e4c365b))
+
 ## [2.8.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.7.7...v2.8.0) (2022-07-17)
 
 
