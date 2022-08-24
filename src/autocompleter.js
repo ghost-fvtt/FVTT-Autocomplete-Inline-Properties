@@ -82,6 +82,11 @@ export class Autocompleter extends Application {
         });
     }
 
+    /** @override */
+    get popOut() {
+        return true;
+    }
+
     /**
      * If the given key does not terminate in a primitive value, return the key with a dot appended, otherwise assume the key is final.
      * If the key is not valid (does not exist in targetData), return the key with no modification
@@ -291,11 +296,19 @@ export class Autocompleter extends Application {
 
     /** @override */
     async _renderOuter(options) {
-        return super._renderOuter(options).then((html) => {
-            // Remove the header added to normal Application windows
-            html[0].querySelector("header.window-header").remove();
-            return html;
-        });
+        const html = await super._renderOuter(options);
+        html[0].querySelector("header.window-header").remove();
+        return html;
+    }
+
+    /**
+     * Overridden in order to avoid an issue with {@link Application._replaceHTML} trying to set the window title, which
+     * doesn't exist. Additionally, this is always a popOut window, so we can omit the non-popOut case.
+     * @override
+     */
+    _replaceHTML(element, html) {
+        if (!element.length) return;
+        element.find(".window-content").html(html);
     }
 
     /** @override */
