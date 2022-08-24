@@ -339,6 +339,7 @@ export class Autocompleter extends Application {
             }
             case "ArrowUp": {
                 event.preventDefault();
+                event.stopPropagation();
                 this.selectedCandidateIndex =
                     this.sortedDataAtPath.length > 0
                         ? ((this.selectedCandidateIndex ?? this.indexOfCurrentBestMatch) + 1) %
@@ -349,6 +350,7 @@ export class Autocompleter extends Application {
             }
             case "ArrowDown": {
                 event.preventDefault();
+                event.stopPropagation();
                 this.selectedCandidateIndex =
                     this.sortedDataAtPath.length > 0
                         ? ((this.selectedCandidateIndex ?? this.indexOfCurrentBestMatch) -
@@ -361,6 +363,7 @@ export class Autocompleter extends Application {
             }
             case "Tab": {
                 event.preventDefault();
+                event.stopPropagation();
                 const selectedOrBestMatch = this.selectedOrBestMatch;
                 if (!selectedOrBestMatch) {
                     ui.notifications.warn(`The key "${this.rawPath}" does not match any known keys.`);
