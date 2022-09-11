@@ -259,6 +259,17 @@ export const PACKAGE_CONFIG = [
                     },
                 ],
             },
+            {
+                name: "ItemActionSheet",
+                fieldConfigs: [
+                    {
+                        selector: `input.formula[type="text"]`,
+                        showButton: true,
+                        allowHotkey: true,
+                        dataMode: DATA_MODE.ROLL_DATA,
+                    },
+                ],
+            },
         ],
     },
     {
