@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.8.1...v2.9.0) (2022-09-11)
+
+
+### Features
+
+* **pf1:** add autocompletion support for roll formulas in item action sheets in pf1 ([78c1c2d](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/78c1c2dd22ce2bba527ec222a3b6d5837dc18ed9)), closes [#192](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues/192)
+
+
+### Bug Fixes
+
+* prevent the cursor from jumping to the front when autocompleting ([c8e8dc6](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/commit/c8e8dc63b8bfaf93b9c816049f1ab1199e4cec8f)), closes [#189](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/issues/189)
+
 ### [2.8.1](https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties/compare/v2.8.0...v2.8.1) (2022-08-24)
 
 
