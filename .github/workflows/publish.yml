@@ -112,10 +112,10 @@ jobs:
                   artifacts: "./module.json, ./module.zip"
 
             - name: Publish to Foundry Admin
-              uses: Varriount/fvtt-autopublish@v1.0.9
-              with:
-                  username: ${{ secrets.FVTT_USERNAME }}
-                  password: ${{ secrets.FVTT_PASSWORD }}
-                  module-id: ${{ secrets.FVTT_PACKAGE_ID }}
-                  manifest-url: https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/module.json
-                  manifest-file: ./module.json
+              run: npx @ghost-fvtt/foundry-publish
+              env:
+                  FVTT_MANIFEST_PATH: ./module.json
+                  FVTT_PACKAGE_ID: ${{ secrets.FVTT_PACKAGE_ID }}
+                  FVTT_USERNAME: ${{ secrets.FVTT_USERNAME }}
+                  FVTT_PASSWORD: ${{ secrets.FVTT_PASSWORD }}
+                  FVTT_DELETE_OBSOLETE_VERSIONS: true
