@@ -398,9 +398,22 @@ export class Autocompleter extends Application {
         const postString = oldValue.slice(spliceEnd);
         const postSpacer = !postString.length || postString[postString.length - 1] === " " ? "" : " ";
         const insert = this.selectedOrBestMatch?.key ?? this.inputElement.value;
+        const fullInsert = `${preSpacer}${this.keyPrefix}${insert}${postSpacer}`;
+
         this.target.focus();
-        this.target.value = preString + preSpacer + this.keyPrefix + insert + postSpacer + postString;
         await this.close();
-        this.target.dispatchEvent(new UIEvent("change", { bubbles: true }));
+
+        const inputEvent = new InputEvent("input", {
+            bubbles: true,
+            data: fullInsert,
+            inputType: "insertText",
+            cancelable: true,
+        });
+
+        const shouldPerformInsertion = this.target.dispatchEvent(inputEvent);
+
+        if (shouldPerformInsertion) {
+            this.target.value = `${preString}${fullInsert}${postString}`;
+        }
     }
 }
