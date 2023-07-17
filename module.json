@@ -26,8 +26,7 @@
     "compatibleCoreVersion": "10",
     "compatibility": {
         "minimum": "0.8.5",
-        "verified": "10",
-        "maximum": "10"
+        "verified": "11"
     },
     "esmodules": ["./aip.js"],
     "styles": ["./styles/aip.css"],
