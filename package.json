@@ -38,8 +38,8 @@
     },
     "homepage": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties#readme",
     "devDependencies": {
-        "@commitlint/cli": "17.6.7",
-        "@commitlint/config-conventional": "17.6.7",
+        "@commitlint/cli": "17.7.0",
+        "@commitlint/config-conventional": "17.7.0",
         "@guanghechen/rollup-plugin-copy": "5.0.4",
         "@rollup/plugin-terser": "0.4.3",
         "@typhonjs-fvtt/eslint-config-foundry.js": "0.8.0",
