@@ -41,7 +41,7 @@
         "@commitlint/cli": "17.7.2",
         "@commitlint/config-conventional": "17.7.0",
         "@guanghechen/rollup-plugin-copy": "5.0.8",
-        "@rollup/plugin-terser": "0.4.3",
+        "@rollup/plugin-terser": "0.4.4",
         "@typhonjs-fvtt/eslint-config-foundry.js": "0.8.0",
         "eslint": "8.50.0",
         "eslint-config-prettier": "9.0.0",
