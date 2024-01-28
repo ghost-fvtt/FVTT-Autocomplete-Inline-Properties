@@ -48,7 +48,7 @@
         "eslint-plugin-prettier": "4.2.1",
         "husky": "9.0.6",
         "lint-staged": "15.2.0",
-        "npm-run-all2": "5.0.2",
+        "npm-run-all2": "6.1.1",
         "prettier": "2.8.8",
         "rimraf": "5.0.5",
         "rollup": "4.9.6",
