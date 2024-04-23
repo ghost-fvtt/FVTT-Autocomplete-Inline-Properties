@@ -38,7 +38,7 @@
     },
     "homepage": "https://github.com/ghost-fvtt/FVTT-Autocomplete-Inline-Properties#readme",
     "devDependencies": {
-        "@commitlint/cli": "19.2.2",
+        "@commitlint/cli": "19.3.0",
         "@commitlint/config-conventional": "19.2.2",
         "@guanghechen/rollup-plugin-copy": "5.0.12",
         "@rollup/plugin-terser": "0.4.4",
