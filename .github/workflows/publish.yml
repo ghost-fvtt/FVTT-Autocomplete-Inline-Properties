@@ -116,6 +116,5 @@ jobs:
               env:
                   FVTT_MANIFEST_PATH: ./module.json
                   FVTT_PACKAGE_ID: ${{ secrets.FVTT_PACKAGE_ID }}
-                  FVTT_USERNAME: ${{ secrets.FVTT_USERNAME }}
-                  FVTT_PASSWORD: ${{ secrets.FVTT_PASSWORD }}
+                  FVTT_TOKEN: ${{ secrets.FVTT_TOKEN }}
                   FVTT_DELETE_OBSOLETE_VERSIONS: true
