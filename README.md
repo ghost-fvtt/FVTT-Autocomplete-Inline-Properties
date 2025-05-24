@@ -7,6 +7,11 @@
 [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fautocomplete-inline-properties%2Fshield%2Fendorsements)](https://www.foundryvtt-hub.com/package/autocomplete-inline-properties/)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-ghostfvtt-00B9FE?logo=kofi)](https://ko-fi.com/ghostfvtt)
 
+# UNDER NEW MANAGEMENT
+
+I have taken over maintenance of the module and will be updating it for Foundry V12 (and V13), starting work in the middle of June (2025).
+
+# README
 
 This module adds an autocompletion and hint UI for sheet fields that can accept inline properties or other document data
 references, for instance a damage field referencing an ability modifier (e.g. `@abilities.dex.mod`), or an
