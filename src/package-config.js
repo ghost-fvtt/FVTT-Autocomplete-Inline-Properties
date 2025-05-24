@@ -66,7 +66,7 @@ let _dummyActors;
 function _getDummyActors() {
     if (!_dummyActors) {
         const cls = getDocumentClass("Actor");
-        _dummyActors = game.system.template.Actor.types.map((type) => new cls({ type, name: "dummy" }));
+        _dummyActors = Object.keys(game.system.documentTypes.Actor).map((type) => new cls({ type, name: "dummy" }));
     }
     return _dummyActors;
 }
